@@ -184,13 +184,12 @@ GameObject:
   - component: {fileID: 507993662015929192}
   - component: {fileID: 507993662015929206}
   - component: {fileID: 507993662015929205}
+  - component: {fileID: 707345098067341134}
   - component: {fileID: 2168946248158206767}
-  - component: {fileID: 2168946248158206766}
   - component: {fileID: 507993662015929194}
   - component: {fileID: 507993662015929195}
   - component: {fileID: 2161631463249222270}
   - component: {fileID: 5238431715026806161}
-  - component: {fileID: 707345098067341134}
   m_Layer: 1
   m_Name: Player
   m_TagString: Untagged
@@ -244,6 +243,85 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &707345098067341134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507993662015929204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df6da2b8df99c64fbe6151838427dd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  health:
+    minValue: 0
+    maxValue: 20
+    _initialValue: 20
+    _value: 20
+  endurance:
+    minValue: 0
+    maxValue: 20
+    _initialValue: 20
+    _value: 20
+  satiety:
+    minValue: 0
+    maxValue: 20
+    _initialValue: 0
+    _value: 20
+  bleedingParameter:
+    minValue: 0
+    maxValue: 20
+    _initialValue: 0
+    _value: 0
+  radiation:
+    minValue: 0
+    maxValue: 20
+    _initialValue: 0
+    _value: 0
+  regeneration:
+    isInfinite: 1
+    recoverToInitial: 1
+    speed: 0.1
+    duration: 0
+    startTime: 0
+    targetParameterIndex: 0
+  enduranceRecovery:
+    isInfinite: 1
+    recoverToInitial: 1
+    speed: 0.3
+    duration: 0
+    startTime: 0
+    targetParameterIndex: 1
+  hunger:
+    isInfinite: 1
+    recoverToInitial: 1
+    speed: -0.1
+    duration: 0
+    startTime: 0
+    targetParameterIndex: 2
+  movement:
+    lifecycle: {fileID: 707345098067341134}
+    isDebugLog: 0
+    movementInputValues: {x: 0, y: 0, z: 0}
+    runningInputValue: 0
+    jumpingInputValue: 0
+    referenceAcceleration: 2.66
+    runningAcceleration: 5.32
+    referenceEndurance: 20
+    jumpForce: 7.5
+    isGeneratePhysicMaterial: 1
+    mass: 70
+    drag: 3
+    height: 1.6
+    groundMask:
+      serializedVersion: 2
+      m_Bits: 1
+    rb: {fileID: 507993662015929206}
+    cc: {fileID: 507993662015929205}
 --- !u!114 &2168946248158206767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,7 +336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  entity: {fileID: 2168946248158206766}
+  entity: {fileID: 707345098067341134}
   overview:
     isDebugLog: 0
     lookingInputValues: {x: 0, y: 0}
@@ -283,40 +361,6 @@ MonoBehaviour:
   playerNameText: {fileID: 5942551270749010761}
   playerHealthText: {fileID: 6370469275099971039}
   HUD: {fileID: 0}
---- !u!114 &2168946248158206766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507993662015929204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af9d2bec6801b7e43b42ca82c40a6144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  lifecycle: {fileID: 707345098067341134}
-  movement:
-    lifecycle: {fileID: 707345098067341134}
-    isDebugLog: 0
-    movementInputValues: {x: 0, y: 0, z: 0}
-    runningInputValue: 0
-    jumpingInputValue: 0
-    referenceAcceleration: 5
-    runningAcceleration: 10
-    referenceEndurance: 20
-    jumpForce: 6
-    isGeneratePhysicMaterial: 1
-    mass: 70
-    drag: 3
-    height: 1.8
-    groundMask:
-      serializedVersion: 2
-      m_Bits: 1
-    rb: {fileID: 507993662015929206}
-    cc: {fileID: 507993662015929205}
 --- !u!33 &507993662015929194
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -421,66 +465,6 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
---- !u!114 &707345098067341134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507993662015929204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df6da2b8df99c64fbe6151838427dd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  health:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 20
-    _value: 20
-  endurance:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 20
-    _value: 20
-  satiety:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 0
-    _value: 20
-  bleedingParameter:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 0
-    _value: 0
-  radiation:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 0
-    _value: 0
-  regeneration:
-    isInfinite: 1
-    recoverToInitial: 1
-    speed: 0.1
-    duration: 0
-    startTime: 0
-    targetParameterIndex: 0
-  enduranceRecovery:
-    isInfinite: 1
-    recoverToInitial: 1
-    speed: 0.3
-    duration: 0
-    startTime: 0
-    targetParameterIndex: 1
-  hunger:
-    isInfinite: 1
-    recoverToInitial: 1
-    speed: -0.1
-    duration: 0
-    startTime: 0
-    targetParameterIndex: 2
 --- !u!1 &1709699199297977212
 GameObject:
   m_ObjectHideFlags: 0

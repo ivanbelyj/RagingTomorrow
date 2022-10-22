@@ -8,7 +8,6 @@ using TMPro;
 [RequireComponent(typeof(Entity))]
 public class Player : NetworkBehaviour
 {
-    [Header("Set in inspector")]
     public Entity entity;
 
     /* Overview class. Look, Aim, Shake... */
@@ -17,7 +16,7 @@ public class Player : NetworkBehaviour
     public TextMeshPro playerNameText;
     public TextMeshPro playerHealthText;
 
-    [Header("Set dynamically")]
+    [Header("Sets dynamically")]
     public SimpleHUD HUD;
 
     [SyncVar(hook = nameof(OnPlayerNameChanged))]
@@ -40,8 +39,8 @@ public class Player : NetworkBehaviour
     }
 
     private void BindHealthFloatingText() {
-        SetHealthText(entity.lifecycle.health.Value);
-        entity.lifecycle.health.OnValueChanged += (old, newVal) => {
+        SetHealthText(entity.health.Value);
+        entity.health.OnValueChanged += (old, newVal) => {
             SetHealthText(newVal);
         };
         void SetHealthText(float val) {
@@ -132,12 +131,14 @@ public class Player : NetworkBehaviour
         entity.movement.jumpingInputValue = Input.GetButtonDown("Jump");
         entity.movement.runningInputValue = Input.GetKey(KeyCode.LeftShift);
 
-        LifecycleEffect damage = new LifecycleEffect(-1f, 10) {
-            targetParameterIndex = 0  // health
+        LifecycleEffect damage = new LifecycleEffect() {
+            speed = -1f,
+            duration = 10,
+            targetParameterIndex = EntityParameterEnum.Health
         };
 
         if (Input.GetKeyDown(KeyCode.H)) {
-            entity.lifecycle.CmdAddEffect(damage);
+            entity.CmdAddEffect(damage);
         }
     }
 

@@ -13,7 +13,7 @@ public static class CustomTypesReaderWriter
         writer.WriteBool(effect.recoverToInitial);
         writer.WriteFloat(effect.speed);
 
-        writer.WriteByte(effect.targetParameterIndex);
+        writer.WriteByte((byte)effect.targetParameterIndex);
         // writer.WriteBool(effect.isActive);
         writer.WriteDouble(effect.startTime);
         // writer.WriteInt(effect.UpdateIterations);
@@ -35,7 +35,7 @@ public static class CustomTypesReaderWriter
             speed = speed,
             isInfinite = isInfinite,
             recoverToInitial = recoverToInitial, 
-            targetParameterIndex = targetParameterIndex,
+            targetParameterIndex = (EntityParameterEnum)targetParameterIndex,
             duration = duration,
             startTime = startTime
         };

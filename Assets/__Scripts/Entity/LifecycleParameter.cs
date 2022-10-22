@@ -87,10 +87,6 @@ public class LifecycleParameter
     // Например, игрок заболел и у него сократилось максимальное здоровье
     public event InitialChanged OnInitialChanged;
 
-    public void Initialize() {
-        // Debug.Log($"{name} is initialized");
-        // OnValueChanged += (oldVal, newVal) => Debug.Log($"{name} is changed to {newVal}");
-    }
     private void InitialChangedActions(float oldInitial, float newInitial)  {
         // Ситуация 1: норма была 100% здоровья. Игрок заболел, теперь никакие аптечки
         // не восстановят выше 80%.

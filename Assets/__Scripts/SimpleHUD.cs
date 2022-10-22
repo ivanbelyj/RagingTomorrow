@@ -6,9 +6,8 @@ using UnityEngine.UI;
 // [RequireComponent(typeof(Entity))]
 public class SimpleHUD : MonoBehaviour
 {
-    private EntityLifecycle lifecycle;
+    private Entity targetEntity;
 
-    [Header("Set in inspector")]
     [SerializeField]
     private Slider healthSlider;
 
@@ -21,18 +20,18 @@ public class SimpleHUD : MonoBehaviour
     // radiation, bleeding
 
     public void SetEntity(GameObject entity) {
-        lifecycle = entity.GetComponent<Entity>().lifecycle;
-        InitializeSlider(healthSlider, lifecycle.health);
-        InitializeSlider(enduranceSlider, lifecycle.endurance);
-        InitializeSlider(satietySlider, lifecycle.satiety);
+        targetEntity = entity.GetComponent<Entity>();
+        InitializeSlider(healthSlider, targetEntity.health);
+        InitializeSlider(enduranceSlider, targetEntity.endurance);
+        InitializeSlider(satietySlider, targetEntity.satiety);
         
-        lifecycle.health.OnValueChanged += (oldValue, newValue) => {
+        targetEntity.health.OnValueChanged += (oldValue, newValue) => {
             UpdateSlider(healthSlider, newValue);
         };
-        lifecycle.endurance.OnValueChanged += (oldValue, newValue) => {
+        targetEntity.endurance.OnValueChanged += (oldValue, newValue) => {
             UpdateSlider(enduranceSlider, newValue);
         };
-        lifecycle.satiety.OnValueChanged += (oldValue, newValue) => {
+        targetEntity.satiety.OnValueChanged += (oldValue, newValue) => {
             UpdateSlider(satietySlider, newValue);
         };
     }

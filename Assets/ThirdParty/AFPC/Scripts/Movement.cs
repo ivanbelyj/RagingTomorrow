@@ -14,7 +14,7 @@ namespace AFPC {
 
         [Header("Set in inspector")]
         [SerializeField]
-        private EntityLifecycle lifecycle;
+        private Entity lifecycle;
 
         public bool isDebugLog;
 
