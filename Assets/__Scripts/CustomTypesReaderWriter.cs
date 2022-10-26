@@ -13,9 +13,10 @@ public static class CustomTypesReaderWriter
         writer.WriteBool(effect.recoverToInitial);
         writer.WriteFloat(effect.speed);
 
-        writer.WriteByte((byte)effect.targetParameterIndex);
+        writer.WriteByte((byte)effect.targetParameter);
         // writer.WriteBool(effect.isActive);
         writer.WriteDouble(effect.startTime);
+        writer.WriteUShort(effect.effectId);
         // writer.WriteInt(effect.UpdateIterations);
         // writer.WriteInt(effect.UpdateIterationsCurrent);
     }
@@ -30,14 +31,16 @@ public static class CustomTypesReaderWriter
         byte targetParameterIndex = reader.ReadByte();
         // effect.isActive = reader.ReadBool();
         double startTime = reader.ReadDouble();
+        ushort effectId = reader.ReadUShort();
 
         LifecycleEffect effect = new LifecycleEffect() {
             speed = speed,
             isInfinite = isInfinite,
             recoverToInitial = recoverToInitial, 
-            targetParameterIndex = (EntityParameterEnum)targetParameterIndex,
+            targetParameter = (EntityParameterEnum)targetParameterIndex,
             duration = duration,
-            startTime = startTime
+            startTime = startTime,
+            effectId = effectId
         };
         return effect;
     }

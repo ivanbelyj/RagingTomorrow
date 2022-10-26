@@ -1,0 +1,49 @@
+ManifestFileVersion: 0
+CRC: 497811037
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bc75dd7f4ebfe481668141c45e975185
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 16b52b84dc432f36bc2349e19a65d602
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 82b72ed713299704c91643aa886afc71, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: bbe75254bc0ade1438f588e2768daca0, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: LifecycleEffect
+Assets:
+- Assets/BundledAssets/itemdata/FirstAidKit.asset
+Dependencies: []

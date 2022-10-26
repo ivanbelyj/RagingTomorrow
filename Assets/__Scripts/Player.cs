@@ -5,22 +5,35 @@ using UnityEngine;
 using Mirror;
 using TMPro;
 
+[RequireComponent(typeof(Inventory))]
+[RequireComponent(typeof(ItemPicker))]
 [RequireComponent(typeof(Entity))]
 public class Player : NetworkBehaviour
 {
-    public Entity entity;
-
-    /* Overview class. Look, Aim, Shake... */
-    public Overview overview;
+    // UI
     public GameObject floatingInfo;
     public TextMeshPro playerNameText;
     public TextMeshPro playerHealthText;
+    public TextMeshPro playerInventoryText;
 
-    [Header("Sets dynamically")]
-    public SimpleHUD HUD;
+    private SimpleHUD _HUD;
 
+    // Components
+    private Inventory _inventory;
+    private ItemPicker _itemPicker;
+    private Entity _entity;
+    public Overview overview;
+    
+    // Object fields
     [SyncVar(hook = nameof(OnPlayerNameChanged))]
-    private string playerName;
+    private string _syncPlayerName;
+    private string _playerName;
+
+    private void Awake() {
+        _inventory = GetComponent<Inventory>();
+        _itemPicker = GetComponent<ItemPicker>();
+        _entity = GetComponent<Entity>();
+    }
 
     private void Start() {
         /* a few apllication settings for more smooth. This is Optional. */
@@ -33,37 +46,49 @@ public class Player : NetworkBehaviour
 
         /* Initialize movement and add camera shake when landing */
         // movement.Initialize();
-        entity.movement.AssignLandingAction(() => overview.Shake(0.5f));
+        // _entity.movement.AssignLandingAction(() => overview.Shake(0.5f));
 
-        BindHealthFloatingText();
+        BindFloatingInfo();
     }
 
-    private void BindHealthFloatingText() {
-        SetHealthText(entity.health.Value);
-        entity.health.OnValueChanged += (old, newVal) => {
+    private void BindFloatingInfo() {
+        SetHealthText(_entity.health.Value);
+        _entity.health.OnValueChanged += (old, newVal) => {
             SetHealthText(newVal);
         };
         void SetHealthText(float val) {
             playerHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
         }
-    }
 
-    private void BindUI() {
-        HUD = FindObjectOfType<SimpleHUD>();
-        if (HUD is not null) {
-            HUD.SetEntity(gameObject);
-            Debug.Log("HUD is set");
-        }
+        playerInventoryText.text = _inventory.items.Count.ToString();
+        _inventory.OnInventoryChanged += (SyncList<InventoryItem>.Operation op,
+            int index, InventoryItem oldItem, InventoryItem newItem) => {
+            playerInventoryText.text = _inventory.items.Count.ToString();
+            Debug.Log($"Inventory is changed! {newItem.itemDataName} is added,"
+                + $" {oldItem.itemDataName} is removed");
+        };
     }
 
     public override void OnStartLocalPlayer()
     {
         overview.camera = Camera.main;
 
-        playerName = $"Player {Random.Range(100, 999)}";
-        CmdSetupPlayer(playerName);
+        string newPlayerName = $"Player {Random.Range(100, 999)}";
+        if (isServer) {
+            ChangePlayerName(newPlayerName);
+        } else {
+            CmdChangePlayerName(newPlayerName);
+        }
 
         BindUI();
+    }
+
+    private void BindUI() {
+        _HUD = FindObjectOfType<SimpleHUD>();
+        if (_HUD is not null) {
+            _HUD.SetEntity(gameObject);
+            Debug.Log("HUD is set");
+        }
     }
 
     private void Update() {
@@ -75,8 +100,10 @@ public class Player : NetworkBehaviour
         if (!hasAuthority)
             return;
 
-        /* Read player input before check availability */
         ReadInput();
+
+        if (!_entity.IsAlive)
+            return;
 
         /* Block controller when unavailable */
         // if (!entity.lifecycle.Availability()) return;
@@ -104,13 +131,17 @@ public class Player : NetworkBehaviour
 
         /* Block controller when unavailable */
         // if (!entity.lifecycle.Availability()) return;
+        if (!_entity.IsAlive)
+            return;
 
         /* Physical rotation with camera */
-        overview.RotateRigigbodyToLookDirection(entity.movement.rb);
+        overview.RotateRigigbodyToLookDirection(_entity.movement.rb);
     }
 
     private void LateUpdate() {
-
+        if (!_entity.IsAlive)
+            return;
+        
         /* Block controller when unavailable */
         // if (!entity.lifecycle.Availability()) return;
 
@@ -126,19 +157,46 @@ public class Player : NetworkBehaviour
         overview.lookingInputValues.y = Input.GetAxis("Mouse Y");
 
         overview.aimingInputValue = Input.GetMouseButton(1);
-        entity.movement.movementInputValues.x = Input.GetAxis("Horizontal");
-        entity.movement.movementInputValues.y = Input.GetAxis("Vertical");
-        entity.movement.jumpingInputValue = Input.GetButtonDown("Jump");
-        entity.movement.runningInputValue = Input.GetKey(KeyCode.LeftShift);
+        _entity.movement.movementInputValues.x = Input.GetAxis("Horizontal");
+        _entity.movement.movementInputValues.y = Input.GetAxis("Vertical");
+        _entity.movement.jumpingInputValue = Input.GetButtonDown("Jump");
+        _entity.movement.runningInputValue = Input.GetKey(KeyCode.LeftShift);
+
+        // Информация об инвентаре
+        if (Input.GetKeyDown(KeyCode.N)) {
+            var dict = new Dictionary<string, int>();
+            foreach (var item in _inventory.items) {
+                if (dict.ContainsKey(item.itemDataName))
+                    dict[item.itemDataName]++;
+                else
+                    dict.Add(item.itemDataName, 1);
+            }
+
+            Debug.Log("Инвентарь");
+            foreach (var pair in dict)
+                Debug.Log($"\t{pair.Key}: {pair.Value}");
+        }
+
+        if (Input.GetKeyDown(KeyCode.G)) {
+            if (_inventory.items.Count != 0) {
+                Debug.Log("Элемент " + _inventory.items[0].itemDataName + " будет выброшен");
+                _itemPicker.ThrowAway(_inventory.items[0]);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.B)) {
+            _inventory.AddTestItems();
+        }
 
         LifecycleEffect damage = new LifecycleEffect() {
             speed = -1f,
             duration = 10,
-            targetParameterIndex = EntityParameterEnum.Health
+            targetParameter = EntityParameterEnum.Health
         };
 
         if (Input.GetKeyDown(KeyCode.H)) {
-            entity.CmdAddEffect(damage);
+            _entity.AddEffect(damage);
+            // entity.CmdAddEffect(damage);
         }
     }
 
@@ -148,12 +206,18 @@ public class Player : NetworkBehaviour
 
     #region Sync
     private void OnPlayerNameChanged(string oldName, string newName) {
+        _playerName = newName;
         playerNameText.text = newName;
     }
 
-    [Command]
-    private void CmdSetupPlayer(string name) {
-        playerName = name;
+    [Server]  // Будет вызываться и выполняться только на сервере
+    private void ChangePlayerName(string newName) {
+        _syncPlayerName = newName;
+    }
+
+    [Command]  // Метод выполняется на сервере по запросу клиента
+    private void CmdChangePlayerName(string name) {
+        ChangePlayerName(name);
     }
     #endregion
 }

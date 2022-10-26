@@ -10,11 +10,11 @@ namespace AFPC {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
     public class Movement {
-        private LifecycleParameter enduranceParameter;
-
-        [Header("Set in inspector")]
-        [SerializeField]
-        private Entity lifecycle;
+        #region Added by Ivan Belyj
+        public delegate void ChangeRunning(bool isRunning);
+        public event ChangeRunning OnChangeRunning;
+        private bool isRunning = false;
+        #endregion
 
         public bool isDebugLog;
 
@@ -83,10 +83,6 @@ namespace AFPC {
                     bounceCombine = PhysicMaterialCombine.Minimum
                 };
                 cc.material = physicMaterial;
-            }
-
-            if (lifecycle is not null) {
-                enduranceParameter = lifecycle.endurance;
             }
         }
 
@@ -234,11 +230,24 @@ namespace AFPC {
 		    if (!isRunningAvaiable) return;
 		    if (!isGrounded) return;
 		    if (runningInputValue && endurance > 0.05f) {
+                // Added by Ivan Belyj
+                if (!isRunning) {
+                    isRunning = true;
+                    OnChangeRunning?.Invoke(true);
+                }
+                
+
                 releaseAcceleration = false;
 			    endurance -= Time.deltaTime * 2;
 			    currentAcceleration = Mathf.MoveTowards (currentAcceleration, runningAcceleration, Time.deltaTime * 10);
 		    }
 		    else {
+                // Added by Ivan Belyj
+                if (isRunning) {
+                    isRunning = false;
+                    OnChangeRunning?.Invoke(false);
+                }
+
                 releaseAcceleration = true;
 			    if (System.Math.Abs(endurance - referenceEndurance) > epsilon) {
                     endurance = Mathf.MoveTowards (endurance, referenceEndurance, Time.deltaTime);

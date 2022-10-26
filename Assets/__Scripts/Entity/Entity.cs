@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AFPC;
 using Mirror;
 using UnityEngine;
@@ -8,7 +9,6 @@ using UnityEngine.Events;
 ///<summary>
 /// Компонент живого существа
 ///</summary>
-[System.Serializable]
 public class Entity : NetworkBehaviour
 {
     #region Parameters and effects
@@ -19,10 +19,14 @@ public class Entity : NetworkBehaviour
     public LifecycleParameter bleedingParameter;
     public LifecycleParameter radiation;
 
-    [Header("Permanent effects")]
+    [Header("Effects")]
+    // Permanent
     public LifecycleEffect regeneration;
     public LifecycleEffect enduranceRecovery;
     public LifecycleEffect hunger;
+
+    // Temporary
+    public LifecycleEffect enduranceDecrease;
 
     // public LifecycleEffect bleedingEffect;
     // public LifecycleEffect radiationExcretion;
@@ -36,7 +40,8 @@ public class Entity : NetworkBehaviour
     /// Все незавершившиеся эффекты, применяемые для изменения параметров жизненного цикла.
     /// Завершившиеся эффекты удаляются после регулярного обхода.
     ///</summary>
-    private readonly SyncList<LifecycleEffect> _effects = new SyncList<LifecycleEffect>();
+    private readonly SyncSet<LifecycleEffect> _effects =
+        new SyncSet<LifecycleEffect>(new HashSet<LifecycleEffect>());
 
     ///<summary>
     /// Все параметры существа, собранные для удобства обхода.
@@ -49,27 +54,45 @@ public class Entity : NetworkBehaviour
     public override void OnStartLocalPlayer() {
         if (!hasAuthority)
             return;
-        
-        foreach (var effect in new List<LifecycleEffect> { regeneration, enduranceRecovery, hunger } ) {
-            CmdAddEffect(effect);
+
+        var effects = new LifecycleEffect[] { regeneration, enduranceRecovery, hunger };
+        for (int i = 0; i < effects.Length; i++) {
+            // effectId должен быть актуален и на клиенте, поэтому устанавливается не в Command
+            // effects[i].effectId = GetVacantEffectId(enduranceDecrease);
+            // CmdAddEffect(effects[i]);
+            AddEffect(effects[i]);
         }
     }
 
     private void Awake() {
-        // Порядок в массиве напрямую зависит от значений полей (?) EntityParameterEnum,
+        // Порядок в массиве напрямую зависит от значений EntityParameterEnum,
         // чтобы связать ограниченный набор значений перечисления с ограниченным
         // набором параметров (причины решения описаны в упомянутом enum)
         _parameters = new [] { health, endurance, satiety };
         if (health.Value > health.minValue) {
             IsAlive = true;
         }
+        Debug.Log($"Is alive: {IsAlive}");
         health.OnMin += Death;
 
         movement.Initialize();
+        movement.OnChangeRunning += (bool isRunning) => {
+            Debug.Log("Running changed. isRunning == " + isRunning);
+            if (isRunning) {
+                AddEffect(enduranceDecrease);
+
+                // enduranceDecrease.effectId = GetVacantEffectId(enduranceDecrease);
+                // CmdAddEffect(enduranceDecrease);
+            }
+            else {
+                CmdRemoveEffect(enduranceDecrease.effectId);
+            }
+        };
     }
 
     private void Death() {
         IsAlive = false;
+        Debug.Log("Entity is dead");
         OnDeath?.Invoke();
     }
 
@@ -84,26 +107,45 @@ public class Entity : NetworkBehaviour
 
         /* Control the jumping, ground search... */
         movement.Jumping();
-        
+
         UpdateEffects();
     }
 
     private void FixedUpdate() {
+        if (!IsAlive)
+            return;
+        
         movement.Accelerate();
     }
 
     #region Effects
+
+    private ushort GetVacantEffectId(LifecycleEffect effect) {
+        if (_effects.Count == 0)
+            return 0;
+        // Todo: find vacant id algorithm
+        return (ushort)(_effects.Max(x => x.effectId) + 1);
+    }
+
+    public void AddEffect(LifecycleEffect effect) {
+        effect.effectId = GetVacantEffectId(enduranceDecrease);
+        CmdAddEffect(effect);
+    }
+
     [Command]
-    public void CmdAddEffect(LifecycleEffect effect) {
-        // effect.isActive = true;
-        Debug.Log($"Effect to {effect.targetParameterIndex}, speed {effect.speed} is added");
+    private void CmdAddEffect(LifecycleEffect effect) {
+        Debug.Log($"Effect {effect.effectId} is added");
         effect.startTime = NetworkTime.time;
+
         _effects.Add(effect);
     }
 
     [Command]
-    public void CmdRemoveEffect(LifecycleEffect effect) {
-        _effects.Remove(effect);
+    public void CmdRemoveEffect(ushort effectId) {
+        LifecycleEffect effect = _effects.First(effect => effect.effectId == effectId);
+        bool isRemoved = _effects.Remove(effect);
+
+        Debug.Log($"Effect {effectId} is " + (isRemoved ? "removed" : "NOT REMOVED"));
     }
 
     bool IsPassed(LifecycleEffect effect)
@@ -113,7 +155,7 @@ public class Entity : NetworkBehaviour
     public void ApplyEffect(LifecycleEffect effect) {
         // Если эффект бесконечен или не закончился
         if ((effect.isInfinite || !IsPassed(effect))) {
-            LifecycleParameter target = _parameters[(byte)effect.targetParameterIndex];
+            LifecycleParameter target = _parameters[(byte)effect.targetParameter];
             // Если параметр восстанавливающийся и сейчас нужно восстанавливать
             if (effect.recoverToInitial) {
                 if (target.Value != target.InitialValue) {
@@ -121,27 +163,23 @@ public class Entity : NetworkBehaviour
                     target.Value += Mathf.Abs(effect.speed) * sign * Time.deltaTime;
                 }
             } else {
-                if (effect.speed < 0)
-                    Debug.Log("Apply effect to " + effect.targetParameterIndex + ". " + effect.speed);
                 target.Value += effect.speed * Time.deltaTime;
             }
         }
     }
 
     private void UpdateEffects() {
-        List<LifecycleEffect> _effectToRemove = new List<LifecycleEffect>();
+        List<ushort> _effectsToRemove = new List<ushort>();
         foreach (LifecycleEffect effect in _effects) {
             // Прошедшие временные эффекты откладываются для удаления
             // (нельзя изменять список, пока проходим по нему)
             if (!effect.isInfinite && IsPassed(effect))
-                _effectToRemove.Add(effect);
+                _effectsToRemove.Add(effect.effectId);
             else
                 ApplyEffect(effect);
         }
-        if (isLocalPlayer) {
-            foreach (LifecycleEffect effect in _effectToRemove)
-                CmdRemoveEffect(effect);
-        }
+        foreach (ushort effectId in _effectsToRemove)
+            CmdRemoveEffect(effectId);
     }
     #endregion
 }
