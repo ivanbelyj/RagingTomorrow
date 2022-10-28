@@ -25,13 +25,18 @@ public class ItemPicker : NetworkBehaviour
         // Если столкнулись с GameObject, и это - предмет
         Item item = col.gameObject.GetComponent<Item>();
         if (item is not null) {
+            ItemGameData itemGameData = item.ItemGameData;
+            // = new ItemGameData() {
+            //     dynamicData = item.DynamicData,
+            //     itemDataName = item.StaticData.name
+            // };
             if (isServer) {
-                _inventory.AddItem(item.ItemData.name);
+                _inventory.AddItem(itemGameData);
             } else {
-                _inventory.CmdAddItem(item.ItemData.name);
+                _inventory.CmdAddItem(itemGameData);
             }
             NetworkServer.Destroy(item.gameObject);
-            Debug.Log($"Item {item.ItemData.name}, {item.ItemData.ItemName} is picked up to inventory");
+            Debug.Log($"Item {item.ItemGameData.itemDataName} is picked up to inventory");
         }
     }
 
@@ -42,42 +47,46 @@ public class ItemPicker : NetworkBehaviour
             _inventory.CmdRemoveItem(invItem);
         }
         
-        // Debug.Log("Throwed item is " + invItem.itemDataName);
-
-        ItemData itemData = _inventory.GetItemData(invItem.itemDataName);
-        Debug.Log("ThrowAway: itemData - " + itemData.name +
-            $". {itemData.ItemName}, {itemData.Description}");
+        Debug.Log("ThrowAway: itemData - " + invItem.itemGameData.itemDataName);
         
         if (isServer) {
-            SpawnAndThrowAway(itemData.name);
+            SpawnAndThrowAway(invItem.itemGameData);
         } else {
-            CmdSpawnAndThrowAway(itemData.name);
+            CmdSpawnAndThrowAway(invItem.itemGameData);
         }
     }
 
     // В Command (как и другие Remote actions) можно передавать не все типы данных
     [Command]
-    public void CmdSpawnAndThrowAway(string itemDataName) {
-        SpawnAndThrowAway(itemDataName);
+    public void CmdSpawnAndThrowAway(ItemGameData itemGameData) {
+        // ItemStaticData itemData = _inventory.GetItemData(itemStaticDataName);
+        SpawnAndThrowAway(itemGameData);
     }
 
     [Server]
-    public void SpawnAndThrowAway(string itemDataName) {
-        ItemData itemData = _inventory.GetItemData(itemDataName);
+    public void SpawnAndThrowAway(ItemGameData itemGameData) {
+        // Полная неизменная информация о предмете берется на основе названия,
+        // которое используется для эффективной синхронизации инвентаря
+        ItemStaticData itemStaticData = _inventory.GetItemData(itemGameData.itemDataName);
 
-        Debug.Log("ThrowAway: itemData - " + itemData.name +
-            $". {itemData.ItemName}, {itemData.Description}, Item: {itemData.Item}");
+        Debug.Log("ThrowAway: itemData - " + itemStaticData.name +
+            $". {itemStaticData.ItemName}, {itemStaticData.Description}, Item: {itemStaticData.ItemPrefab}");
         
         // Небольшой отступ, чтобы предмет не подбирался сразу после выбрасывания
         Vector3 offsetForNotToPick = transform.forward * (_collider.bounds.size.z * 1.5f) / 2;
-        GameObject item = Instantiate(itemData.Item.gameObject,
+        GameObject itemGO = Instantiate(itemStaticData.ItemPrefab,
             transform.position + offsetForNotToPick, Quaternion.identity);
+        
+        // Предметы должны быть инициализированы
+        Item item = itemGO.GetComponent<Item>();
+        item.Initialize(itemGameData, itemStaticData);
 
         // Отправляем информацию о сетевом объекте всем игрокам
-        NetworkServer.Spawn(item);
+        NetworkServer.Spawn(itemGO);
         
         // Бросок
-        Rigidbody itemRb = item.GetComponent<Rigidbody>();
-        itemRb.AddForce(transform.forward * throwAwayForce, ForceMode.Impulse);
+        Rigidbody itemRb = itemGO.GetComponent<Rigidbody>();
+        // Сила броска зависит от массы: и легкая аптечка, и тяжелый автомат слегка отбрасываются
+        itemRb.AddForce(transform.forward * throwAwayForce * itemRb.mass, ForceMode.Impulse);
     }
 }

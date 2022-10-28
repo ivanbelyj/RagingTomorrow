@@ -26,13 +26,11 @@ public class Inventory : NetworkBehaviour
     /// </summary>
     public int height;
 
-    private ItemDataManager _itemDataManager;
+    private ItemStaticDataManager _itemDataManager;
 
     public override void OnStartClient()
     {
         base.OnStartClient();
-
-        _syncItems.Callback += SyncItems;
 
         // При старте в _syncItems уже могут быть элементы
         items = new List<InventoryItem>(_syncItems.Count);
@@ -44,14 +42,17 @@ public class Inventory : NetworkBehaviour
 
     private void Start()
     {
-        _itemDataManager = FindObjectOfType<ItemDataManager>();
+        _syncItems.Callback += SyncItems;
+        _itemDataManager = FindObjectOfType<ItemStaticDataManager>();
     }
 
     public void AddTestItems()
     {
         for (int n = 0; n < 20; n++) {
             InventoryItem invItem = new InventoryItem() {
-                itemDataName = _itemDataManager.NamesAndData.ElementAt(0).Key
+                itemGameData = new ItemGameData() {
+                    itemDataName = _itemDataManager.NamesAndData.ElementAt(0).Key
+                }
             };
             if (isServer) {
                 AddItem(invItem);
@@ -68,9 +69,9 @@ public class Inventory : NetworkBehaviour
     }
 
     [Server]
-    public void AddItem(string itemDataName) {
+    public void AddItem(ItemGameData itemGameData) {
         InventoryItem invItem = new InventoryItem() {
-            itemDataName = itemDataName
+            itemGameData = itemGameData
         };
         _syncItems.Add(invItem);
     }
@@ -86,7 +87,7 @@ public class Inventory : NetworkBehaviour
     }
 
     [Command]
-    public void CmdAddItem(string itemDataName) {
+    public void CmdAddItem(ItemGameData itemDataName) {
         AddItem(itemDataName);
     }
 
@@ -136,9 +137,9 @@ public class Inventory : NetworkBehaviour
         }
     }
 
-    public float TotalWeight => items.Sum(item => GetItemData(item.itemDataName).Mass);
+    public float TotalWeight => items.Sum(item => GetItemData(item.itemGameData.itemDataName).Mass);
 
-    public ItemData GetItemData(string itemDataName)
+    public ItemStaticData GetItemData(string itemDataName)
     {
         return _itemDataManager.NamesAndData[itemDataName];
     }

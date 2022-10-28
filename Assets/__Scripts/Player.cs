@@ -64,8 +64,8 @@ public class Player : NetworkBehaviour
         _inventory.OnInventoryChanged += (SyncList<InventoryItem>.Operation op,
             int index, InventoryItem oldItem, InventoryItem newItem) => {
             playerInventoryText.text = _inventory.items.Count.ToString();
-            Debug.Log($"Inventory is changed! {newItem.itemDataName} is added,"
-                + $" {oldItem.itemDataName} is removed");
+            Debug.Log($"Inventory is changed! {newItem.itemGameData.itemDataName} is added,"
+                + $" {oldItem.itemGameData.itemDataName} is removed");
         };
     }
 
@@ -166,10 +166,10 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.N)) {
             var dict = new Dictionary<string, int>();
             foreach (var item in _inventory.items) {
-                if (dict.ContainsKey(item.itemDataName))
-                    dict[item.itemDataName]++;
+                if (dict.ContainsKey(item.itemGameData.itemDataName))
+                    dict[item.itemGameData.itemDataName]++;
                 else
-                    dict.Add(item.itemDataName, 1);
+                    dict.Add(item.itemGameData.itemDataName, 1);
             }
 
             Debug.Log("Инвентарь");
@@ -179,7 +179,8 @@ public class Player : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.G)) {
             if (_inventory.items.Count != 0) {
-                Debug.Log("Элемент " + _inventory.items[0].itemDataName + " будет выброшен");
+                Debug.Log("Элемент " + _inventory.items[0].itemGameData.itemDataName
+                    + " будет выброшен");
                 _itemPicker.ThrowAway(_inventory.items[0]);
             }
         }

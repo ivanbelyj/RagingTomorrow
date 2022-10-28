@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New ArmorItemData",
     menuName = "Item Data/Armor Item Data",
     order = 51)]
-public class ArmorItemData : ItemData
+public class ArmorItemStaticData : ItemStaticData
 {
     
 }

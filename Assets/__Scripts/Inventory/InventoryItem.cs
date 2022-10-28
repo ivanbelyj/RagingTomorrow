@@ -12,7 +12,8 @@ public struct InventoryItem
 
     public int count;
 
-    public string itemDataName;
+    // public string itemDataName;
+    public ItemGameData itemGameData;
 
     // public int InventoryX { get => _inventoryX; }
     // public int InventoryY { get => _inventoryY; }

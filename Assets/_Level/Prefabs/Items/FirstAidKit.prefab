@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7433995896713791612}
   - component: {fileID: 9193935081771352012}
   - component: {fileID: 6775837700265308253}
-  - component: {fileID: 7626891148500304052}
+  - component: {fileID: 4494829470696123349}
   m_Layer: 0
   m_Name: FirstAidKit
   m_TagString: Untagged
@@ -171,7 +171,7 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
---- !u!114 &7626891148500304052
+--- !u!114 &4494829470696123349
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -180,9 +180,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5277316773288308795}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbe75254bc0ade1438f588e2768daca0, type: 3}
+  m_Script: {fileID: 11500000, guid: be6ed748c40801d468bf4d2049607d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _itemData: {fileID: 11400000, guid: c2c35c4707ea8224d9d2a18d55cc8860, type: 2}

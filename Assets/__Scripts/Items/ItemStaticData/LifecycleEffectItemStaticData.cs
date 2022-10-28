@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New LifecycleEffectItem",
     menuName = "Item Data/Lifecycle Effect Item Data",
     order = 51)]
-public class LifecycleEffectItemData : ItemData
+public class LifecycleEffectItemStaticData : ItemStaticData
 {
     [SerializeField]
     private LifecycleEffect _effect;
