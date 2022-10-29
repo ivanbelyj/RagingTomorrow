@@ -28,6 +28,7 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnPlayerNameChanged))]
     private string _syncPlayerName;
     private string _playerName;
+    public string PlayerName => _playerName;
 
     private void Awake() {
         _inventory = GetComponent<Inventory>();
