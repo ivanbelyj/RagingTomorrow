@@ -3626,6 +3626,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6617823096310768953, guid: b3c6565247716c6468235f370c59d79d,
+        type: 3}
+      propertyPath: gridSpacing
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6865192819377530504, guid: b3c6565247716c6468235f370c59d79d,
         type: 3}
       propertyPath: m_AnchorMax.x

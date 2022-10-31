@@ -21,6 +21,7 @@ public class Player : NetworkBehaviour
     // Components
     private Inventory _inventory;
     private ItemPicker _itemPicker;
+    private PlayerInventoryUIBinder _inventoryUIBinder;
     private Entity _entity;
     public Overview overview;
     
@@ -34,6 +35,7 @@ public class Player : NetworkBehaviour
         _inventory = GetComponent<Inventory>();
         _itemPicker = GetComponent<ItemPicker>();
         _entity = GetComponent<Entity>();
+        _inventoryUIBinder = GetComponent<PlayerInventoryUIBinder>();
     }
 
     private void Start() {
@@ -61,12 +63,12 @@ public class Player : NetworkBehaviour
             playerHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
         }
 
-        playerInventoryText.text = _inventory.items.Count.ToString();
-        _inventory.OnInventoryChanged += (SyncList<InventoryItem>.Operation op,
+        playerInventoryText.text = _inventory.Items.Count.ToString();
+        _inventory.InventoryChanged += (SyncList<InventoryItem>.Operation op,
             int index, InventoryItem oldItem, InventoryItem newItem) => {
-            playerInventoryText.text = _inventory.items.Count.ToString();
-            Debug.Log($"Inventory is changed! {newItem.itemGameData.itemDataName} is added,"
-                + $" {oldItem.itemGameData.itemDataName} is removed");
+            playerInventoryText.text = _inventory.Items.Count.ToString();
+            Debug.Log($"Inventory is changed! {newItem.itemGameData.itemStaticDataName} is added,"
+                + $" {oldItem.itemGameData.itemStaticDataName} is removed");
         };
     }
 
@@ -166,11 +168,11 @@ public class Player : NetworkBehaviour
         // Информация об инвентаре
         if (Input.GetKeyDown(KeyCode.N)) {
             var dict = new Dictionary<string, int>();
-            foreach (var item in _inventory.items) {
-                if (dict.ContainsKey(item.itemGameData.itemDataName))
-                    dict[item.itemGameData.itemDataName]++;
+            foreach (var item in _inventory.Items) {
+                if (dict.ContainsKey(item.itemGameData.itemStaticDataName))
+                    dict[item.itemGameData.itemStaticDataName]++;
                 else
-                    dict.Add(item.itemGameData.itemDataName, 1);
+                    dict.Add(item.itemGameData.itemStaticDataName, 1);
             }
 
             Debug.Log("Инвентарь");
@@ -179,15 +181,19 @@ public class Player : NetworkBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.G)) {
-            if (_inventory.items.Count != 0) {
-                Debug.Log("Элемент " + _inventory.items[0].itemGameData.itemDataName
+            if (_inventory.Items.Count != 0) {
+                Debug.Log("Элемент " + _inventory.Items[0].itemGameData.itemStaticDataName
                     + " будет выброшен");
-                _itemPicker.ThrowAway(_inventory.items[0]);
+                _itemPicker.ThrowAway(_inventory.Items[0]);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {
-            _inventory.AddTestItems();
+            bool isAllAdded = _inventory.AddTestItems();
+            if (!isAllAdded) {
+                Debug.Log("Не все предметы были добавлены. Нет места в инвентаре для предметов "
+                    + "данного размера.");
+            }
         }
 
         LifecycleEffect damage = new LifecycleEffect() {
@@ -199,6 +205,10 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.H)) {
             _entity.AddEffect(damage);
             // entity.CmdAddEffect(damage);
+        }
+
+        if (Input.GetKeyDown(KeyCode.I)) {
+            _inventoryUIBinder.ToggleInventory();
         }
     }
 

@@ -9,6 +9,6 @@ using UnityEngine;
 /// </summary>
 public struct ItemGameData
 {
-    public string itemDataName;
+    public string itemStaticDataName;
     public ItemDynamicData dynamicData;
 }

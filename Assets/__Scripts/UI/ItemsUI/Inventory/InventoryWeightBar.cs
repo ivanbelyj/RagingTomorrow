@@ -15,7 +15,7 @@ public class InventoryWeightBar : MonoBehaviour
         UpdateWeightInfoText(0, 40);
     }
 
-    private void UpdateWeightInfoText(float weight, float maxWeight) {
+    public void UpdateWeightInfoText(float weight, float maxWeight) {
         weightInfoText.text = string.Format(weightInfoFormatString, weight, maxWeight);
     }
 }

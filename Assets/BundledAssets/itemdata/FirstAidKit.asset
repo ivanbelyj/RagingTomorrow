@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemPrefab: {fileID: 5277316773288308795, guid: 0fb1b8aacfe5b1046a2bd3d19d664aaa,
     type: 3}
-  _icon: {fileID: -1977042380, guid: 3caa3e5bb33af4042b649b071b9b696e, type: 3}
+  _icon: {fileID: -1365500845, guid: e3a6c802bf4f20440b571c8e41626b0d, type: 3}
   _width: 1
   _height: 1
+  _stackSize: 1
   _mass: 0.1
   _name: "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
   _description: "\u0422\u0435\u0441\u0442\u043E\u0432\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435

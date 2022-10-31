@@ -402,7 +402,7 @@ MonoBehaviour:
     recoverToInitial: 1
     speed: -0.1
     duration: 0
-    targetParameter: 0
+    targetParameter: 2
     startTime: 0
     effectId: 0
   enduranceDecrease:
@@ -491,9 +491,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  items: []
-  width: 7
-  height: 14
+  _sections:
+  - _cols: 7
+    _rows: 14
+  - _cols: 7
+    _rows: 7
+  _defaultSection: 0
 --- !u!114 &144923770622983988
 MonoBehaviour:
   m_ObjectHideFlags: 0

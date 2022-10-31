@@ -30,13 +30,9 @@ public class ItemPicker : NetworkBehaviour
             //     dynamicData = item.DynamicData,
             //     itemDataName = item.StaticData.name
             // };
-            if (isServer) {
-                _inventory.AddItem(itemGameData);
-            } else {
-                _inventory.CmdAddItem(itemGameData);
-            }
+            _inventory.FindPlaceAndAddItemToDefaultSection(itemGameData);
             NetworkServer.Destroy(item.gameObject);
-            Debug.Log($"Item {item.ItemGameData.itemDataName} is picked up to inventory");
+            Debug.Log($"Item {item.ItemGameData.itemStaticDataName} is picked up to inventory");
         }
     }
 
@@ -47,7 +43,7 @@ public class ItemPicker : NetworkBehaviour
             _inventory.CmdRemoveItem(invItem);
         }
         
-        Debug.Log("ThrowAway: itemData - " + invItem.itemGameData.itemDataName);
+        Debug.Log("ThrowAway: itemData - " + invItem.itemGameData.itemStaticDataName);
         
         if (isServer) {
             SpawnAndThrowAway(invItem.itemGameData);
@@ -67,7 +63,7 @@ public class ItemPicker : NetworkBehaviour
     public void SpawnAndThrowAway(ItemGameData itemGameData) {
         // Полная неизменная информация о предмете берется на основе названия,
         // которое используется для эффективной синхронизации инвентаря
-        ItemStaticData itemStaticData = _inventory.GetItemData(itemGameData.itemDataName);
+        ItemStaticData itemStaticData = _inventory.GetItemData(itemGameData.itemStaticDataName);
 
         Debug.Log("ThrowAway: itemData - " + itemStaticData.name +
             $". {itemStaticData.ItemName}, {itemStaticData.Description}, Item: {itemStaticData.ItemPrefab}");

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1509651278
+CRC: 1744450210
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b077beef69f3e7a1c4f25582d92fbc5f
+    Hash: 59ef8c3dbccdec959bf33b144a61ee19
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6877a14ff56e332ae28f778bebf8a871
+    Hash: 3bb13990c03c95f9d819e150ef4f7856
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -29,12 +29,18 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: be6ed748c40801d468bf4d2049607d2f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  Script: {fileID: 11500000, guid: a959e8eaffe445141aecb3767f64e6fc, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: be6ed748c40801d468bf4d2049607d2f, type: 3}
+  Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c253c8f561532e04994875b004b8a368, type: 3}
 - Class: 115
@@ -46,4 +52,5 @@ SerializeReferenceClassIdentifiers:
   ClassName: LifecycleEffect
 Assets:
 - Assets/BundledAssets/itemdata/FirstAidKit.asset
+- Assets/BundledAssets/itemdata/TestWeapon.asset
 Dependencies: []
