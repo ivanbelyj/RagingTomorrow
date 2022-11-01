@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Информация об инвентаре. Например, может содержать имя владельца.
 /// </summary>
-public class InventoryInfo : MonoBehaviour
+public class InventoryInfoUI : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI _title;
@@ -16,19 +16,29 @@ public class InventoryInfo : MonoBehaviour
     private TextMeshProUGUI _subTitle;
 
     [SerializeField]
-    private Image _image;
+    private Image _avatar;
 
-    public string Title {
+    private string Title {
         get => _title.text;
         set {
             _title.text = value;
         }
     }
-    public string SubTitle {
+    private string SubTitle {
         get => _subTitle.text;
         set {
             _subTitle.text = value;
         }
     }
-    public Image Image => _image;
+    private Image Avatar => _avatar;
+    private void SetAvatar(Sprite avatar) {
+        if (avatar is not null)
+            _avatar.sprite = avatar;
+    }
+
+    public void SetInfo(IInventoryInfo inventoryInfo) {
+        Title = inventoryInfo.Title;
+        SubTitle = inventoryInfo.SubTitle;
+        SetAvatar(inventoryInfo.Avatar);
+    }
 }

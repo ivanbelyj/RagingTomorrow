@@ -8,7 +8,7 @@ using TMPro;
 [RequireComponent(typeof(Inventory))]
 [RequireComponent(typeof(ItemPicker))]
 [RequireComponent(typeof(Entity))]
-public class Player : NetworkBehaviour
+public class Player : NetworkBehaviour, IInventoryInfo
 {
     // UI
     public GameObject floatingInfo;
@@ -21,9 +21,10 @@ public class Player : NetworkBehaviour
     // Components
     private Inventory _inventory;
     private ItemPicker _itemPicker;
-    private PlayerInventoryUIBinder _inventoryUIBinder;
     private Entity _entity;
     public Overview overview;
+
+    private ItemsUIController _itemsUIController;
     
     // Object fields
     [SyncVar(hook = nameof(OnPlayerNameChanged))]
@@ -31,11 +32,22 @@ public class Player : NetworkBehaviour
     private string _playerName;
     public string PlayerName => _playerName;
 
+    string IInventoryInfo.Title => PlayerName;
+    string IInventoryInfo.SubTitle => "";
+    Sprite IInventoryInfo.Avatar => null;
+
+
+    // For test
+    [SerializeField]
+    private Inventory _otherInventory;
+
     private void Awake() {
         _inventory = GetComponent<Inventory>();
         _itemPicker = GetComponent<ItemPicker>();
         _entity = GetComponent<Entity>();
-        _inventoryUIBinder = GetComponent<PlayerInventoryUIBinder>();
+
+        // For test
+        _otherInventory = GameObject.Find("OtherInventoryTest").GetComponent<Inventory>();
     }
 
     private void Start() {
@@ -92,6 +104,11 @@ public class Player : NetworkBehaviour
             _HUD.SetEntity(gameObject);
             Debug.Log("HUD is set");
         }
+
+        _itemsUIController = FindObjectOfType<ItemsUIController>();
+        _itemsUIController.SetPlayer(this);
+
+        _itemsUIController.CloseUI();
     }
 
     private void Update() {
@@ -208,7 +225,18 @@ public class Player : NetworkBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.I)) {
-            _inventoryUIBinder.ToggleInventory();
+            _itemsUIController.ShowPlayersInventory();
+            _itemsUIController.ToggleUI();
+        }
+
+        // Имитация открытия ящика
+        if (Input.GetKeyDown(KeyCode.F)) {
+            InventoryInfo inventoryInfo = new InventoryInfo() {
+                Title = "Ящик",
+                SubTitle = "Маленький"
+            };
+            _itemsUIController.ShowOtherInventory(inventoryInfo, _otherInventory);
+            _itemsUIController.ToggleUI();
         }
     }
 

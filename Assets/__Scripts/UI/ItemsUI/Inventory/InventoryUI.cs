@@ -4,12 +4,12 @@ using Mirror;
 using UnityEngine;
 
 /// <summary>
-/// Компонент, предоставляющий доступ для управления инвентарем
+/// Компонент, управляющий UI инвентаря
 /// </summary>
 public class InventoryUI : MonoBehaviour
 {
     [SerializeField]
-    private InventoryInfo _invInfo;
+    private InventoryInfoUI _invInfo;
 
     [SerializeField]
     private InventoryGrid _invGrid;
@@ -19,7 +19,7 @@ public class InventoryUI : MonoBehaviour
 
     private Inventory _inventory;
 
-    public void SetPlayersInventory(Player player, Inventory inventory) {
+    public void SetInventory(IInventoryInfo inventoryInfo, Inventory inventory) {
         Inventory oldInventory = _inventory;
         _inventory = inventory;
         // Если до установки инвентаря был старый, необходимо отвязаться от него
@@ -27,8 +27,7 @@ public class InventoryUI : MonoBehaviour
             oldInventory.InventoryChanged -= OnInventoryChanged;
         }
         
-        _invInfo.Title = player.PlayerName;
-        _invInfo.SubTitle = "";
+        _invInfo.SetInfo(inventoryInfo);
         _invGrid.SetInventory(inventory, inventory.DefaultSection);
 
         inventory.InventoryChanged += OnInventoryChanged;
