@@ -501,15 +501,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 168683855}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5cc53972c7e72c49a1f05dfeec2b313, type: 3}
+  m_Script: {fileID: 11500000, guid: 87448b7a64729db479ff76e72ea6b549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _sectionName: the only section
-  _gridLimitation:
-    _initialWidth: 5
-    _initialHeight: 3
+  _sectionName: 
+  _initialWidth: 5
+  _initialHeight: 3
 --- !u!224 &276856765 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3186460696552500332, guid: b3c6565247716c6468235f370c59d79d,

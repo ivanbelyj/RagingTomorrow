@@ -191,9 +191,10 @@ GameObject:
   - component: {fileID: 707345098067341134}
   - component: {fileID: 879729973011753151}
   - component: {fileID: 2168946248158206767}
-  - component: {fileID: 7274773079541963613}
-  - component: {fileID: 2202103577203392636}
   - component: {fileID: 144923770622983988}
+  - component: {fileID: 4901890020522425594}
+  - component: {fileID: 2088041632563891022}
+  - component: {fileID: 8271884393692352404}
   m_Layer: 1
   m_Name: Player
   m_TagString: Untagged
@@ -493,40 +494,6 @@ MonoBehaviour:
     referenceShakingAmount: 0.5
     camera: {fileID: 0}
   _otherInventory: {fileID: 0}
---- !u!114 &7274773079541963613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507993662015929204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5cc53972c7e72c49a1f05dfeec2b313, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  _sectionName: main
-  _gridLimitation:
-    _initialWidth: 7
-    _initialHeight: 14
---- !u!114 &2202103577203392636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507993662015929204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b65fc49e352c9eb42a5ef41ae8a897d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mainSection: {fileID: 7274773079541963613}
-  _ingredientsSection: {fileID: 0}
-  _craftResultsSection: {fileID: 0}
-  _donnedSection: {fileID: 0}
 --- !u!114 &144923770622983988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,13 +503,59 @@ MonoBehaviour:
   m_GameObject: {fileID: 507993662015929204}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a387a0daa60a44546870cbe0295584b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a878b36a889e804faa98626d3826a11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  throwAwayForce: 1.4
-  _sectionToPick: {fileID: 0}
+  throwAwayForce: 0.8
+  _wearSectionToPick: {fileID: 8271884393692352404}
+  _sectionToPick: {fileID: 2088041632563891022}
+--- !u!114 &4901890020522425594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507993662015929204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817a0730016ac124da5b13f11781478f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainSection: {fileID: 2088041632563891022}
+  _wearSection: {fileID: 8271884393692352404}
+--- !u!114 &2088041632563891022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507993662015929204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87448b7a64729db479ff76e72ea6b549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _sectionName: main
+  _initialWidth: 7
+  _initialHeight: 14
+--- !u!114 &8271884393692352404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507993662015929204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3efe26de08737c347b52afe6e64e14ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &1709699199297977212
 GameObject:
   m_ObjectHideFlags: 0

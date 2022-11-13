@@ -48,7 +48,7 @@ public class ItemsUIController : MonoBehaviour
             _player.GetMainInventorySection());
     }
 
-    private void SetOtherInventory(IInventoryInfoProvider inventoryInfo, IItemsGrid inventory) {
+    private void SetOtherInventory(IInventoryInfoProvider inventoryInfo, GridSection inventory) {
         _otherInventoryUI.Set(inventoryInfo, inventory);
     }
 
@@ -104,7 +104,7 @@ public class ItemsUIController : MonoBehaviour
     /// тождественно его установке (в отличие от инвентаря игрока, который постоянен).
     /// </summary>
     public void ShowOtherInventory(IInventoryInfoProvider inventoryInfo,
-        GridInventorySection inventory) {
+        GridSection inventory) {
         SetOtherInventory(inventoryInfo, inventory);
         Show(ItemsUI.PlayerLootsInventory);
     }

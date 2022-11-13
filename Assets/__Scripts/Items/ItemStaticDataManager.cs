@@ -13,7 +13,7 @@ public class ItemStaticDataManager : MonoBehaviour
     private Dictionary<string, ItemStaticData> _namesAndData;
     public Dictionary<string, ItemStaticData> NamesAndData => _namesAndData;
 
-    public ItemStaticData GetItemDataByName(string name) => _namesAndData[name];
+    public ItemStaticData GetStaticDataByName(string name) => _namesAndData[name];
 
     private void Start() {
         AssetBundle localAssetBundle = AssetBundle.LoadFromFile(

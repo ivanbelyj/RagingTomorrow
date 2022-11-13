@@ -7,7 +7,7 @@ using TMPro;
 
 [RequireComponent(typeof(ItemPicker))]
 [RequireComponent(typeof(Entity))]
-[RequireComponent(typeof(CharactersInventoryController))]
+[RequireComponent(typeof(CharactersInventory))]
 [RequireComponent(typeof(CharacterInfo))]
 public class Player : NetworkBehaviour
 {
@@ -20,7 +20,7 @@ public class Player : NetworkBehaviour
     private SimpleHUD _HUD;
 
     // Components
-    private CharactersInventoryController _invController;
+    private CharactersInventory _invController;
     private ItemPicker _itemPicker;
     private CharacterInfo _characterInfo;
     private Entity _entity;
@@ -30,20 +30,20 @@ public class Player : NetworkBehaviour
 
     // For test
     [SerializeField]
-    private GridInventorySection _otherInventory;
+    private GridSection _otherInventory;
 
     private void Awake() {
         // _mainInvSection = GetComponent<GridInventorySection>();
         _itemPicker = GetComponent<ItemPicker>();
         _entity = GetComponent<Entity>();
-        _invController = GetComponent<CharactersInventoryController>();
+        _invController = GetComponent<CharactersInventory>();
         _characterInfo = GetComponent<CharacterInfo>();
         _characterInfo.CharacterInfoChanged += (CharacterInfo.CharacterInfoData newInfo) => {
             playerNameText.text = newInfo.Name;
         };
 
         // For test
-        _otherInventory = GameObject.Find("OtherInventoryTest").GetComponent<GridInventorySection>();
+        _otherInventory = GameObject.Find("OtherInventoryTest").GetComponent<GridSection>();
     }
 
     private void Start() {
@@ -72,12 +72,12 @@ public class Player : NetworkBehaviour
         }
 
         playerInventoryText.text = _invController.MainSection.Items.Count.ToString();
-        _invController.MainSection.InventoryChanged += (SyncList<InventoryItem>.Operation op,
-            int index, InventoryItem oldItem, InventoryItem newItem) => {
+        _invController.MainSection.InventoryChanged += (SyncList<GridSectionItem>.Operation op,
+            int index, GridSectionItem oldItem, GridSectionItem newItem) => {
             playerInventoryText.text = _invController.MainSection.Items.Count.ToString();
             Debug.Log($"Inventory is changed! "
-                + (newItem is null ? "" : $"{newItem.itemGameData.itemStaticDataName} is added,")
-                + (oldItem is null ? "" : $" {oldItem.itemGameData.itemStaticDataName} is removed. ")
+                + (newItem is null ? "" : $"{newItem.itemData.itemStaticDataName} is added,")
+                + (oldItem is null ? "" : $" {oldItem.itemData.itemStaticDataName} is removed. ")
                 + $" New Count is {playerInventoryText.text}");
         };
     }
@@ -166,13 +166,10 @@ public class Player : NetworkBehaviour
     /// Информация персонажа может отображаться в инвентаре
     /// </summary>
     public IInventoryInfoProvider GetInventoryInfoProvider() {
-        Debug.Log("Player's inventory info provider: "
-            + (_characterInfo as IInventoryInfoProvider));
         return _characterInfo;
     }
 
-    public GridInventorySection GetMainInventorySection() {
-        Debug.Log("Main inventory section : " + _invController.MainSection);
+    public GridSection GetMainInventorySection() {
         return _invController.MainSection;
     }
 
@@ -193,10 +190,10 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.N)) {
             var dict = new Dictionary<string, int>();
             foreach (var item in _invController.MainSection.Items) {
-                if (dict.ContainsKey(item.itemGameData.itemStaticDataName))
-                    dict[item.itemGameData.itemStaticDataName]++;
+                if (dict.ContainsKey(item.itemData.itemStaticDataName))
+                    dict[item.itemData.itemStaticDataName]++;
                 else
-                    dict.Add(item.itemGameData.itemStaticDataName, 1);
+                    dict.Add(item.itemData.itemStaticDataName, 1);
             }
 
             Debug.Log("Инвентарь");
@@ -206,9 +203,9 @@ public class Player : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.G)) {
             if (_invController.MainSection.Items.Count != 0) {
-                Debug.Log("Элемент " + _invController.MainSection.Items[0].itemGameData.itemStaticDataName
+                Debug.Log("Элемент " + _invController.MainSection.Items[0].itemData.itemStaticDataName
                     + " будет выброшен");
-                _itemPicker.ThrowAway(_invController.MainSection,
+                _itemPicker.ThrowAwayFromGridSection(_invController.MainSection,
                     _invController.MainSection.Items[0]);
             }
         }

@@ -56,9 +56,9 @@ public class InventorySlotItem : MonoBehaviour
         }
     }
 
-    public void SetItem(GridItemData invItem) {
-        ItemStaticData staticData = _itemStaticDataManager.GetItemDataByName(
-            invItem.InventoryItem.itemGameData.itemStaticDataName);
+    public void SetItem(GridSectionItem invItem) {
+        ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
+            invItem.itemData.itemStaticDataName);
         
         // Картинка предмета получает размер на некоторое кол-во слотов
         _itemRectTransform.sizeDelta =
@@ -66,6 +66,6 @@ public class InventorySlotItem : MonoBehaviour
             _slotHeight * staticData.Height + _gridSpacing * (staticData.Height - 1));
         
         SetSprite(staticData.Sprite);
-        SetItemsCountUI(invItem.InventoryItem.count);
+        SetItemsCountUI(invItem.count);
     }
 }

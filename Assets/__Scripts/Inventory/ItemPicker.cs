@@ -14,36 +14,51 @@ public class ItemPicker : NetworkBehaviour
 
     // Можно установить что-то стороннее в качестве инвентаря, например, рюкзак
     [SerializeField]
-    private InventorySection _sectionToPick;
+    private WearSection _wearSectionToPick;
+    [SerializeField]
+    private GridSection _sectionToPick;
     private Collider _collider;
+
+    private ItemStaticDataManager _itemStaticDataManager;
 
     private void Awake() {
         _collider = GetComponent<Collider>();
+        _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
     }
 
     private void OnCollisionEnter(Collision col) {
         // Если столкнулись с GameObject, и это - предмет
         Item item = col.gameObject.GetComponent<Item>();
         if (item is not null) {
-            InventoryItem itemStack = new InventoryItem() {
-                itemGameData = item.ItemGameData,
-                count = 1
-            };
-            _sectionToPick.AddToSection(itemStack);
+            ItemData itemData = item.ItemData;
+
+            if (!_wearSectionToPick.AddToAccordingSlot(itemData)) {
+                if (!_sectionToPick.AddToFreePlace(itemData)) {
+                    Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
+                }
+            }
+
             NetworkServer.Destroy(item.gameObject);
-            Debug.Log($"Item {item.ItemGameData.itemStaticDataName} is picked up to inventory");
+            Debug.Log($"Item {item.ItemData.itemStaticDataName} is picked up to inventory");
         }
     }
 
-    public void ThrowAway(InventorySection section, InventoryItem invItem) {
-        section.RemoveFromSection(invItem);
-        
-        Debug.Log("ThrowAway: itemData - " + invItem.itemGameData.itemStaticDataName);
+    public void ThrowAwayFromWearSection(WearSection wearSection, WearSlot slot) {
+        ThrowAway(wearSection.Slots[slot]);
+        wearSection.RemoveFromSection(slot);
+    }
+    public void ThrowAwayFromGridSection(GridSection gridSection, GridSectionItem gridItem) {
+        ThrowAway(gridItem.itemData);
+        gridSection.RemoveFromSection(gridItem);
+    }
+
+    private void ThrowAway(ItemData itemData) {
+        Debug.Log("ThrowAway: itemData - " + itemData.itemStaticDataName);
         
         if (isServer) {
-            SpawnAndThrowAway(invItem.itemGameData);
+            SpawnAndThrowAway(itemData);
         } else {
-            CmdSpawnAndThrowAway(invItem.itemGameData);
+            CmdSpawnAndThrowAway(itemData);
         }
     }
 
@@ -58,7 +73,8 @@ public class ItemPicker : NetworkBehaviour
     public void SpawnAndThrowAway(ItemData itemGameData) {
         // Полная неизменная информация о предмете берется на основе названия,
         // которое используется для эффективной синхронизации инвентаря
-        ItemStaticData itemStaticData = _sectionToPick.GetItemData(itemGameData.itemStaticDataName);
+        ItemStaticData itemStaticData = _itemStaticDataManager.GetStaticDataByName(
+            itemGameData.itemStaticDataName);
 
         Debug.Log("ThrowAway: itemData - " + itemStaticData.name +
             $". {itemStaticData.ItemName}, {itemStaticData.Description}, Item: {itemStaticData.ItemPrefab}");
@@ -77,6 +93,7 @@ public class ItemPicker : NetworkBehaviour
         
         // Бросок
         Rigidbody itemRb = itemGO.GetComponent<Rigidbody>();
+        Debug.Log($"Масса бросаемого предмета: {itemRb.mass}; сила броска: {throwAwayForce}");
         // Сила броска зависит от массы: и легкая аптечка, и тяжелый автомат слегка отбрасываются
         itemRb.AddForce(transform.forward * throwAwayForce * itemRb.mass, ForceMode.Impulse);
     }
