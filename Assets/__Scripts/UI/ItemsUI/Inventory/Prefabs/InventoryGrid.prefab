@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4749637529522628056}
-  - component: {fileID: 7640762764541928458}
+  - component: {fileID: 4804218014715858950}
   m_Layer: 5
   m_Name: InventoryGrid
   m_TagString: Untagged
@@ -37,7 +37,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 466, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7640762764541928458
+--- !u!114 &4804218014715858950
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4975979722669194341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6922cd8d9a3d40d45baa2b058fb66124, type: 3}
+  m_Script: {fileID: 11500000, guid: cb38c71805350724e8c43f87754c450f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gridSpacing: 3

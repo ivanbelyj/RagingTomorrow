@@ -5,14 +5,15 @@ using UnityEngine.UI;
 using Mirror;
 
 /// <summary>
-/// UI для отображения определенной секции инвентаря
+/// UI для отображения сетки с предметами инвентаря
 /// </summary>
-public class InventoryGrid : MonoBehaviour
+public class InventoryGridUI : MonoBehaviour
 {
     /// <summary>
     /// Расстояние между слотами в сетке по вертикали и горизонтали
     /// </summary>
-    public float gridSpacing = 3;
+    [SerializeField]
+    private float gridSpacing = 3;
 
     [SerializeField]
     private RectTransform _gridParent;
@@ -28,8 +29,9 @@ public class InventoryGrid : MonoBehaviour
     private float _slotHeight;
 
     private ItemStaticDataManager _itemStaticDataManager;
-    private Inventory _inventory;
-    private int _inventorySection;
+    private IItemsGrid _invGrid;
+    // private string _inventorySectionName;
+    // private InventorySection _invSection;
 
     private void Awake() {
         RectTransform slotRectTransform = _slotPrefab.GetComponent<RectTransform>();
@@ -44,23 +46,18 @@ public class InventoryGrid : MonoBehaviour
     /// Для UI устанавливается новый инвентарь. Например, игрок открывает ящик, и для UI инвентаря
     /// устанавливается инвентарь ящика
     /// </summary>
-    public void SetInventory(Inventory inventory, int section) {
-        // Сбрасываем все, что связано со старым инвентарем
-        Inventory oldInventory = _inventory;
-        _inventory = inventory;
-
-        int oldSection = _inventorySection;
-        _inventorySection = section;
+    public void SetGrid(IItemsGrid invGrid) {
+        // Сбрасываем все, что связано со старой сеткой
+        IItemsGrid oldInvGrid = _invGrid;
+        _invGrid = invGrid;
 
         bool areSlotsSet = false;
-        if (oldInventory is not null) {
-            oldInventory.InventoryChanged -= OnInventoryChanged;
+        if (oldInvGrid is not null) {
+            invGrid.GridChanged -= OnGridChanged;
 
             // Если секция старого инвентаря такого же размера, можно не создавать слоты заново
-            if (oldInventory.GetSectionWidth(oldSection)
-                == _inventory.GetSectionWidth(_inventorySection)
-                && oldInventory.GetSectionHeight(oldSection)
-                == _inventory.GetSectionHeight(_inventorySection)) {
+            if (oldInvGrid.Width == _invGrid.Width
+                && oldInvGrid.Height == _invGrid.Height) {
                 areSlotsSet = true;
             }
         }
@@ -71,35 +68,33 @@ public class InventoryGrid : MonoBehaviour
             CreateSlots();
         }
 
-        _inventory.InventoryChanged += OnInventoryChanged;
+        invGrid.GridChanged += OnGridChanged;
     }
 
-    private void OnInventoryChanged(SyncList<InventoryItem>.Operation op, int index,
-        InventoryItem oldItem, InventoryItem newItem) {
+    private void OnGridChanged(SyncList<GridItemData>.Operation op, int index,
+        GridItemData oldItem, GridItemData newItem) {
         switch (op) {
-            case SyncList<InventoryItem>.Operation.OP_ADD:
+            case SyncList<GridItemData>.Operation.OP_ADD:
             {
-                // Изменения в других секциях инвентаря игнорируются для данной сетки
-                if (newItem.inventorySection == _inventorySection)
-                    CreateItem(newItem);
+                CreateItem(newItem);
                 break;
             }
-            case SyncList<InventoryItem>.Operation.OP_CLEAR:
+            case SyncList<GridItemData>.Operation.OP_CLEAR:
             {
 
                 break;
             }
-            case SyncList<InventoryItem>.Operation.OP_INSERT:
+            case SyncList<GridItemData>.Operation.OP_INSERT:
             {
 
                 break;
             }
-            case SyncList<InventoryItem>.Operation.OP_REMOVEAT:
+            case SyncList<GridItemData>.Operation.OP_REMOVEAT:
             {
-                // items.Remove(oldItem);
+                // items.Remove(oldGridItem);
                 break;
             }
-            case SyncList<InventoryItem>.Operation.OP_SET:
+            case SyncList<GridItemData>.Operation.OP_SET:
             {
 
                 break;
@@ -108,8 +103,8 @@ public class InventoryGrid : MonoBehaviour
     }
 
     private void CreateSlots() {
-        int rows = _inventory.GetSectionHeight(_inventorySection);
-        int cols = _inventory.GetSectionWidth(_inventorySection);
+        int rows = _invGrid.Height;
+        int cols = _invGrid.Width;
 
         float gridHeight = rows * _slotHeight + gridSpacing * rows;
         float gridWidth = cols * _slotWidth +  + gridSpacing * cols;
@@ -149,14 +144,14 @@ public class InventoryGrid : MonoBehaviour
     }
 
     private void CreateItems() {
-        foreach (InventoryItem invItem in _inventory.Items) {
+        foreach (GridItemData invItem in _invGrid.GridItems) {
             CreateItem(invItem);
         }
     }
 
-    private void CreateItem(InventoryItem invItem) {
-        int col = invItem.inventoryX;
-        int row = invItem.inventoryY;
+    private void CreateItem(GridItemData invItem) {
+        int col = invItem.InventoryX;
+        int row = invItem.InventoryY;
 
         // Добавляем в сетку
         GameObject itemGO = Instantiate(_slotItemPrefab);

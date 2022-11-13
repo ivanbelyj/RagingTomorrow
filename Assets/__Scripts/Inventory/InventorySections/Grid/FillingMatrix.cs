@@ -4,13 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Инвентарь представляется некоторым количеством секций. Например, для персонажа это секция
-/// рюкзака, секция надетой экипировки и выбранного оружия,
-/// секции для ингредиентов и для результатов крафта.
-/// Секции служат для выполнения ограничения размера инвентаря
-/// Ограничение по месту применяется не к инвентарю в целом, а к каждой отдельной секции.
-/// Для реализации ограничений используется битовая матрица, хранящая для каждого слота секции
-/// информацию о заполненности
+/// Битовая матрица, хранящая данные о заполненности секции инвентаря и предоставляющая методы,
+/// связанные с заполненностью
 /// </summary>
 [Serializable]
 public class FillingMatrix
@@ -25,11 +20,7 @@ public class FillingMatrix
     public int Width => _cols;
     public int Height => _rows;
 
-    public void Initialize() {
-        Initialize(_rows, _cols);
-    }
-
-    private void Initialize(int rows, int cols) {
+    public FillingMatrix(int rows, int cols) {
         _data = new BitArray[rows];
         _cols = cols;
         _rows = rows;

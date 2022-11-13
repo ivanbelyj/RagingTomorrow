@@ -36,9 +36,9 @@ public class InventoryInfoUI : MonoBehaviour
             _avatar.sprite = avatar;
     }
 
-    public void SetInfo(IInventoryInfo inventoryInfo) {
-        Title = inventoryInfo.Title;
-        SubTitle = inventoryInfo.SubTitle;
-        SetAvatar(inventoryInfo.Avatar);
+    public void SetInfo(InventoryInfo invInfo) {
+        Title = invInfo.Title;
+        SubTitle = invInfo.SubTitle;
+        SetAvatar(invInfo.Avatar);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ using UnityEngine;
 /// помимо имени, также нужно синхронизировать.
 /// Например, патроны, оставшиеся заряженными в автомате, показатель поношенности брони, и т.п.
 /// </summary>
+[Serializable]
 public class ItemDynamicData
 {
     

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,14 @@ public class InventorySlotItem : MonoBehaviour
 {
     [SerializeField]
     private GameObject _itemImageGO;
+
+    // GameObject, содержащий TextMeshPro для отображения количества предметов
+    [SerializeField]
+    private GameObject _itemsCountGO;
+
+    [SerializeField]
+    private TextMeshProUGUI _itemsCountText;
+
     private Image _itemImage;
     private RectTransform _itemRectTransform;
 
@@ -38,9 +47,18 @@ public class InventorySlotItem : MonoBehaviour
         _itemImage.sprite = sprite;
     }
 
-    public void SetItem(InventoryItem invItem) {
+    private void SetItemsCountUI(int itemsCount) {
+        if (itemsCount > 1) {
+            _itemsCountGO.SetActive(true);
+            _itemsCountText.text = itemsCount.ToString();
+        } else {
+            _itemsCountGO.SetActive(false);
+        }
+    }
+
+    public void SetItem(GridItemData invItem) {
         ItemStaticData staticData = _itemStaticDataManager.GetItemDataByName(
-            invItem.itemGameData.itemStaticDataName);
+            invItem.InventoryItem.itemGameData.itemStaticDataName);
         
         // Картинка предмета получает размер на некоторое кол-во слотов
         _itemRectTransform.sizeDelta =
@@ -48,5 +66,6 @@ public class InventorySlotItem : MonoBehaviour
             _slotHeight * staticData.Height + _gridSpacing * (staticData.Height - 1));
         
         SetSprite(staticData.Sprite);
+        SetItemsCountUI(invItem.InventoryItem.count);
     }
 }

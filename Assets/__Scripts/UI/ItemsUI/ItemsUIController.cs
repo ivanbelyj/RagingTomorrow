@@ -44,11 +44,12 @@ public class ItemsUIController : MonoBehaviour
         _playersInventoryUI = GameObject.FindGameObjectWithTag("PlayersInventory")
             .GetComponent<InventoryUI>();
         
-        _playersInventoryUI.SetInventory(_player, _player.GetComponent<Inventory>());
+        _playersInventoryUI.Set(_player.GetInventoryInfoProvider(),
+            _player.GetMainInventorySection());
     }
 
-    private void SetOtherInventory(IInventoryInfo inventoryInfo, Inventory inventory) {
-        _otherInventoryUI.SetInventory(inventoryInfo, inventory);
+    private void SetOtherInventory(IInventoryInfoProvider inventoryInfo, IItemsGrid inventory) {
+        _otherInventoryUI.Set(inventoryInfo, inventory);
     }
 
     public void ToggleUI() {
@@ -102,7 +103,8 @@ public class ItemsUIController : MonoBehaviour
     /// поэтому открытие нового инвентаря с точки зрения пользователей ItemsUIController
     /// тождественно его установке (в отличие от инвентаря игрока, который постоянен).
     /// </summary>
-    public void ShowOtherInventory(IInventoryInfo inventoryInfo, Inventory inventory) {
+    public void ShowOtherInventory(IInventoryInfoProvider inventoryInfo,
+        GridInventorySection inventory) {
         SetOtherInventory(inventoryInfo, inventory);
         Show(ItemsUI.PlayerLootsInventory);
     }

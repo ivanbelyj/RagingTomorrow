@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,8 @@ using UnityEngine;
 /// получить неизменные характеристики, которые неэффективно постоянно передавать по сети),
 /// так и динамическую информацию
 /// </summary>
-public struct ItemGameData
+[Serializable]
+public class ItemData
 {
     public string itemStaticDataName;
     public ItemDynamicData dynamicData;

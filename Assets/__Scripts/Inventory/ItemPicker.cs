@@ -14,7 +14,7 @@ public class ItemPicker : NetworkBehaviour
 
     // Можно установить что-то стороннее в качестве инвентаря, например, рюкзак
     [SerializeField]
-    private Inventory _inventory;
+    private InventorySection _sectionToPick;
     private Collider _collider;
 
     private void Awake() {
@@ -25,23 +25,18 @@ public class ItemPicker : NetworkBehaviour
         // Если столкнулись с GameObject, и это - предмет
         Item item = col.gameObject.GetComponent<Item>();
         if (item is not null) {
-            ItemGameData itemGameData = item.ItemGameData;
-            // = new ItemGameData() {
-            //     dynamicData = item.DynamicData,
-            //     itemDataName = item.StaticData.name
-            // };
-            _inventory.FindPlaceAndAddItemToDefaultSection(itemGameData);
+            InventoryItem itemStack = new InventoryItem() {
+                itemGameData = item.ItemGameData,
+                count = 1
+            };
+            _sectionToPick.AddToSection(itemStack);
             NetworkServer.Destroy(item.gameObject);
             Debug.Log($"Item {item.ItemGameData.itemStaticDataName} is picked up to inventory");
         }
     }
 
-    public void ThrowAway(InventoryItem invItem) {
-        if (isServer) {
-            _inventory.RemoveItem(invItem);
-        } else {
-            _inventory.CmdRemoveItem(invItem);
-        }
+    public void ThrowAway(InventorySection section, InventoryItem invItem) {
+        section.RemoveFromSection(invItem);
         
         Debug.Log("ThrowAway: itemData - " + invItem.itemGameData.itemStaticDataName);
         
@@ -54,16 +49,16 @@ public class ItemPicker : NetworkBehaviour
 
     // В Command (как и другие Remote actions) можно передавать не все типы данных
     [Command]
-    public void CmdSpawnAndThrowAway(ItemGameData itemGameData) {
+    public void CmdSpawnAndThrowAway(ItemData itemGameData) {
         // ItemStaticData itemData = _inventory.GetItemData(itemStaticDataName);
         SpawnAndThrowAway(itemGameData);
     }
 
     [Server]
-    public void SpawnAndThrowAway(ItemGameData itemGameData) {
+    public void SpawnAndThrowAway(ItemData itemGameData) {
         // Полная неизменная информация о предмете берется на основе названия,
         // которое используется для эффективной синхронизации инвентаря
-        ItemStaticData itemStaticData = _inventory.GetItemData(itemGameData.itemStaticDataName);
+        ItemStaticData itemStaticData = _sectionToPick.GetItemData(itemGameData.itemStaticDataName);
 
         Debug.Log("ThrowAway: itemData - " + itemStaticData.name +
             $". {itemStaticData.ItemName}, {itemStaticData.Description}, Item: {itemStaticData.ItemPrefab}");

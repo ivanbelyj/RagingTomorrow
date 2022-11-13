@@ -452,7 +452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 168683858}
   - component: {fileID: 168683857}
-  - component: {fileID: 168683856}
+  - component: {fileID: 168683859}
   m_Layer: 0
   m_Name: OtherInventoryTest
   m_TagString: Untagged
@@ -460,24 +460,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &168683856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 168683855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0cb008b85e7c2b4cbbd723a34ce1bcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  _sections:
-  - _cols: 4
-    _rows: 4
-  _defaultSection: 0
 --- !u!114 &168683857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +492,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &168683859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168683855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5cc53972c7e72c49a1f05dfeec2b313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _sectionName: the only section
+  _gridLimitation:
+    _initialWidth: 5
+    _initialHeight: 3
 --- !u!224 &276856765 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3186460696552500332, guid: b3c6565247716c6468235f370c59d79d,

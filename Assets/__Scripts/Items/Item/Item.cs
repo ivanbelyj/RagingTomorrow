@@ -16,9 +16,9 @@ public class Item : NetworkBehaviour
     [Header("Set in inspector")]
 
     [SyncVar(hook = nameof(OnItemGameDataChanged))]
-    private ItemGameData _syncItemGameData;
-    private ItemGameData _itemGameData;
-    public ItemGameData ItemGameData => _itemGameData;
+    private ItemData _syncItemGameData;
+    private ItemData _itemGameData;
+    public ItemData ItemGameData => _itemGameData;
 
     /// <summary>
     /// Ссылка на ItemStaticData (ScriptableObject), содержащий информацию о шаблоне предмета,
@@ -49,17 +49,17 @@ public class Item : NetworkBehaviour
     // }
 
     #region Sync
-    private void OnItemGameDataChanged(ItemGameData oldData, ItemGameData newData) {
+    private void OnItemGameDataChanged(ItemData oldData, ItemData newData) {
         _itemGameData = newData;
     }
 
     [Server]
-    public void ChangeItemGameData(ItemGameData newData) {
+    public void ChangeItemGameData(ItemData newData) {
         _syncItemGameData = newData;
     }
 
     [Command]
-    public void CmdChangeItemGameData(ItemGameData newData) {
+    public void CmdChangeItemGameData(ItemData newData) {
         ChangeItemGameData(newData);
     }
     #endregion
@@ -68,7 +68,7 @@ public class Item : NetworkBehaviour
     /// Инициализация на сервере перед спавном
     /// </summary>
     [Server]
-    public void Initialize(ItemGameData itemGameData, ItemStaticData staticData) {
+    public void Initialize(ItemData itemGameData, ItemStaticData staticData) {
         Rigidbody rb = GetComponent<Rigidbody>();
         Debug.Log($"Static data of item {staticData.ItemName}: mass: {staticData.Mass}." +
             $"Rigidbody: {rb}");

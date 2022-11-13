@@ -5,10 +5,11 @@ using UnityEngine;
 using Mirror;
 using TMPro;
 
-[RequireComponent(typeof(Inventory))]
 [RequireComponent(typeof(ItemPicker))]
 [RequireComponent(typeof(Entity))]
-public class Player : NetworkBehaviour, IInventoryInfo
+[RequireComponent(typeof(CharactersInventoryController))]
+[RequireComponent(typeof(CharacterInfo))]
+public class Player : NetworkBehaviour
 {
     // UI
     public GameObject floatingInfo;
@@ -19,35 +20,30 @@ public class Player : NetworkBehaviour, IInventoryInfo
     private SimpleHUD _HUD;
 
     // Components
-    private Inventory _inventory;
+    private CharactersInventoryController _invController;
     private ItemPicker _itemPicker;
+    private CharacterInfo _characterInfo;
     private Entity _entity;
     public Overview overview;
 
     private ItemsUIController _itemsUIController;
-    
-    // Object fields
-    [SyncVar(hook = nameof(OnPlayerNameChanged))]
-    private string _syncPlayerName;
-    private string _playerName;
-    public string PlayerName => _playerName;
-
-    string IInventoryInfo.Title => PlayerName;
-    string IInventoryInfo.SubTitle => "";
-    Sprite IInventoryInfo.Avatar => null;
-
 
     // For test
     [SerializeField]
-    private Inventory _otherInventory;
+    private GridInventorySection _otherInventory;
 
     private void Awake() {
-        _inventory = GetComponent<Inventory>();
+        // _mainInvSection = GetComponent<GridInventorySection>();
         _itemPicker = GetComponent<ItemPicker>();
         _entity = GetComponent<Entity>();
+        _invController = GetComponent<CharactersInventoryController>();
+        _characterInfo = GetComponent<CharacterInfo>();
+        _characterInfo.CharacterInfoChanged += (CharacterInfo.CharacterInfoData newInfo) => {
+            playerNameText.text = newInfo.Name;
+        };
 
         // For test
-        _otherInventory = GameObject.Find("OtherInventoryTest").GetComponent<Inventory>();
+        _otherInventory = GameObject.Find("OtherInventoryTest").GetComponent<GridInventorySection>();
     }
 
     private void Start() {
@@ -75,12 +71,14 @@ public class Player : NetworkBehaviour, IInventoryInfo
             playerHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
         }
 
-        playerInventoryText.text = _inventory.Items.Count.ToString();
-        _inventory.InventoryChanged += (SyncList<InventoryItem>.Operation op,
+        playerInventoryText.text = _invController.MainSection.Items.Count.ToString();
+        _invController.MainSection.InventoryChanged += (SyncList<InventoryItem>.Operation op,
             int index, InventoryItem oldItem, InventoryItem newItem) => {
-            playerInventoryText.text = _inventory.Items.Count.ToString();
-            Debug.Log($"Inventory is changed! {newItem.itemGameData.itemStaticDataName} is added,"
-                + $" {oldItem.itemGameData.itemStaticDataName} is removed");
+            playerInventoryText.text = _invController.MainSection.Items.Count.ToString();
+            Debug.Log($"Inventory is changed! "
+                + (newItem is null ? "" : $"{newItem.itemGameData.itemStaticDataName} is added,")
+                + (oldItem is null ? "" : $" {oldItem.itemGameData.itemStaticDataName} is removed. ")
+                + $" New Count is {playerInventoryText.text}");
         };
     }
 
@@ -88,12 +86,7 @@ public class Player : NetworkBehaviour, IInventoryInfo
     {
         overview.camera = Camera.main;
 
-        string newPlayerName = $"Player {Random.Range(100, 999)}";
-        if (isServer) {
-            ChangePlayerName(newPlayerName);
-        } else {
-            CmdChangePlayerName(newPlayerName);
-        }
+        // Player name must be set
 
         BindUI();
     }
@@ -169,6 +162,20 @@ public class Player : NetworkBehaviour, IInventoryInfo
         overview.Follow(transform.position);
     }
 
+    /// <summary>
+    /// Информация персонажа может отображаться в инвентаре
+    /// </summary>
+    public IInventoryInfoProvider GetInventoryInfoProvider() {
+        Debug.Log("Player's inventory info provider: "
+            + (_characterInfo as IInventoryInfoProvider));
+        return _characterInfo;
+    }
+
+    public GridInventorySection GetMainInventorySection() {
+        Debug.Log("Main inventory section : " + _invController.MainSection);
+        return _invController.MainSection;
+    }
+
     private void ReadInput() {
         // if (Input.GetKeyDown (KeyCode.R)) entity.lifecycle.Damage(50);
         // if (Input.GetKeyDown (KeyCode.H)) entity.lifecycle.Heal(50);
@@ -185,7 +192,7 @@ public class Player : NetworkBehaviour, IInventoryInfo
         // Информация об инвентаре
         if (Input.GetKeyDown(KeyCode.N)) {
             var dict = new Dictionary<string, int>();
-            foreach (var item in _inventory.Items) {
+            foreach (var item in _invController.MainSection.Items) {
                 if (dict.ContainsKey(item.itemGameData.itemStaticDataName))
                     dict[item.itemGameData.itemStaticDataName]++;
                 else
@@ -198,15 +205,16 @@ public class Player : NetworkBehaviour, IInventoryInfo
         }
 
         if (Input.GetKeyDown(KeyCode.G)) {
-            if (_inventory.Items.Count != 0) {
-                Debug.Log("Элемент " + _inventory.Items[0].itemGameData.itemStaticDataName
+            if (_invController.MainSection.Items.Count != 0) {
+                Debug.Log("Элемент " + _invController.MainSection.Items[0].itemGameData.itemStaticDataName
                     + " будет выброшен");
-                _itemPicker.ThrowAway(_inventory.Items[0]);
+                _itemPicker.ThrowAway(_invController.MainSection,
+                    _invController.MainSection.Items[0]);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {
-            bool isAllAdded = _inventory.AddTestItems();
+            bool isAllAdded = _invController.MainSection.AddTestItems();
             if (!isAllAdded) {
                 Debug.Log("Не все предметы были добавлены. Нет места в инвентаре для предметов "
                     + "данного размера.");
@@ -231,9 +239,8 @@ public class Player : NetworkBehaviour, IInventoryInfo
 
         // Имитация открытия ящика
         if (Input.GetKeyDown(KeyCode.F)) {
-            InventoryInfo inventoryInfo = new InventoryInfo() {
-                Title = "Ящик",
-                SubTitle = "Маленький"
+            MockInventoryInfoProvider inventoryInfo = new MockInventoryInfoProvider() {
+                InventoryInfo = new InventoryInfo(null, "Ящик", "Маленький")
             };
             _itemsUIController.ShowOtherInventory(inventoryInfo, _otherInventory);
             _itemsUIController.ToggleUI();
@@ -244,20 +251,5 @@ public class Player : NetworkBehaviour, IInventoryInfo
         overview.Shake(0.75f);
     }
 
-    #region Sync
-    private void OnPlayerNameChanged(string oldName, string newName) {
-        _playerName = newName;
-        playerNameText.text = newName;
-    }
-
-    [Server]  // Будет вызываться и выполняться только на сервере
-    private void ChangePlayerName(string newName) {
-        _syncPlayerName = newName;
-    }
-
-    [Command]  // Метод выполняется на сервере по запросу клиента
-    private void CmdChangePlayerName(string name) {
-        ChangePlayerName(name);
-    }
-    #endregion
+    
 }
