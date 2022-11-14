@@ -42,6 +42,12 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         return _itemStaticDataManager.NamesAndData[itemDataName];
     }
 
+    private void Awake() {
+        _syncItems.Callback += SyncItems;
+        _sectionFilling = new FillingMatrix(_initialHeight, _initialWidth);
+        _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
+    }
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -52,16 +58,8 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         {
             _items.Add(_syncItems[i]);
         }
-    }
 
-    private void Awake() {
-        _sectionFilling = new FillingMatrix(_initialHeight, _initialWidth);
-        _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
-    }
-
-    private void Start()
-    {
-        _syncItems.Callback += SyncItems;
+        Debug.Log("Grid section items are initialized");
     }
 
     public float GetTotalWeight()
@@ -76,11 +74,13 @@ public class GridSection : NetworkBehaviour, ITotalWeight
 
     [Server]
     private void RemoveItem(GridSectionItem item) {
+        Debug.Log("Remove on server");
         _syncItems.Remove(item);
     }
 
     [Command]
     private void CmdAddItem(GridSectionItem item) {
+        Debug.Log("From CmdAddItem: item is " + item);
         AddItem(item);
     }
 
@@ -141,27 +141,38 @@ public class GridSection : NetworkBehaviour, ITotalWeight
             inventoryX = x,
             inventoryY = y
         };
-        return AddToSection(gridItem);
-    }
 
-    public bool AddToSection(GridSectionItem itemStack) {
-        bool isPlaceFree = true;
-        if (!isPlaceFree)
-            return false;
-        
         if (isServer) {
-            AddItem(itemStack);
+            AddItem(gridItem);
         } else {
-            CmdAddItem(itemStack);
+            CmdAddItem(gridItem);
         }
-
         return true;
+        
+        // return AddToSection(gridItem);
     }
 
+    // private bool AddToSection(GridSectionItem gridItem) {
+    //     bool isPlaceFree = FindFreePos(gridItem.itemData, out int x, out int y);;
+    //     if (!isPlaceFree)
+    //         return false;
+        
+    //     if (isServer) {
+    //         AddItem(gridItem);
+    //     } else {
+    //         CmdAddItem(gridItem);
+    //     }
+
+    //     return true;
+    // }
+
+    // Todo: pass GridSectionItem
     public void RemoveFromSection(GridSectionItem invItem) {
         if (isServer) {
+            Debug.Log("Remove Item");
             RemoveItem(invItem);
         } else {
+            Debug.Log("Cmd Remove Item");
             CmdRemoveItem(invItem);
         }
     }

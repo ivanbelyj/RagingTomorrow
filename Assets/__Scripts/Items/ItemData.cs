@@ -9,8 +9,14 @@ using UnityEngine;
 /// так и динамическую информацию
 /// </summary>
 [Serializable]
-public class ItemData
+public class ItemData : IEquatable<ItemData>
 {
     public string itemStaticDataName;
     public ItemDynamicData dynamicData;
+
+    public bool Equals(ItemData other)
+    {
+        return itemStaticDataName.Equals(other.itemStaticDataName) &&
+            (this.dynamicData is null ? true : this.dynamicData.Equals(other.dynamicData));
+    }
 }

@@ -44,4 +44,35 @@ public static class CustomTypesReaderWriter
         };
         return effect;
     }
+
+    public static void WriteItemDynamicData(this NetworkWriter writer, ItemDynamicData dynamicData)
+    {
+        DynamicDataType type;
+        if (dynamicData is TestDynamicData) {
+            type = DynamicDataType.Test;
+        } else {
+            type = DynamicDataType.None;
+        }
+        writer.WriteByte((byte)type);
+
+        switch (type) {
+            case DynamicDataType.Test:
+                var testData = (TestDynamicData)dynamicData;
+                writer.WriteString(testData.bookNotes);
+                break;
+        }
+    }
+
+    public static ItemDynamicData ReadItemDynamicData(this NetworkReader reader) {
+        switch ((DynamicDataType)reader.ReadByte()) {
+            case DynamicDataType.Test:
+                string bookNotes = reader.ReadString();
+                return new TestDynamicData() {
+                    bookNotes = bookNotes
+                };
+            default:
+                return null;
+        }
+        
+    }
 }

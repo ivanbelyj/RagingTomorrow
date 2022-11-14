@@ -110,7 +110,7 @@ public class WearSection : NetworkBehaviour, ITotalWeight
     // Например, автомат нельзя положить в слот для шлема
     private bool IsItemAllowed(WearSlot slot, ItemData item) {
         // Todo: корректно ли относить предмет к данному слоту?
-        return true;
+        return false;
     }
 
     public bool AddToSection(WearSlot slot, ItemData item) {

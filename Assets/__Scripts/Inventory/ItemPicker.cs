@@ -27,16 +27,25 @@ public class ItemPicker : NetworkBehaviour
     }
 
     private void OnCollisionEnter(Collision col) {
+        // Иначе предметы добавляются дублированно
+        if (!isServer)
+            return;
+        
         // Если столкнулись с GameObject, и это - предмет
         Item item = col.gameObject.GetComponent<Item>();
         if (item is not null) {
+            Debug.Log("Collision with item");
+
             ItemData itemData = item.ItemData;
 
-            if (!_wearSectionToPick.AddToAccordingSlot(itemData)) {
-                if (!_sectionToPick.AddToFreePlace(itemData)) {
-                    Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
-                }
+            if (!_sectionToPick.AddToFreePlace(itemData)) {
+                Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
             }
+
+            // Todo:
+            // if (!_wearSectionToPick.AddToAccordingSlot(itemData)) {
+                
+            // }
 
             NetworkServer.Destroy(item.gameObject);
             Debug.Log($"Item {item.ItemData.itemStaticDataName} is picked up to inventory");
@@ -44,12 +53,19 @@ public class ItemPicker : NetworkBehaviour
     }
 
     public void ThrowAwayFromWearSection(WearSection wearSection, WearSlot slot) {
+        // Todo:
+        // wearSection.RemoveFromSection(slot);
         ThrowAway(wearSection.Slots[slot]);
-        wearSection.RemoveFromSection(slot);
     }
-    public void ThrowAwayFromGridSection(GridSection gridSection, GridSectionItem gridItem) {
+    public void ThrowAwayFromGridSection(/*GridSection gridSection,*/ GridSectionItem gridItem) {
+        if (_sectionToPick.Items.Find(item => item.Equals(gridItem)) is null) {
+            Debug.Log("Не удалось выбросить предмет, т.к. его нет в инвентаре");
+            return;
+        }
+        _sectionToPick.RemoveFromSection(gridItem);
         ThrowAway(gridItem.itemData);
-        gridSection.RemoveFromSection(gridItem);
+        
+        // gridSection.RemoveFromSection(gridItem);
     }
 
     private void ThrowAway(ItemData itemData) {

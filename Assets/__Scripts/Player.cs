@@ -20,7 +20,7 @@ public class Player : NetworkBehaviour
     private SimpleHUD _HUD;
 
     // Components
-    private CharactersInventory _invController;
+    private CharactersInventory _inventory;
     private ItemPicker _itemPicker;
     private CharacterInfo _characterInfo;
     private Entity _entity;
@@ -29,16 +29,16 @@ public class Player : NetworkBehaviour
     private ItemsUIController _itemsUIController;
 
     // For test
-    [SerializeField]
     private GridSection _otherInventory;
 
     private void Awake() {
         // _mainInvSection = GetComponent<GridInventorySection>();
         _itemPicker = GetComponent<ItemPicker>();
         _entity = GetComponent<Entity>();
-        _invController = GetComponent<CharactersInventory>();
+        _inventory = GetComponent<CharactersInventory>();
         _characterInfo = GetComponent<CharacterInfo>();
         _characterInfo.CharacterInfoChanged += (CharacterInfo.CharacterInfoData newInfo) => {
+            Debug.Log("Character info is changed");
             playerNameText.text = newInfo.Name;
         };
 
@@ -46,7 +46,7 @@ public class Player : NetworkBehaviour
         _otherInventory = GameObject.Find("OtherInventoryTest").GetComponent<GridSection>();
     }
 
-    private void Start() {
+    public override void OnStartClient() {
         /* a few apllication settings for more smooth. This is Optional. */
         QualitySettings.vSyncCount = 0;
         Cursor.lockState = CursorLockMode.Locked;
@@ -71,10 +71,11 @@ public class Player : NetworkBehaviour
             playerHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
         }
 
-        playerInventoryText.text = _invController.MainSection.Items.Count.ToString();
-        _invController.MainSection.InventoryChanged += (SyncList<GridSectionItem>.Operation op,
+        // To fix: не работает
+        playerInventoryText.text = _inventory.MainSection.Items.Count.ToString();
+        _inventory.MainSection.InventoryChanged += (SyncList<GridSectionItem>.Operation op,
             int index, GridSectionItem oldItem, GridSectionItem newItem) => {
-            playerInventoryText.text = _invController.MainSection.Items.Count.ToString();
+            playerInventoryText.text = _inventory.MainSection.Items.Count.ToString();
             Debug.Log($"Inventory is changed! "
                 + (newItem is null ? "" : $"{newItem.itemData.itemStaticDataName} is added,")
                 + (oldItem is null ? "" : $" {oldItem.itemData.itemStaticDataName} is removed. ")
@@ -87,7 +88,6 @@ public class Player : NetworkBehaviour
         overview.camera = Camera.main;
 
         // Player name must be set
-
         BindUI();
     }
 
@@ -170,7 +170,7 @@ public class Player : NetworkBehaviour
     }
 
     public GridSection GetMainInventorySection() {
-        return _invController.MainSection;
+        return _inventory.MainSection;
     }
 
     private void ReadInput() {
@@ -189,7 +189,7 @@ public class Player : NetworkBehaviour
         // Информация об инвентаре
         if (Input.GetKeyDown(KeyCode.N)) {
             var dict = new Dictionary<string, int>();
-            foreach (var item in _invController.MainSection.Items) {
+            foreach (var item in _inventory.MainSection.Items) {
                 if (dict.ContainsKey(item.itemData.itemStaticDataName))
                     dict[item.itemData.itemStaticDataName]++;
                 else
@@ -202,16 +202,17 @@ public class Player : NetworkBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.G)) {
-            if (_invController.MainSection.Items.Count != 0) {
-                Debug.Log("Элемент " + _invController.MainSection.Items[0].itemData.itemStaticDataName
+            if (_inventory.MainSection.Items.Count != 0) {
+                var item = _inventory.MainSection.Items[0];
+                Debug.Log($"Inv. count: {_inventory.MainSection.Items.Count}. Элемент "
+                    + item.itemData.itemStaticDataName
                     + " будет выброшен");
-                _itemPicker.ThrowAwayFromGridSection(_invController.MainSection,
-                    _invController.MainSection.Items[0]);
+                _itemPicker.ThrowAwayFromGridSection(/*_inventory.MainSection, */item);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {
-            bool isAllAdded = _invController.MainSection.AddTestItems();
+            bool isAllAdded = _inventory.MainSection.AddTestItems();
             if (!isAllAdded) {
                 Debug.Log("Не все предметы были добавлены. Нет места в инвентаре для предметов "
                     + "данного размера.");
