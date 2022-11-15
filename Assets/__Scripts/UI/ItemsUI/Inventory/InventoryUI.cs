@@ -36,7 +36,7 @@ public class InventoryUI : MonoBehaviour
         }
         _gridSection = gridSection;
         _gridSection.InventoryChanged += OnInventoryChanged;
-        _invGridUI.SetGrid(_gridSection);
+        _invGridUI.SetInventorySection(_gridSection);
         
         // Привязаться к изменениям информации
         _infoProvider = invInfoProvider;

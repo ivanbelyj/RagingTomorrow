@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// UI отдельного предмета, находящегося в инвентаре
+/// </summary>
 public class InventorySlotItem : MonoBehaviour
 {
     [SerializeField]
@@ -25,6 +28,9 @@ public class InventorySlotItem : MonoBehaviour
     private float _slotHeight;
     private float _gridSpacing;
 
+    private GridSectionItem _gridSectionItem;
+    public GridSectionItem GridSectionItem => _gridSectionItem;
+
     private void Awake() {
         _itemImage = _itemImageGO.GetComponent<Image>();
         _itemRectTransform = _itemImageGO.GetComponent<RectTransform>();
@@ -34,12 +40,16 @@ public class InventorySlotItem : MonoBehaviour
     /// ItemStaticDataManager требуется для получения данных о предмете по имени,
     /// т.к. при установке предмета в слот передаются компактные данные
     /// </summary>
-    public void Initialize(ItemStaticDataManager itemStaticDataManager,
+    public void Initialize(GridSectionItem gridSectionItem,
+        ItemStaticDataManager itemStaticDataManager,
         float slotWidth, float slotHeight, float gridSpacing) {
+        _gridSectionItem = gridSectionItem;
         _itemStaticDataManager = itemStaticDataManager;
         _slotWidth = slotWidth;
         _slotHeight = slotHeight;
         _gridSpacing = gridSpacing;
+
+        SetItem(gridSectionItem);
     }
 
     private void SetSprite(Sprite sprite) {
@@ -55,8 +65,11 @@ public class InventorySlotItem : MonoBehaviour
             _itemsCountGO.SetActive(false);
         }
     }
-
-    public void SetItem(GridSectionItem invItem) {
+    
+    /// <summary>
+    /// Устанавливает предмет для UI
+    /// </summary>
+    private void SetItem(GridSectionItem invItem) {
         ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
             invItem.itemData.itemStaticDataName);
         

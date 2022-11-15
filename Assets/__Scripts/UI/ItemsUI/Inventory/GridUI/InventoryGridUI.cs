@@ -33,10 +33,16 @@ public class InventoryGridUI : MonoBehaviour
     // private string _inventorySectionName;
     // private InventorySection _invSection;
 
+    private List<InventorySlot> _slots;
+    private List<InventorySlotItem> _slotItems;
+
     private void Awake() {
         RectTransform slotRectTransform = _slotPrefab.GetComponent<RectTransform>();
         _slotHeight = slotRectTransform.sizeDelta.x;
         _slotWidth = slotRectTransform.sizeDelta.y;
+
+        _slots = new List<InventorySlot>();
+        _slotItems = new List<InventorySlotItem>();
     }
     private void Start() {
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
@@ -46,7 +52,7 @@ public class InventoryGridUI : MonoBehaviour
     /// Для UI устанавливается новый инвентарь. Например, игрок открывает ящик, и для UI инвентаря
     /// устанавливается инвентарь ящика
     /// </summary>
-    public void SetGrid(GridSection gridSection) {
+    public void SetInventorySection(GridSection gridSection) {
         // Сбрасываем все, что связано со старой сеткой
         GridSection oldInvGrid = _gridSection;
         _gridSection = gridSection;
@@ -63,11 +69,16 @@ public class InventoryGridUI : MonoBehaviour
         }
 
         if (!areSlotsSet) {
-            // Todo:
-            // ClearSlots();
+            // Старые слоты удаляются
+            foreach (var slot in _slots) {
+                Destroy(slot.gameObject);
+            }
             CreateSlots();
         }
-        // Todo: Clear items
+        // Созданные ранее UI объектов удаляются
+        foreach (var slotItem in _slotItems) {
+            Destroy(slotItem.gameObject);
+        }
         CreateItems();
 
         _gridSection.InventoryChanged += OnInventoryChanged;
@@ -84,6 +95,15 @@ public class InventoryGridUI : MonoBehaviour
             case SyncList<GridSectionItem>.Operation.OP_REMOVEAT:
             {
                 // items.Remove(oldGridItem);
+                // Todo: Equals
+                InventorySlotItem slotItemToDestroy =
+                    _slotItems.Find(x => x.GridSectionItem.inventoryX == oldItem.inventoryX
+                    && x.GridSectionItem.inventoryY == oldItem.inventoryY);
+                Debug.Log("_slotItems.Count: " + _slotItems.Count);
+                Debug.Log("slotItemToRemove: " + slotItemToDestroy
+                    + $"; name: {slotItemToDestroy.GridSectionItem.itemData.itemStaticDataName}");
+                Debug.Log("Удален ли slotItem? " + _slotItems.Remove(slotItemToDestroy));
+                Destroy(slotItemToDestroy.gameObject);
                 break;
             }
         }
@@ -105,17 +125,52 @@ public class InventoryGridUI : MonoBehaviour
         }
     }
 
-    private void CreateSlot(int row, int col) {
+    private void CreateItems() {
+        foreach (GridSectionItem invItem in _gridSection.Items) {
+            CreateItem(invItem);
+        }
+    }
+
+    private InventorySlot CreateSlot(int row, int col) {
         // Добавляем в сетку
         GameObject slotGO = Instantiate(_slotPrefab);
         slotGO.transform.SetParent(_gridParent.transform);
         slotGO.transform.localScale = Vector3.one;
 
         SetPositionInGrid(slotGO, row, col);
+        InventorySlot invSlot = slotGO.GetComponent<InventorySlot>();
+        _slots.Add(invSlot);
+        return invSlot;
 
         // Обеспечение дальнейшей работы
         // InventorySlot slot = slotGO.GetComponent<InventorySlot>();
         // _slots[row, col] = slot;
+    }
+    
+    private InventorySlotItem CreateItem(GridSectionItem invItem) {
+        int col = invItem.inventoryX;
+        int row = invItem.inventoryY;
+        Debug.Log("Добавление элемента в сетку. Позиция: (" + col + ", " + row + ")");
+
+        // Добавляем в сетку
+        GameObject itemGO = Instantiate(_slotItemPrefab);
+        itemGO.transform.SetParent(_gridParent.transform);
+        itemGO.transform.localScale = Vector3.one;
+        SetPositionInGrid(itemGO, row, col);
+
+        InventorySlotItem slotItem = itemGO.GetComponent<InventorySlotItem>();
+        slotItem.Initialize(invItem, _itemStaticDataManager, _slotWidth, _slotHeight, gridSpacing);
+        // slotItem.SetItem(invItem);
+
+        _slotItems.Add(slotItem);
+        return slotItem;
+
+        // Debug.Log($"Set slot [{x}, {y}] with item {invItem.itemGameData.itemDataName}; "
+        //     + $"_slots is {_slots.GetLength(0)}x{_slots.GetLength(1)}");
+
+        // Todo: рефакторинг, инкапсулировать
+        // установку слота по InventoryItem внутри InventorySlot
+        // _slots[x, y].SetItem(invItem);
     }
 
     /// <summary>
@@ -128,36 +183,5 @@ public class InventoryGridUI : MonoBehaviour
         float spacingX = col * gridSpacing;
         float spacingY = row * gridSpacing;
         go.transform.localPosition = new Vector3(posX + spacingX, -posY - spacingY);
-    }
-
-    private void CreateItems() {
-        foreach (GridSectionItem invItem in _gridSection.Items) {
-            CreateItem(invItem);
-        }
-    }
-
-    private void CreateItem(GridSectionItem invItem) {
-        
-        int col = invItem.inventoryX;
-        int row = invItem.inventoryY;
-        Debug.Log("Добавление элемента в сетку. Позиция: (" + col + ", " + row + ")");
-
-        // Добавляем в сетку
-        GameObject itemGO = Instantiate(_slotItemPrefab);
-        itemGO.transform.SetParent(_gridParent.transform);
-        itemGO.transform.localScale = Vector3.one;
-        SetPositionInGrid(itemGO, row, col);
-
-        InventorySlotItem slotItem = itemGO.GetComponent<InventorySlotItem>();
-        slotItem.Initialize(_itemStaticDataManager, _slotWidth, _slotHeight, gridSpacing);
-        slotItem.SetItem(invItem);
-
-        // Debug.Log($"Set slot [{x}, {y}] with item {invItem.itemGameData.itemDataName}; "
-        //     + $"_slots is {_slots.GetLength(0)}x{_slots.GetLength(1)}");
-
-        // Todo: рефакторинг, инкапсулировать
-        // установку слота по InventoryItem внутри InventorySlot
-        // _slots[x, y].SetItem(invItem);
-
     }
 }
