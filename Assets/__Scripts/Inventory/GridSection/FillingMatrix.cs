@@ -10,11 +10,21 @@ using UnityEngine;
 [Serializable]
 public class FillingMatrix
 {
+    // Прямоугольник, занимающий место в матрице
+    public struct FillingRect {
+        public int width;
+        public int height;
+
+        // Координаты верхнего левого угла прямоугольника в матрице
+        public int x;
+        public int y;
+    }
+
     private BitArray[] _data;
 
-    [SerializeField]
+    // [SerializeField]
     private int _cols;
-    [SerializeField]
+    // [SerializeField]
     private int _rows;
 
     public int Width => _cols;
@@ -31,14 +41,18 @@ public class FillingMatrix
 
     public bool this[int row, int col] {
         get => _data[row][col];
-        set => _data[row][col] = value;
+        private set => _data[row][col] = value;
+    }
+
+    private void SetRect(FillingRect rect, bool val) {
+        SetRect(rect.width, rect.height, rect.x, rect.y, val);
     }
 
     /// <summary>
     /// Устанавливает данное значение в позициях матрицы заполнения, соответствующих размеру 
     /// и позиции прямоугольника
     /// </summary>
-    public void SetRect(int width, int height, int x, int y, bool val) {
+    private void SetRect(int width, int height, int x, int y, bool val) {
          for (int row = y; row < y + height; row++) {
             for (int col = x; col < x + width; col++) {
                 this[row, col] = val;
@@ -67,6 +81,10 @@ public class FillingMatrix
         return true;
     }
 
+    public bool HasPlaceForRect(FillingRect rect) {
+        return HasPlaceForRect(rect.width, rect.height, rect.x, rect.y);
+    }
+
     /// <summary>
     /// Ищет свободное место для прямоугольника заданного размера.
     /// true, если в секции нашлось такое место
@@ -83,5 +101,19 @@ public class FillingMatrix
         }
         x = y = 0;
         return false;
+    }
+
+    /// <summary>
+    /// Создает матрицу заполненности на основе данных о ее заполнении.
+    /// Асимптотика: O(n)
+    /// </summary>
+    public static FillingMatrix Create(int rows, int cols, FillingRect[] fillingRects) {
+        FillingMatrix res = new FillingMatrix(rows, cols);
+        foreach (var rect in fillingRects) {
+            /// На практике можно считать O(const), т.к. средний размер
+            // прямоугольника заполнения - const
+            res.SetRect(rect, true);
+        }
+        return res;
     }
 }

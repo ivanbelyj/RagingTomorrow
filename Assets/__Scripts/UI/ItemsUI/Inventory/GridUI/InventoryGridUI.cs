@@ -137,9 +137,10 @@ public class InventoryGridUI : MonoBehaviour
     }
 
     private void CreateItem(GridSectionItem invItem) {
-        Debug.Log("Добавление элемента в сетку");
+        
         int col = invItem.inventoryX;
         int row = invItem.inventoryY;
+        Debug.Log("Добавление элемента в сетку. Позиция: (" + col + ", " + row + ")");
 
         // Добавляем в сетку
         GameObject itemGO = Instantiate(_slotItemPrefab);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,13 +30,13 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     // public float TotalWeight
     //     => _items.Sum(item => GetItemData(item.itemStaticDataName).Mass);
 
-    private FillingMatrix _sectionFilling;
+    // private FillingMatrix _sectionFilling;
     [SerializeField]
     private int _initialWidth;
     [SerializeField]
     private int _initialHeight;
-    public int Width => _sectionFilling.Width;
-    public int Height => _sectionFilling.Height;
+    public int Width { get; private set; }
+    public int Height { get; private set; }
 
     public ItemStaticData GetItemData(string itemDataName)
     {
@@ -44,7 +45,9 @@ public class GridSection : NetworkBehaviour, ITotalWeight
 
     private void Awake() {
         _syncItems.Callback += SyncItems;
-        _sectionFilling = new FillingMatrix(_initialHeight, _initialWidth);
+        Width = _initialWidth;
+        Height = _initialHeight;
+        // _sectionFilling = new FillingMatrix(_initialHeight, _initialWidth);
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
 
         _items = new List<GridSectionItem>(_syncItems.Count);
@@ -107,20 +110,20 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     }
     #endregion
 
-    #region Filling Matrix Operations
-    private void SetFillingRect(GridSectionItem gridItem, bool value) {
-        ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
-            gridItem.itemData.itemStaticDataName);
+    // private void SetFillingRect(GridSectionItem gridItem, bool value) {
+    //     ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
+    //         gridItem.itemData.itemStaticDataName);
         
-        _sectionFilling.SetRect(staticData.Width, staticData.Height,
-            gridItem.inventoryX, gridItem.inventoryY, value);
-    }
+    //     _sectionFilling.SetRect(staticData.Width, staticData.Height,
+    //         gridItem.inventoryX, gridItem.inventoryY, value);
+    // }
 
-    private bool FindFreePos(ItemData item, out int x, out int y) {
+    #region Filling Matrix Operations
+    private bool FindFreePos(FillingMatrix sectionFilling, ItemData item, out int x, out int y) {
         ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
             item.itemStaticDataName);
         
-        bool hasFreePlace = _sectionFilling.FindFreeRectPos(
+        bool hasFreePlace = sectionFilling.FindFreeRectPos(
             staticData.Width, staticData.Height,
             out int resX, out int resY);
         x = resX;
@@ -128,13 +131,41 @@ public class GridSection : NetworkBehaviour, ITotalWeight
 
         return hasFreePlace;
     }
+
+    /// <summary>
+    /// Получает информацию о заполненности инвентаря.
+    /// Асимптотика: O(n * log(n))
+    /// </summary>
+    private FillingMatrix GetFillingMatrix() {
+        // O(n * log(n))
+        var fillingRects = new FillingMatrix.FillingRect[_items.Count];
+        for (int i = 0; i < _items.Count; i++) {
+            // O(log(n))
+            var itemStaticData = _itemStaticDataManager
+                .GetStaticDataByName(_items[i].itemData.itemStaticDataName);
+            fillingRects[i] = new FillingMatrix.FillingRect() {
+                height = itemStaticData.Height,
+                width = itemStaticData.Width,
+                x = _items[i].inventoryX,
+                y = _items[i].inventoryY,
+            };
+        }
+
+        // O(n)
+        return FillingMatrix.Create(_initialHeight, _initialWidth, fillingRects);
+    }
     #endregion
 
     #region Add And Remove
     public bool AddToFreePlace(ItemData itemData) {
-        bool freePosIsFound = FindFreePos(itemData, out int x, out int y);
+        Debug.Log($"Добавление предмета {itemData.itemStaticDataName} в свободное место.");
+        Debug.Log($"\tПостроение матрицы заполненности");
+        FillingMatrix fillingMatrix = GetFillingMatrix();
+
+        bool freePosIsFound = FindFreePos(fillingMatrix, itemData, out int x, out int y);
         if (!freePosIsFound)
             return false;
+        Debug.Log($"Найдена свободная позиция: ({x}, {y})");
         
         GridSectionItem gridItem = new GridSectionItem() {
             itemData = itemData,
@@ -167,7 +198,6 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     //     return true;
     // }
 
-    // Todo: pass GridSectionItem
     public void RemoveFromSection(GridSectionItem invItem) {
         if (isServer) {
             Debug.Log("Remove Item");
