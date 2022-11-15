@@ -119,10 +119,17 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     // }
 
     #region Filling Matrix Operations
+    /// <summary>
+    /// Находит координаты верхнего левого угла свободного прямоугольника, в который можно
+    /// поместить данный предмет. true, если такой прямоугольник найден.
+    /// Асимптотика: O(n^2)
+    /// </summary>
     private bool FindFreePos(FillingMatrix sectionFilling, ItemData item, out int x, out int y) {
+        // O(log(n))
         ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
             item.itemStaticDataName);
         
+        // O(n^2)
         bool hasFreePlace = sectionFilling.FindFreeRectPos(
             staticData.Width, staticData.Height,
             out int resX, out int resY);
@@ -157,11 +164,60 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     #endregion
 
     #region Add And Remove
-    public bool AddToFreePlace(ItemData itemData) {
+    public bool TryToAddToSection(ItemData itemData) {
+        bool isAdded = TryToAddToUnfilledItemStack(itemData);
+        if (!isAdded) {
+            return TryToAddToFreePlace(itemData);
+        } else {
+            return true;
+        }
+    }
+
+    private bool TryToAddToUnfilledItemStack(ItemData itemData) {
+        GridSectionItem unfilled = FindUnfilledItemStack(itemData);
+        if (unfilled is null) {
+            return false;
+        }
+        RemoveFromSection(unfilled);
+        unfilled.count += 1;
+        if (isServer) {
+            AddItem(unfilled);
+        } else {
+            CmdAddItem(unfilled);
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Находит стак предметов, который не заполнен до максимального значения
+    /// </summary>
+    private GridSectionItem FindUnfilledItemStack(ItemData itemData) {
+        ItemStaticData staticData =
+            _itemStaticDataManager.GetStaticDataByName(itemData.itemStaticDataName);
+        int stackSize = staticData.StackSize;
+        foreach (var item in _items) {
+            // Стаковать можно только одинаковое, чтобы не потерять различия
+            bool sameItem = item.itemData.Equals(itemData);
+
+            // Некоторые предметы, например, не могут стаковаться
+            bool itemStackLimitNotReached = item.count < stackSize;
+            if (sameItem && itemStackLimitNotReached) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Находит свободное место в инвентаре и добавляет туда предмет
+    /// </summary>
+    private bool TryToAddToFreePlace(ItemData itemData) {
         Debug.Log($"Добавление предмета {itemData.itemStaticDataName} в свободное место.");
         Debug.Log($"\tПостроение матрицы заполненности");
+        // O(n * log(n))
         FillingMatrix fillingMatrix = GetFillingMatrix();
 
+        // O(n^2)
         bool freePosIsFound = FindFreePos(fillingMatrix, itemData, out int x, out int y);
         if (!freePosIsFound)
             return false;
@@ -215,7 +271,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
             var newItem = new ItemData() {
                 itemStaticDataName = _itemStaticDataManager.NamesAndData.ElementAt(0).Key,
             };
-            bool isAdded = AddToFreePlace(newItem);
+            bool isAdded = TryToAddToSection(newItem);
             if (!isAdded) {
                 // В инвентаре нет места для предметов данного размера
                 return false;

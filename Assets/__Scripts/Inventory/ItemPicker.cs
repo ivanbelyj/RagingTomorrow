@@ -38,7 +38,7 @@ public class ItemPicker : NetworkBehaviour
 
             ItemData itemData = item.ItemData;
 
-            if (!_sectionToPick.AddToFreePlace(itemData)) {
+            if (!_sectionToPick.TryToAddToSection(itemData)) {
                 Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
             }
 

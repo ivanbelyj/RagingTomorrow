@@ -87,7 +87,8 @@ public class FillingMatrix
 
     /// <summary>
     /// Ищет свободное место для прямоугольника заданного размера.
-    /// true, если в секции нашлось такое место
+    /// true, если в секции нашлось такое место.
+    /// Асимптотика: O(n^2)
     /// </summary>
     public bool FindFreeRectPos(int width, int height, out int x, out int y) {
         for (int row = 0; row < _data.Length; row++) {

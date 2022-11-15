@@ -67,12 +67,6 @@ public class Player : NetworkBehaviour
             playerHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
         }
 
-        // To fix: не работает
-        Debug.Log("playerInventoryText: " + playerInventoryText);
-        Debug.Log("_inventory: " + _inventory);
-        Debug.Log("_inventory.MainSection: " + _inventory.MainSection);
-        Debug.Log("_inventory.MainSection.Items.Count: " + _inventory.MainSection.Items.Count);
-
         playerInventoryText.text = _inventory.MainSection.Items.Count.ToString();
         _inventory.MainSection.InventoryChanged += (SyncList<GridSectionItem>.Operation op,
             int index, GridSectionItem oldItem, GridSectionItem newItem) => {
