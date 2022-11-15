@@ -46,6 +46,8 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         _syncItems.Callback += SyncItems;
         _sectionFilling = new FillingMatrix(_initialHeight, _initialWidth);
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
+
+        _items = new List<GridSectionItem>(_syncItems.Count);
     }
 
     public override void OnStartClient()
@@ -53,7 +55,6 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         base.OnStartClient();
 
         // При старте в _syncItems уже могут быть элементы
-        _items = new List<GridSectionItem>(_syncItems.Count);
         for (int i = 0; i < _syncItems.Count; i++)
         {
             _items.Add(_syncItems[i]);

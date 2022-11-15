@@ -47,10 +47,6 @@ public class Player : NetworkBehaviour
     }
 
     public override void OnStartClient() {
-        /* a few apllication settings for more smooth. This is Optional. */
-        QualitySettings.vSyncCount = 0;
-        Cursor.lockState = CursorLockMode.Locked;
-
         /* Initialize lifecycle and add Damage FX */
         // lifecycle.Initialize();
         // entity.lifecycle.AssignDamageAction(DamageFX);
@@ -72,6 +68,11 @@ public class Player : NetworkBehaviour
         }
 
         // To fix: не работает
+        Debug.Log("playerInventoryText: " + playerInventoryText);
+        Debug.Log("_inventory: " + _inventory);
+        Debug.Log("_inventory.MainSection: " + _inventory.MainSection);
+        Debug.Log("_inventory.MainSection.Items.Count: " + _inventory.MainSection.Items.Count);
+
         playerInventoryText.text = _inventory.MainSection.Items.Count.ToString();
         _inventory.MainSection.InventoryChanged += (SyncList<GridSectionItem>.Operation op,
             int index, GridSectionItem oldItem, GridSectionItem newItem) => {
@@ -85,6 +86,9 @@ public class Player : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
+        /* a few apllication settings for more smooth. This is Optional. */
+        QualitySettings.vSyncCount = 0;
+        Cursor.lockState = CursorLockMode.Locked;
         overview.camera = Camera.main;
 
         // Player name must be set
