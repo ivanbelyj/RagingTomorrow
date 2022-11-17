@@ -99,10 +99,10 @@ public class InventoryGridUI : MonoBehaviour
                 InventorySlotItem slotItemToDestroy =
                     _slotItems.Find(x => x.GridSectionItem.inventoryX == oldItem.inventoryX
                     && x.GridSectionItem.inventoryY == oldItem.inventoryY);
-                Debug.Log("_slotItems.Count: " + _slotItems.Count);
-                Debug.Log("slotItemToRemove: " + slotItemToDestroy
-                    + $"; name: {slotItemToDestroy.GridSectionItem.itemData.itemStaticDataName}");
-                Debug.Log("Удален ли slotItem? " + _slotItems.Remove(slotItemToDestroy));
+                // Debug.Log("_slotItems.Count: " + _slotItems.Count);
+                // Debug.Log("slotItemToRemove: " + slotItemToDestroy
+                //     + $"; name: {slotItemToDestroy.GridSectionItem.itemData.itemStaticDataName}");
+                // Debug.Log("Удален ли slotItem? " + _slotItems.Remove(slotItemToDestroy));
                 Destroy(slotItemToDestroy.gameObject);
                 break;
             }
@@ -150,7 +150,7 @@ public class InventoryGridUI : MonoBehaviour
     private InventorySlotItem CreateItem(GridSectionItem invItem) {
         int col = invItem.inventoryX;
         int row = invItem.inventoryY;
-        Debug.Log("Добавление элемента в сетку. Позиция: (" + col + ", " + row + ")");
+        // Debug.Log("Добавление элемента в сетку. Позиция: (" + col + ", " + row + ")");
 
         // Добавляем в сетку
         GameObject itemGO = Instantiate(_slotItemPrefab);

@@ -38,7 +38,7 @@ public class Player : NetworkBehaviour
         _inventory = GetComponent<CharactersInventory>();
         _characterInfo = GetComponent<CharacterInfo>();
         _characterInfo.CharacterInfoChanged += (CharacterInfo.CharacterInfoData newInfo) => {
-            Debug.Log("Character info is changed");
+            // Debug.Log("Character info is changed");
             playerNameText.text = newInfo.Name;
         };
 
@@ -67,14 +67,16 @@ public class Player : NetworkBehaviour
             playerHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
         }
 
+        // To fix: если на сервере уже стоял Count, то на только что подключенном клиенте
+        // он отображается как 0
         playerInventoryText.text = _inventory.MainSection.Items.Count.ToString();
         _inventory.MainSection.InventoryChanged += (SyncList<GridSectionItem>.Operation op,
             int index, GridSectionItem oldItem, GridSectionItem newItem) => {
             playerInventoryText.text = _inventory.MainSection.Items.Count.ToString();
-            Debug.Log($"Inventory is changed! "
-                + (newItem is null ? "" : $"{newItem.itemData.itemStaticDataName} is added,")
-                + (oldItem is null ? "" : $" {oldItem.itemData.itemStaticDataName} is removed. ")
-                + $" New Count is {playerInventoryText.text}");
+            // Debug.Log($"Inventory is changed! "
+            //     + (newItem is null ? "" : $"{newItem.itemData.itemStaticDataName} is added,")
+            //     + (oldItem is null ? "" : $" {oldItem.itemData.itemStaticDataName} is removed. ")
+            //     + $" New Count is {playerInventoryText.text}");
         };
     }
 
@@ -93,7 +95,7 @@ public class Player : NetworkBehaviour
         _HUD = FindObjectOfType<SimpleHUD>();
         if (_HUD is not null) {
             _HUD.SetEntity(gameObject);
-            Debug.Log("HUD is set");
+            // Debug.Log("HUD is set");
         }
 
         _itemsUIController = FindObjectOfType<ItemsUIController>();

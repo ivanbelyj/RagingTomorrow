@@ -41,8 +41,8 @@ public class ItemsUIController : MonoBehaviour
     /// </summary>
     public void SetPlayer(Player player) {
         _player = player;
-        _playersInventoryUI = GameObject.FindGameObjectWithTag("PlayersInventory")
-            .GetComponent<InventoryUI>();
+        // _playersInventoryUI = GameObject.FindGameObjectWithTag("PlayersInventory")
+        //     .GetComponent<InventoryUI>();
         
         _playersInventoryUI.Set(_player.GetInventoryInfoProvider(),
             _player.GetMainInventorySection());

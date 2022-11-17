@@ -63,7 +63,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
             _items.Add(_syncItems[i]);
         }
 
-        Debug.Log("Grid section items are initialized");
+        // Debug.Log("Grid section items are initialized");
     }
 
     public float GetTotalWeight()
@@ -78,7 +78,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
 
     [Server]
     private void RemoveItem(GridSectionItem item) {
-        Debug.Log("Remove on server");
+        // Debug.Log("Remove on server");
         _syncItems.Remove(item);
     }
 
@@ -165,9 +165,13 @@ public class GridSection : NetworkBehaviour, ITotalWeight
 
     #region Add And Remove
     public bool TryToAddToSection(ItemData itemData) {
+        Debug.Log("Попытка добавления элемента в секцию");
         bool isAdded = TryToAddToUnfilledItemStack(itemData);
+        Debug.Log("\tУдалось добавить в имеющийся стак: " + isAdded);
         if (!isAdded) {
-            return TryToAddToFreePlace(itemData);
+            bool res = TryToAddToFreePlace(itemData);
+            Debug.Log("\tНайдено свободное место: " + res);
+            return res;
         } else {
             return true;
         }
@@ -195,12 +199,20 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         ItemStaticData staticData =
             _itemStaticDataManager.GetStaticDataByName(itemData.itemStaticDataName);
         int stackSize = staticData.StackSize;
+        Debug.Log("Find unfilled item stack");
+        Debug.Log("_items.Count: " + _items.Count);
         foreach (var item in _items) {
             // Стаковать можно только одинаковое, чтобы не потерять различия
             bool sameItem = item.itemData.Equals(itemData);
+            Debug.Log($"Можно ли застаковать {itemData.itemStaticDataName} в "
+                + $"({item.itemData}, {item.count})?");
 
             // Некоторые предметы, например, не могут стаковаться
             bool itemStackLimitNotReached = item.count < stackSize;
+
+            Debug.Log($"\tЗаполнен ли стек {item.itemData.itemStaticDataName}?" +
+                $"{!itemStackLimitNotReached}");
+
             if (sameItem && itemStackLimitNotReached) {
                 return item;
             }
@@ -254,6 +266,9 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     //     return true;
     // }
 
+    /// <summary>
+    /// Убирает стак предметов из секции
+    /// </summary>
     public void RemoveFromSection(GridSectionItem invItem) {
         if (isServer) {
             Debug.Log("Remove Item");
@@ -267,7 +282,11 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     // For test
     public bool AddTestItems()
     {
-        for (int n = 0; n < 10; n++) {
+        // To fix: добавление каждого нового значения опирается на синхронизированные данные.
+        // Однако, насколько я понял, обновление этих данных происходит в следующем кадре,
+        // поэтому каждое последующее добавление в текущем кадре считает, что синхронизированные
+        // данные пусты
+        for (int n = 0; n < 1; n++) {
             var newItem = new ItemData() {
                 itemStaticDataName = _itemStaticDataManager.NamesAndData.ElementAt(0).Key,
             };

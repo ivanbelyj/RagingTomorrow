@@ -27,7 +27,7 @@ public class ItemPicker : NetworkBehaviour
     }
 
     private void OnCollisionEnter(Collision col) {
-        // Иначе предметы добавляются дублированно
+        // Если не добавить эту строчку, предметы добавляются дублированно
         if (!isServer)
             return;
         
@@ -62,8 +62,13 @@ public class ItemPicker : NetworkBehaviour
             Debug.Log("Не удалось выбросить предмет, т.к. его нет в инвентаре");
             return;
         }
+        // За раз удаляется весь стак
         _sectionToPick.RemoveFromSection(gridItem);
-        ThrowAway(gridItem.itemData);
+
+        // Но каждый предмет из стака спавнится отдельно
+        for (int i = 0; i < gridItem.count; i++) {
+            ThrowAway(gridItem.itemData);
+        }
         
         // gridSection.RemoveFromSection(gridItem);
     }
