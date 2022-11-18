@@ -191,9 +191,9 @@ public class Player : NetworkBehaviour
             var dict = new Dictionary<string, int>();
             foreach (var item in _inventory.MainSection.Items) {
                 if (dict.ContainsKey(item.itemData.itemStaticDataName))
-                    dict[item.itemData.itemStaticDataName]++;
+                    dict[item.itemData.itemStaticDataName] += item.count;
                 else
-                    dict.Add(item.itemData.itemStaticDataName, 1);
+                    dict.Add(item.itemData.itemStaticDataName, item.count);
             }
 
             Debug.Log("Инвентарь");

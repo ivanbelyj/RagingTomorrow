@@ -204,7 +204,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         foreach (var item in _items) {
             // Стаковать можно только одинаковое, чтобы не потерять различия
             bool sameItem = item.itemData.Equals(itemData);
-            Debug.Log($"Можно ли застаковать {itemData.itemStaticDataName} в "
+            Debug.Log($"\tМожно ли застаковать {itemData.itemStaticDataName} в "
                 + $"({item.itemData}, {item.count})?");
 
             // Некоторые предметы, например, не могут стаковаться
@@ -233,7 +233,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         bool freePosIsFound = FindFreePos(fillingMatrix, itemData, out int x, out int y);
         if (!freePosIsFound)
             return false;
-        Debug.Log($"Найдена свободная позиция: ({x}, {y})");
+        Debug.Log($"\tНайдена свободная позиция: ({x}, {y})");
         
         GridSectionItem gridItem = new GridSectionItem() {
             itemData = itemData,

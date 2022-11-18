@@ -96,6 +96,7 @@ public class InventoryGridUI : MonoBehaviour
             {
                 // items.Remove(oldGridItem);
                 // Todo: Equals
+                
                 InventorySlotItem slotItemToDestroy =
                     _slotItems.Find(x => x.GridSectionItem.inventoryX == oldItem.inventoryX
                     && x.GridSectionItem.inventoryY == oldItem.inventoryY);
@@ -103,6 +104,7 @@ public class InventoryGridUI : MonoBehaviour
                 // Debug.Log("slotItemToRemove: " + slotItemToDestroy
                 //     + $"; name: {slotItemToDestroy.GridSectionItem.itemData.itemStaticDataName}");
                 // Debug.Log("Удален ли slotItem? " + _slotItems.Remove(slotItemToDestroy));
+                _slotItems.Remove(slotItemToDestroy);
                 Destroy(slotItemToDestroy.gameObject);
                 break;
             }
