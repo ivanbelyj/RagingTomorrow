@@ -4,10 +4,41 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 
+/// <summary>
+/// Секция инвентаря для предметов, в настоящий момент используемых персонажем.
+/// Данная секция состоит из слотов, в каждом слоте может находиться максимум 1 предмет.
+/// Todo:
+/// В некоторых случаях предметы могут занимать сразу несколько слотов. Например, если надет
+/// экзоскелет, то надеть бронежилет или шлем уже нельзя
+/// </summary>
 public class WearSection : NetworkBehaviour, ITotalWeight
 {
+    /// <summary>
+    /// Для хранения информации о заполненности WearSection и обращения к хранимым предметам
+    /// извне
+    /// </summary>
+    public enum WearSlot
+    {
+        None,  // Для преметов, которые нельзя поместить в какой-либо слот
+        Head,
+        Vest,
+        Legs,
+        Feet,
+        Tail,
+        HandGun,
+        Rifle,
+    }
+
     private readonly SyncDictionary<WearSlot, ItemData> _syncSlots
         = new SyncDictionary<WearSlot, ItemData>();
+
+    // Каждый слот выполняет конкретную функцию и может быть использован кодом в процессе игры.
+    // Например, в слоте оружия лежит объект определенного класса, поэтому логично
+    // добавлять предметы не по WearSlot, который не привязан к классам, а по кастомным
+    // признакам добавляемого предмета. С реализацией с WearSlot ничего не мешает добавить в
+    // слот для оружия еду, у которой установлено WearSlot соотв. образом.
+    // С другой стороны, WearSlot позволяет содержать словарь, который легче синхронизировать,
+    // чем множество отдельных полей
 
     protected ItemStaticDataManager _itemStaticDataManager;
 
@@ -98,29 +129,39 @@ public class WearSection : NetworkBehaviour, ITotalWeight
 
     #region Add And Remove
     public bool AddToAccordingSlot(ItemData itemData) {
-        WearSlot slot = GetSlotForItem(itemData);
-        return AddToSection(slot, itemData);
+        return AddToSection(GetAccordingSlot(itemData), itemData);
     }
 
-    private WearSlot GetSlotForItem(ItemData itemData) {
-        // Todo: к какому слоту корректно отнести предмет?
-        return WearSlot.Head;
-    }
-
-    // Например, автомат нельзя положить в слот для шлема
-    private bool IsItemAllowed(WearSlot slot, ItemData item) {
-        // Todo: корректно ли относить предмет к данному слоту?
-        return false;
-    }
-
-    public bool AddToSection(WearSlot slot, ItemData item) {
-        if (!IsItemAllowed(slot, item)) {
-            return false;
+    private WearSlot GetAccordingSlot(ItemData itemData) {
+        var staticData = _itemStaticDataManager.GetStaticDataByName(itemData.itemStaticDataName);
+        if (staticData is WeaponItemStaticData weaponData) {
+            if (weaponData.Type == WeaponItemStaticData.WeaponType.HandGun)
+                return WearSlot.HandGun;
+            else if (weaponData.Type == WeaponItemStaticData.WeaponType.Rifle)
+                return WearSlot.Rifle;
+        } else if (staticData is ArmorItemStaticData armorData) {
+            return WearSlot.Vest;
         }
+        return WearSlot.None;
+    }
+
+    // Например, автомат нельзя положить в слот для шлема или пистолета
+    // private bool IsItemAllowed(WearSlot slot, ItemData item) {
+    //     var staticData = _itemStaticDataManager.GetStaticDataByName(item.itemStaticDataName);
+    //     if (staticData.AllowedWearSlot == WearSlot.None || slot == WearSlot.None) {
+    //         return false;
+    //     }
+    //     return staticData.AllowedWearSlot == slot;
+    // }
+
+    private bool AddToSection(WearSlot slot, ItemData item) {
+        // if (!IsItemAllowed(slot, item)) {
+        //     return false;
+        // }
 
         // В занятый слот нельзя добавить предмет
         bool isSlotFree = !_slots.ContainsKey(slot);
-        if (!isSlotFree) {
+        if (!isSlotFree || slot == WearSlot.None) {
             return false;
         }
 
@@ -145,9 +186,9 @@ public class WearSection : NetworkBehaviour, ITotalWeight
     public bool AddTestItems()
     {
         var newItem = new ItemData() {
-            itemStaticDataName = "TestHelmet",
+            itemStaticDataName = "TestArmor",
         };
-        bool isAdded = AddToSection(WearSlot.Head, newItem);
+        bool isAdded = AddToAccordingSlot(newItem);
         if (!isAdded) {
             // В инвентаре нет места для предметов данного размера
             return false;

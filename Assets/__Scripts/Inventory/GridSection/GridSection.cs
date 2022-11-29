@@ -288,7 +288,8 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         // данные пусты
         for (int n = 0; n < 1; n++) {
             var newItem = new ItemData() {
-                itemStaticDataName = _itemStaticDataManager.NamesAndData.ElementAt(0).Key,
+                // itemStaticDataName = _itemStaticDataManager.NamesAndData.ElementAt(0).Key,
+                itemStaticDataName = "TestArmor"
             };
             bool isAdded = TryToAddToSection(newItem);
             if (!isAdded) {

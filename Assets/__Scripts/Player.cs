@@ -200,6 +200,13 @@ public class Player : NetworkBehaviour
             foreach (var pair in dict)
                 Debug.Log($"\t{pair.Key}: {pair.Value}");
         }
+        if (Input.GetKeyDown(KeyCode.M)) {
+            Debug.Log("Информация о том, что надето на персонажа");
+            Debug.Log($"Всего надето/выбрано: {_inventory.WearSection.Slots.Count}");
+            foreach (var pair in _inventory.WearSection.Slots) {
+                Debug.Log($"\tСлот {pair.Key.ToString()}: {pair.Value.itemStaticDataName}");
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.G)) {
             if (_inventory.MainSection.Items.Count != 0) {
@@ -217,6 +224,9 @@ public class Player : NetworkBehaviour
                 Debug.Log("Не все предметы были добавлены. Нет места в инвентаре для предметов "
                     + "данного размера.");
             }
+            bool isAddedToWear = _inventory.WearSection.AddTestItems();
+            if (isAddedToWear)
+                Debug.Log("Добавлен предмет в WearSection");
         }
 
         LifecycleEffect damage = new LifecycleEffect() {

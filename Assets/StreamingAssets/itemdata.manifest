@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2556038948
+CRC: 3150109258
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 424c5b6ac96a8fd8fb81b9347cbabf01
+    Hash: b7b07d42f6b48c2790140db973fb2a5f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 3bb13990c03c95f9d819e150ef4f7856
+    Hash: 0376cc59469864946ea471e272b138b4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -34,6 +34,8 @@ ClassTypes:
 - Class: 95
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 5a47e4f0c0831a84898a55f9254e20b3, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: be6ed748c40801d468bf4d2049607d2f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
@@ -53,4 +55,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/BundledAssets/itemdata/FirstAidKit.asset
 - Assets/BundledAssets/itemdata/TestWeapon.asset
+- Assets/BundledAssets/itemdata/TestArmor.asset
 Dependencies: []

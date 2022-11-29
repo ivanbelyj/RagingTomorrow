@@ -47,16 +47,16 @@ public static class CustomTypesReaderWriter
 
     public static void WriteItemDynamicData(this NetworkWriter writer, ItemDynamicData dynamicData)
     {
-        DynamicDataType type;
+        DynamicItemType type;
         if (dynamicData is TestDynamicData) {
-            type = DynamicDataType.Test;
+            type = DynamicItemType.Test;
         } else {
-            type = DynamicDataType.None;
+            type = DynamicItemType.None;
         }
-        writer.WriteByte((byte)type);
+        writer.WriteInt((int)type);
 
         switch (type) {
-            case DynamicDataType.Test:
+            case DynamicItemType.Test:
                 var testData = (TestDynamicData)dynamicData;
                 writer.WriteString(testData.bookNotes);
                 break;
@@ -64,8 +64,8 @@ public static class CustomTypesReaderWriter
     }
 
     public static ItemDynamicData ReadItemDynamicData(this NetworkReader reader) {
-        switch ((DynamicDataType)reader.ReadByte()) {
-            case DynamicDataType.Test:
+        switch ((DynamicItemType)reader.ReadInt()) {
+            case DynamicItemType.Test:
                 string bookNotes = reader.ReadString();
                 return new TestDynamicData() {
                     bookNotes = bookNotes

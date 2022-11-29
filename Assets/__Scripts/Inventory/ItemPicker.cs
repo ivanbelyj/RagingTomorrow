@@ -52,7 +52,7 @@ public class ItemPicker : NetworkBehaviour
         }
     }
 
-    public void ThrowAwayFromWearSection(WearSection wearSection, WearSlot slot) {
+    public void ThrowAwayFromWearSection(WearSection wearSection, WearSection.WearSlot slot) {
         // Todo:
         // wearSection.RemoveFromSection(slot);
         ThrowAway(wearSection.Slots[slot]);
@@ -107,6 +107,8 @@ public class ItemPicker : NetworkBehaviour
         
         // Предметы должны быть инициализированы
         Item item = itemGO.GetComponent<Item>();
+        if (item is null)
+            Debug.LogError("Инстанцируемый префаб предмета не имеет компонента Item");
         item.Initialize(itemGameData, itemStaticData);
 
         // Отправляем информацию о сетевом объекте всем игрокам

@@ -34,6 +34,9 @@ public class ItemStaticData : ScriptableObject
 
     [SerializeField]
     private string _description;
+
+    // [SerializeField]
+    // private WearSlot _allowedWearSlot;
     #endregion
 
     public GameObject ItemPrefab => _itemPrefab;
@@ -51,4 +54,9 @@ public class ItemStaticData : ScriptableObject
     public float Mass { get => _mass; }
     public string ItemName => _name;
     public string Description => _description;
+
+    /// <summary>
+    /// Слот инвентаря, в который допустимо помещать предмет.
+    /// </summary>
+    // public WearSlot AllowedWearSlot => _allowedWearSlot;
 }

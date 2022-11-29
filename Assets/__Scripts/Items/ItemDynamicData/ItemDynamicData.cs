@@ -13,8 +13,7 @@ using UnityEngine;
 public abstract class ItemDynamicData
 {
     [HideInInspector]
-    public DynamicDataType type;
-
+    public DynamicItemType type;
     public abstract override bool Equals(object obj);
     public abstract override int GetHashCode();
 }
