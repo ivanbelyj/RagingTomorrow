@@ -25,8 +25,8 @@ public class InventorySlotItem : MonoBehaviour
 
     private ItemStaticDataManager _itemStaticDataManager;
 
-    private float _slotWidth;
-    private float _slotHeight;
+    private float _slotSize;
+    // private float _slotHeight;
     private float _gridSpacing;
 
     private ItemData _itemData;
@@ -49,14 +49,14 @@ public class InventorySlotItem : MonoBehaviour
     /// </summary>
     public void Initialize(ItemData itemData, int count, uint itemLocalId, uint sectionNetId,
         ItemStaticDataManager itemStaticDataManager,
-        float slotWidth, float slotHeight, float gridSpacing) {
+        float slotSize/*, float slotHeight*/, float gridSpacing) {
         _itemData = itemData;
         _itemLocalId = itemLocalId;
         _sectionNetId = sectionNetId;
 
         _itemStaticDataManager = itemStaticDataManager;
-        _slotWidth = slotWidth;
-        _slotHeight = slotHeight;
+        _slotSize = slotSize;
+        // _slotHeight = slotHeight;
         _gridSpacing = gridSpacing;
 
         SetItemUI(itemData, count);
@@ -92,10 +92,45 @@ public class InventorySlotItem : MonoBehaviour
         
         // Картинка предмета получает размер на некоторое кол-во слотов
         _itemRectTransform.sizeDelta =
-            new Vector2(_slotWidth * staticData.Width + _gridSpacing * (staticData.Width - 1),
-            _slotHeight * staticData.Height + _gridSpacing * (staticData.Height - 1));
+            FromSlots(new Vector2Int(staticData.Width, staticData.Height));
+            // new Vector2(_slotSize * staticData.Width + _gridSpacing * (staticData.Width - 1),
+            // _slotSize * staticData.Height + _gridSpacing * (staticData.Height - 1));
         
         SetSprite(staticData.Sprite);
         SetItemsCountUI(count);
+    }
+
+    public Vector2 FromSlots(Vector2Int v) =>
+        new Vector2(LenghtOfSlots(v.x), LenghtOfSlots(v.y));
+
+    public Vector2Int ToSlots(Vector2 v) {
+        return new Vector2Int(SlotsInLength(v.x), SlotsInLength(v.y));
+        
+        // var staticData = _itemStaticDataManager
+        //     .GetStaticDataByName(_itemData.itemStaticDataName);
+        // return new Vector2Int(
+        //     (int)((v.x * _itemRectTransform.sizeDelta.x)
+        //     / (_slotSize * _itemRectTransform.sizeDelta.x)),
+        //     (int)((v.y * _itemRectTransform.sizeDelta.y)
+        //     / (_slotSize * _itemRectTransform.sizeDelta.y))
+        // );
+        // slot * width -- transform.width
+        // x * width -- v.x
+
+        // x / transform.width = v.x / (slot * width)
+        // x = (v.x * transform.width) / (slot * width)
+    }
+        
+
+    private float LenghtOfSlots(int slots) {
+        return _slotSize * slots + _gridSpacing * (slots - 1);
+    }
+
+    private int SlotsInLength(float l) {
+        // l = _slotSize * slots + _gridSpacing * (slots - 1);
+        // l = _slotSize * slots + _gridSpacing * slots - _gridSpacing;
+        // l + _gridSpacing = slots * (_slotSize + _gridSpacing);
+        // (l + _gridSpacing) / (_slotSize + _gridSpacing) = slots;
+        return (int)((l + _gridSpacing) / (_slotSize + _gridSpacing));
     }
 }

@@ -34,24 +34,43 @@ public class InventorySlot : MonoBehaviour, IDropAcceptor<DraggedItemData>
         Debug.Log($"Accepted: {draggedData.DraggingPlayerNetId} " +
             $" {draggedData.InventorySectionNetId} {draggedData.ItemLocalId}");
         
-        GridSection fromSection =
+        // Удаление элемента из его предыдущей секции инвентаря
+        GridSection oldSection =
             GetGridSectionByNetId(draggable.DraggedData.InventorySectionNetId);
-        Debug.Log($"Found section by id. Size: {fromSection.Width}x{fromSection.Height}");
-        GridSectionItem gridItem = fromSection
+        Debug.Log($"Found section by id. Size: {oldSection.Width}x{oldSection.Height}");
+        GridSectionItem oldGridItem = oldSection
             .Items.Find(x => x.GetLocalIdByInventoryPosition() == draggedData.ItemLocalId);
-        Debug.Log($"Found item by local id. {gridItem.itemData.itemStaticDataName}. "
-            + "It could be changed during drag and drop");
+        Debug.Log($"Old item by local id: {oldGridItem.itemData.itemStaticDataName}. ");
 
-        bool isAdded = _gridSection.TryToAddToSection(gridItem.itemData);
-        if (isAdded) {
-            bool isRemoved = fromSection.RemoveFromSection(gridItem);
-            if (isRemoved) {
-                Destroy(draggable);
-            } else {
-                Debug.LogError("Item was added, but not removed from old section");
-            }
+        GridSectionItem newItem = new GridSectionItem() {
+            inventoryX = _col - draggedData.MouseSlotsOffsetX,
+            inventoryY = _row - draggedData.MouseSlotsOffsetY,
+            count = oldGridItem.count,
+            itemData = oldGridItem.itemData
+        };
+
+        bool isAdded;
+        
+        if (_gridSection.netId == oldSection.netId &&
+            oldGridItem.GetLocalIdByInventoryPosition()
+            == newItem.GetLocalIdByInventoryPosition()) {
+            // Добавлять элемент в одно и то же место не имеет смысла,
+            // ничего не происходит
+            isAdded = false;
         } else {
-            // Todo: вернуть предмет на изначальное место
+            isAdded = _gridSection.TryToAddGridSectionItem(newItem,
+                oldSection.netId == _gridSection.netId ? oldGridItem : null);
+            if (isAdded) {
+                bool isRemoved = oldSection.RemoveFromSection(oldGridItem);
+                if (isRemoved) {
+                    Debug.Log("Item is removed from old section");
+                    Destroy(draggable);
+                }
+            }
+        }
+        Debug.Log("Is item added? " + isAdded);
+        if (!isAdded) {
+            draggable.ResetDrag();
             Debug.Log("Item was accepted, but not added.");
         }
     }

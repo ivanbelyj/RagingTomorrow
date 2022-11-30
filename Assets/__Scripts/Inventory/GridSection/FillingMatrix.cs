@@ -44,7 +44,7 @@ public class FillingMatrix
         private set => _data[row][col] = value;
     }
 
-    private void SetRect(FillingRect rect, bool val) {
+    public void SetRect(FillingRect rect, bool val) {
         SetRect(rect.width, rect.height, rect.x, rect.y, val);
     }
 
@@ -52,12 +52,25 @@ public class FillingMatrix
     /// Устанавливает данное значение в позициях матрицы заполнения, соответствующих размеру 
     /// и позиции прямоугольника
     /// </summary>
-    private void SetRect(int width, int height, int x, int y, bool val) {
+    public void SetRect(int width, int height, int x, int y, bool val) {
          for (int row = y; row < y + height; row++) {
             for (int col = x; col < x + width; col++) {
                 this[row, col] = val;
             }
         }
+    }
+
+    /// <summary>
+    /// true, если прямоугольник находится в рамках матрицы
+    /// </summary>
+    public bool IsRectInBounds(int width, int height, int x, int y) {
+        return x > 0 && y > 0
+            && x + width <= _cols
+            && y + height <= _rows;
+    }
+
+    public bool IsRectInBounds(FillingRect rect) {
+        return IsRectInBounds(rect.width, rect.height, rect.x, rect.y);
     }
 
     /// <summary>
@@ -116,5 +129,20 @@ public class FillingMatrix
             res.SetRect(rect, true);
         }
         return res;
+    }
+
+    /// <summary>
+    /// Возвращается копия прямоугольника, выходящего за границы матрицы заполнения,
+    /// обрезанная по рамкам матрицы.
+    /// </summary>
+    public FillingRect ToBounds(FillingRect rect) {
+        int rowOverflow = (rect.height + rect.y) - _rows;
+        int colOverflow = (rect.width + rect.x) - _cols;
+        return new FillingRect() {
+            x = rect.x,
+            y = rect.y,
+            width = rect.width - colOverflow,
+            height = rect.height - rowOverflow
+        };
     }
 }

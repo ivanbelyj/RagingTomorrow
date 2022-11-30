@@ -18,24 +18,30 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     /// </summary>
     public T DraggedData => _draggedData;
 
-    private Canvas _canvas;
-    private Vector3 _dragPos;
-    private GraphicRaycaster _graphicRaycaster;
+    protected Canvas _canvas;
+    // private Vector3 _dragPos;
+    private Vector3 _initialPos;
+    protected GraphicRaycaster _graphicRaycaster;
 
     /// <summary>
-    /// В момент, когда элемент переносится, он должен отображаться над всеми секциями инвентаря,
-    /// т.е. быть последним дочерним эл-том главного родительского UI.
+    /// В момент, когда элемент переносится, он должен отображаться над всеми секциями
+    /// инвентаря, т.е. быть последним дочерним эл-том главного родительского UI.
     /// </summary>
-    private Transform _uiParent;
+    // private Transform _uiParent;
 
-    // Элемент больше не вернется, поэтому вспоминать о старом родительском Transform не требуется
+    private Transform _oldParent;
+
+    /// <summary>
+    /// true, если при следующем событии Drag нужно сбросить перетаскивание 
+    /// </summary>
+    private bool _shouldResetDrag = false;
 
     protected virtual void Awake() {
         _canvas = FindObjectOfType<Canvas>();
-        _uiParent = _canvas.transform;
+        // _uiParent = _canvas.transform;
 
         _graphicRaycaster = _canvas.GetComponent<GraphicRaycaster>();
-        Debug.Log($"canvas: {_canvas}; raycaster: {_graphicRaycaster}; uiParent: {_uiParent}");
+        Debug.Log($"canvas: {_canvas}; raycaster: {_graphicRaycaster}");
     }
 
     protected virtual void Start() {
@@ -49,10 +55,13 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("Drag begins");
-        _dragPos = transform.position;
+        _shouldResetDrag = false;
 
-        transform.SetParent(_uiParent);
+        Debug.Log("Drag begins");
+        _initialPos = transform.position;
+
+        _oldParent = transform.parent;
+        transform.SetParent(_canvas.transform);
         transform.SetAsLastSibling();
     }
 
@@ -62,10 +71,15 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         //     eventData.position, _canvas.worldCamera,
         //     out Vector2 movePos);
 
-        _dragPos += (Vector3)eventData.delta;
-        Vector3 mousePos = _dragPos;
+        if (_shouldResetDrag) {
+            eventData.pointerDrag = null;
+        }
 
-        transform.position = mousePos;
+        // _dragPos += (Vector3)eventData.delta;
+        // Vector3 mousePos = _dragPos;
+
+        // transform.position = mousePos;
+        transform.position += (Vector3)eventData.delta;
     }
 
     public virtual void OnEndDrag(PointerEventData eventData)
@@ -81,8 +95,16 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             {
                 Debug.Log("End drag on DropAcceptor");
                 dropAcceptor.AcceptDrop(this, _draggedData/*_draggedDataProvider.GetDraggedData()*/);
-                break;
+                return;
             }
         }
+        ResetDrag();
+    }
+
+    public virtual void ResetDrag() {
+        Debug.Log("Reset Drag");
+        transform.position = _initialPos;
+        transform.SetParent(_oldParent);
+        _shouldResetDrag = true;
     }
 }

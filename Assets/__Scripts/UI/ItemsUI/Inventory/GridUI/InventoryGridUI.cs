@@ -25,8 +25,8 @@ public class InventoryGridUI : MonoBehaviour
     private GameObject _slotItemPrefab;
 
     // private InventorySlot[,] _slots;
-    private float _slotWidth;
-    private float _slotHeight;
+    private float _slotSize;
+    // private float _slotHeight;
 
     private ItemStaticDataManager _itemStaticDataManager;
     private GridSection _gridSection;
@@ -43,8 +43,11 @@ public class InventoryGridUI : MonoBehaviour
 
     private void Awake() {
         RectTransform slotRectTransform = _slotPrefab.GetComponent<RectTransform>();
-        _slotHeight = slotRectTransform.sizeDelta.x;
-        _slotWidth = slotRectTransform.sizeDelta.y;
+        // _slotHeight = slotRectTransform.sizeDelta.x;
+        if (slotRectTransform.sizeDelta.x != slotRectTransform.sizeDelta.y) {
+            Debug.LogError("Slot width and height must be same");
+        }
+        _slotSize = slotRectTransform.sizeDelta.y;
 
         _slots = new List<InventorySlot>();
         _slotItems = new Dictionary<uint, InventorySlotItem>();
@@ -123,8 +126,8 @@ public class InventoryGridUI : MonoBehaviour
         int rows = _gridSection.Height;
         int cols = _gridSection.Width;
 
-        float gridHeight = rows * _slotHeight + gridSpacing * rows;
-        float gridWidth = cols * _slotWidth +  + gridSpacing * cols;
+        float gridHeight = rows * _slotSize + gridSpacing * rows;
+        float gridWidth = cols * _slotSize +  + gridSpacing * cols;
         _gridParent.sizeDelta = new Vector2(gridWidth, gridHeight);
 
         // _slots = new InventorySlot[rows, cols];
@@ -173,7 +176,7 @@ public class InventoryGridUI : MonoBehaviour
         uint localId = invItem.GetLocalIdByInventoryPosition();
         slotItem.Initialize(invItem.itemData, invItem.Count, localId,
             _gridSection.GetComponent<NetworkIdentity>().netId,
-            _itemStaticDataManager, _slotWidth, _slotHeight,
+            _itemStaticDataManager, _slotSize,/* _slotHeight,*/
             gridSpacing);
 
         _slotItems.Add(localId, slotItem);
@@ -188,8 +191,8 @@ public class InventoryGridUI : MonoBehaviour
     /// </summary>
     private void SetPositionInGrid(GameObject go, int row, int col) {
         // Положение в сетке
-        float posX = col * _slotWidth;
-        float posY = row * _slotHeight;
+        float posX = col * _slotSize;
+        float posY = row * _slotSize;
         float spacingX = col * gridSpacing;
         float spacingY = row * gridSpacing;
         go.transform.localPosition = new Vector3(posX + spacingX, -posY - spacingY);

@@ -250,10 +250,29 @@ public class Player : NetworkBehaviour
             MockInventoryInfoProvider inventoryInfo = new MockInventoryInfoProvider() {
                 InventoryInfo = new InventoryInfo(null, "Ящик", "Маленький")
             };
+
+            // Для управления инвентарем игроку требуется авторизация
+            // if (!_otherInventory.hasAuthority) {
+            //     if (isServer) {
+            //         Debug.Log("Assign authority on server");
+            //         _otherInventory.netIdentity.AssignClientAuthority(connectionToClient);
+            //     } else {
+            //         Debug.Log("Call command to assign authority on server");
+            //         CmdAssignClientAuthorityToOtherInventory();
+            //     }
+            // }
+            // Debug.Log("After setting authority: " + _otherInventory.hasAuthority);
+            
             _itemsUIController.ShowOtherInventory(inventoryInfo, _otherInventory);
             _itemsUIController.ToggleUI();
         }
     }
+
+    // [Command]
+    // private void CmdAssignClientAuthorityToOtherInventory() {
+    //     Debug.Log("Cmd assign client authority");
+    //     _otherInventory.netIdentity.AssignClientAuthority(connectionToClient);
+    // }
 
     private void DamageFX() {
         overview.Shake(0.75f);

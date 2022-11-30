@@ -79,17 +79,17 @@ public class GridSection : NetworkBehaviour, ITotalWeight
 
     [Server]
     private void RemoveItem(GridSectionItem item) {
-        // Debug.Log("Remove on server");
+        Debug.Log($"Remove grid section item on server: " + item);
         _syncItems.Remove(item);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdAddItem(GridSectionItem item) {
         Debug.Log("From CmdAddItem: item is " + item);
         AddItem(item);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdRemoveItem(GridSectionItem item) {
         RemoveItem(item);
     }
@@ -165,6 +165,50 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     #endregion
 
     #region Add And Remove
+    private FillingMatrix.FillingRect GetRectForItem(GridSectionItem gridItem) {
+        ItemStaticData staticData = _itemStaticDataManager
+            .GetStaticDataByName(gridItem.itemData.itemStaticDataName);
+
+        FillingMatrix.FillingRect itemRect = new FillingMatrix.FillingRect() {
+            width = staticData.Width,
+            height = staticData.Height,
+            x = gridItem.inventoryX,
+            y = gridItem.inventoryY
+        };
+        return itemRect;
+    }
+
+    /// <summary>
+    /// Добавляет предмет с заданными параметрами, специфичными для сеточного инвентаря.
+    /// </summary>
+    /// <param name="ignoreOldItemFilling">
+    /// Если добавляемый предмет на самом деле перемещается и перед добавлением уже
+    /// присутствует в инвентаре, то занятое им место игнорируется, т.к. будет
+    /// гарантированно освобождено после добавления (перемещения) предмета
+    /// </param>
+    public bool TryToAddGridSectionItem(GridSectionItem gridItem,
+        GridSectionItem ignoreOldItemFilling) {
+        FillingMatrix filling = GetFillingMatrix();
+        var itemRect = GetRectForItem(gridItem);
+
+        if (ignoreOldItemFilling is not null) {
+            filling.SetRect(GetRectForItem(ignoreOldItemFilling), false);
+            // Это позволяет перемещать, например, предмет 2x2 на один слот
+            // вверх/вниз/вправо/влево от предыдущей позиции
+        }
+        
+        if (!filling.HasPlaceForRect(itemRect))
+            return false;
+
+        if (isServer) {
+            AddItem(gridItem);
+        } else {
+            CmdAddItem(gridItem);
+        }
+
+        return true;
+    }
+
     public bool TryToAddToSection(ItemData itemData) {
         Debug.Log("Попытка добавления элемента в секцию");
         bool isAdded = TryToAddToUnfilledItemStack(itemData);
@@ -271,6 +315,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     /// Убирает стак предметов из секции
     /// </summary>
     public bool RemoveFromSection(GridSectionItem invItem) {
+        Debug.Log("Remove from section - has authority: " + this.hasAuthority);
         bool hasItem = Items.IndexOf(invItem) != -1;
         if (!hasItem)
             return false;
