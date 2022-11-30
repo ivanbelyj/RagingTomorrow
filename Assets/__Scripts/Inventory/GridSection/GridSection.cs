@@ -50,6 +50,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         // _sectionFilling = new FillingMatrix(_initialHeight, _initialWidth);
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
 
+        // Todo: не всегда ли 0?
         _items = new List<GridSectionItem>(_syncItems.Count);
     }
 
@@ -269,7 +270,11 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     /// <summary>
     /// Убирает стак предметов из секции
     /// </summary>
-    public void RemoveFromSection(GridSectionItem invItem) {
+    public bool RemoveFromSection(GridSectionItem invItem) {
+        bool hasItem = Items.IndexOf(invItem) != -1;
+        if (!hasItem)
+            return false;
+        
         if (isServer) {
             Debug.Log("Remove Item");
             RemoveItem(invItem);
@@ -277,6 +282,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
             Debug.Log("Cmd Remove Item");
             CmdRemoveItem(invItem);
         }
+        return true;
     }
 
     // For test

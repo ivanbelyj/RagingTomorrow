@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// UI отдельного предмета, находящегося в инвентаре
+/// UI отдельного предмета, находящегося в инвентаре. Может использоваться как в сеточной секции
+/// инвентаря, так и независимо
 /// </summary>
 public class InventorySlotItem : MonoBehaviour
 {
@@ -28,8 +29,14 @@ public class InventorySlotItem : MonoBehaviour
     private float _slotHeight;
     private float _gridSpacing;
 
-    private GridSectionItem _gridSectionItem;
-    public GridSectionItem GridSectionItem => _gridSectionItem;
+    private ItemData _itemData;
+    public ItemData ItemData => _itemData;
+
+    private uint _itemLocalId;
+    public uint ItemLocalId => _itemLocalId;
+
+    private uint _sectionNetId;
+    public uint SectionNetId => _sectionNetId;
 
     private void Awake() {
         _itemImage = _itemImageGO.GetComponent<Image>();
@@ -40,17 +47,27 @@ public class InventorySlotItem : MonoBehaviour
     /// ItemStaticDataManager требуется для получения данных о предмете по имени,
     /// т.к. при установке предмета в слот передаются компактные данные
     /// </summary>
-    public void Initialize(GridSectionItem gridSectionItem,
+    public void Initialize(ItemData itemData, int count, uint itemLocalId, uint sectionNetId,
         ItemStaticDataManager itemStaticDataManager,
         float slotWidth, float slotHeight, float gridSpacing) {
-        _gridSectionItem = gridSectionItem;
+        _itemData = itemData;
+        _itemLocalId = itemLocalId;
+        _sectionNetId = sectionNetId;
+
         _itemStaticDataManager = itemStaticDataManager;
         _slotWidth = slotWidth;
         _slotHeight = slotHeight;
         _gridSpacing = gridSpacing;
 
-        SetItem(gridSectionItem);
+        SetItemUI(itemData, count);
     }
+
+    // public void Initialize(GridSectionItem gridItem, uint itemLocalId,
+    //     ItemStaticDataManager itemStaticDataManager,
+    //     float slotWidth, float slotHeight, float gridSpacing) {
+    //     Initialize(gridItem.itemData, gridItem.Count, , itemLocalId, itemStaticDataManager,
+    //         slotWidth, slotHeight, gridSpacing);
+    // }
 
     private void SetSprite(Sprite sprite) {
         _itemImage.gameObject.SetActive(sprite is not null);
@@ -69,9 +86,9 @@ public class InventorySlotItem : MonoBehaviour
     /// <summary>
     /// Устанавливает предмет для UI
     /// </summary>
-    private void SetItem(GridSectionItem invItem) {
+    private void SetItemUI(ItemData itemData, int count) {
         ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
-            invItem.itemData.itemStaticDataName);
+            itemData.itemStaticDataName);
         
         // Картинка предмета получает размер на некоторое кол-во слотов
         _itemRectTransform.sizeDelta =
@@ -79,6 +96,6 @@ public class InventorySlotItem : MonoBehaviour
             _slotHeight * staticData.Height + _gridSpacing * (staticData.Height - 1));
         
         SetSprite(staticData.Sprite);
-        SetItemsCountUI(invItem.count);
+        SetItemsCountUI(count);
     }
 }
