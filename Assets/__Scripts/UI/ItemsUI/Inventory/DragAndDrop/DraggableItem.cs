@@ -48,7 +48,6 @@ public class DraggableItem : Draggable<DraggedItemData>
     }
 
     private void SetDebugPoint(Transform parent, Vector2 pos, Color color = default(Color)) {
-        return;
         var test0 = Instantiate(test, Vector3.zero, Quaternion.identity, parent);
         test0.transform.localPosition = pos;
         test0.transform.SetAsLastSibling();
@@ -69,7 +68,7 @@ public class DraggableItem : Draggable<DraggedItemData>
             mousePos, _canvas.worldCamera,
             out Vector2 posInCanvas);
         Debug.Log("Позиция мыши в canvas (yellow): " + posInCanvas);
-        SetDebugPoint(_canvas.transform, posInCanvas, Color.yellow);
+        // SetDebugPoint(_canvas.transform, posInCanvas, Color.yellow);
 
         // Vector2 worldMousePos = (Vector2)_canvas.transform.TransformPoint(posInCanvas);
         // Debug.Log("Позиция мыши в глобальных коорд.: " + worldPosInRect);
@@ -80,8 +79,8 @@ public class DraggableItem : Draggable<DraggedItemData>
         Vector2 offset = posInCanvas - (Vector2)transform.localPosition;
 
         // debug
-        SetDebugPoint(transform, Vector2.zero);
-        SetDebugPoint(transform, offset);
+        // SetDebugPoint(transform, Vector2.zero);
+        // SetDebugPoint(transform, offset);
 
         Debug.Log("Отступ от left top угла предмета: " + offset);
         Vector2Int inSlots = _slotItem.ToSlots(offset);

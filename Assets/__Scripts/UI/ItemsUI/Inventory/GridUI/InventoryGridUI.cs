@@ -174,10 +174,8 @@ public class InventoryGridUI : MonoBehaviour
 
         InventorySlotItem slotItem = itemGO.GetComponent<InventorySlotItem>();
         uint localId = invItem.GetLocalIdByInventoryPosition();
-        slotItem.Initialize(invItem.itemData, invItem.Count, localId,
-            _gridSection.GetComponent<NetworkIdentity>().netId,
-            _itemStaticDataManager, _slotSize,/* _slotHeight,*/
-            gridSpacing);
+        slotItem.Initialize(invItem.itemData, _slotSize, gridSpacing,
+            invItem.Count, localId, _gridSection.GetComponent<NetworkIdentity>().netId);
 
         _slotItems.Add(localId, slotItem);
         return slotItem;

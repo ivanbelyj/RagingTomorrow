@@ -9,14 +9,19 @@ using TMPro;
 [RequireComponent(typeof(Entity))]
 [RequireComponent(typeof(CharactersInventory))]
 [RequireComponent(typeof(CharacterInfo))]
+[RequireComponent(typeof(Interactor))]
+[RequireComponent(typeof(ItemInteractorStrategy))]
 public class Player : NetworkBehaviour
 {
+    // Todo: refactor player; separate responsibilities
+
     // UI
     public GameObject floatingInfo;
     public TextMeshPro playerNameText;
     public TextMeshPro playerHealthText;
     public TextMeshPro playerInventoryText;
 
+    private PickableItemIcon _pickableItemUI;
     private SimpleHUD _HUD;
 
     // Components
@@ -24,6 +29,7 @@ public class Player : NetworkBehaviour
     // private ItemPicker _itemPicker;
 
     private Interactor _interactor;
+    private ItemInteractorStrategy _itemInteractorStrategy;
     private CharacterInfo _characterInfo;
     private Entity _entity;
     public Overview overview;
@@ -43,6 +49,10 @@ public class Player : NetworkBehaviour
             // Debug.Log("Character info is changed");
             playerNameText.text = newInfo.Name;
         };
+
+        _itemInteractorStrategy = GetComponent<ItemInteractorStrategy>();
+        _itemInteractorStrategy.LookedAtItem += OnLookedAtItem;
+        _itemInteractorStrategy.LookedAwayFromItem += OnLookedAwayFromItem;
 
         // For test
         _otherInventory = GameObject.Find("OtherInventoryTest").GetComponent<GridSection>();
@@ -98,8 +108,14 @@ public class Player : NetworkBehaviour
         BindUI();
     }
 
-    private void OnLookingToItem(Collider collider) {
-        Debug.Log(collider.gameObject.name);
+    private void OnLookedAtItem(Item item) {
+        _pickableItemUI.ShowIcon(item.ItemData);
+        Debug.Log("Looked at item");
+    }
+
+    private void OnLookedAwayFromItem() {
+        _pickableItemUI.HideIcon();
+        Debug.Log("Looked away from item");
     }
 
     private void BindUI() {
@@ -113,6 +129,9 @@ public class Player : NetworkBehaviour
         _itemsUIController.SetPlayer(this);
 
         _itemsUIController.CloseUI();
+
+        _pickableItemUI = FindObjectOfType<PickableItemIcon>();
+        _pickableItemUI.HideIcon();
     }
 
     private void Update() {

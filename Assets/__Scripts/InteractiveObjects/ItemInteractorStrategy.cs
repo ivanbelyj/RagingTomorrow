@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -7,8 +8,11 @@ using UnityEngine;
 /// Компонент, обеспечивающий взаимодействие с предметами, т.е. их сбор в инвентарь
 /// </summary>
 // Todo: вместо наследования от Interactor - агрегация нескольких обработчиков в Interactor
-public class ItemInteractorStrategy : MonoBehaviour, IInteractorStrategy
+public class ItemInteractorStrategy : NetworkBehaviour, IInteractorStrategy
 {
+    public event Action<Item> LookedAtItem;
+    public event Action LookedAwayFromItem;
+
     // Можно установить что-то стороннее в качестве инвентаря, например, рюкзак
     [SerializeField]
     private WearSection _wearSectionToPick;
@@ -40,13 +44,26 @@ public class ItemInteractorStrategy : MonoBehaviour, IInteractorStrategy
             
         // }
 
-        // Todo: можно ли выполнять на клиенте?
-        NetworkServer.Destroy(item.gameObject);
+        if (isServer) {
+            NetworkServer.Destroy(item.gameObject);
+        } else {
+            CmdDestroy(item.netId);
+        }
+        
         Debug.Log($"Item {item.ItemData.itemStaticDataName} is picked up to inventory");
     }
 
-    public void LookToObject(Collider col)
+    [Command]
+    private void CmdDestroy(uint netId) {
+        NetworkServer.Destroy(NetworkServer.spawned[netId].gameObject);
+    }
+
+    public void LookedAtObject(Collider col)
     {
-        Debug.Log("Looking to item");
+        LookedAtItem?.Invoke(col.GetComponent<Item>());
+    }
+
+    public void LookedAwayFromObject() {
+        LookedAwayFromItem?.Invoke();
     }
 }
