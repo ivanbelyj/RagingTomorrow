@@ -5,7 +5,7 @@ using UnityEngine;
 using Mirror;
 using TMPro;
 
-[RequireComponent(typeof(ItemPicker))]
+[RequireComponent(typeof(ItemInteractorStrategy))]
 [RequireComponent(typeof(Entity))]
 [RequireComponent(typeof(CharactersInventory))]
 [RequireComponent(typeof(CharacterInfo))]
@@ -21,7 +21,9 @@ public class Player : NetworkBehaviour
 
     // Components
     private CharactersInventory _inventory;
-    private ItemPicker _itemPicker;
+    // private ItemPicker _itemPicker;
+
+    private Interactor _interactor;
     private CharacterInfo _characterInfo;
     private Entity _entity;
     public Overview overview;
@@ -33,7 +35,7 @@ public class Player : NetworkBehaviour
 
     private void Awake() {
         // _mainInvSection = GetComponent<GridInventorySection>();
-        _itemPicker = GetComponent<ItemPicker>();
+        // _itemPicker = GetComponent<ItemPicker>();
         _entity = GetComponent<Entity>();
         _inventory = GetComponent<CharactersInventory>();
         _characterInfo = GetComponent<CharacterInfo>();
@@ -82,13 +84,22 @@ public class Player : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
-        /* a few apllication settings for more smooth. This is Optional. */
+        // A few apllication settings for more smooth. This is Optional
         QualitySettings.vSyncCount = 0;
         Cursor.lockState = CursorLockMode.Locked;
         overview.camera = Camera.main;
 
+        _interactor = GetComponent<Interactor>();
+        _interactor.Initialize(overview.camera.transform);
+
+        // _interactor.LookingToInteractiveObject += OnLookingToItem;
+
         // Player name must be set
         BindUI();
+    }
+
+    private void OnLookingToItem(Collider collider) {
+        Debug.Log(collider.gameObject.name);
     }
 
     private void BindUI() {
@@ -208,15 +219,19 @@ public class Player : NetworkBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.G)) {
-            if (_inventory.MainSection.Items.Count != 0) {
-                var item = _inventory.MainSection.Items[0];
-                Debug.Log($"Inv. count: {_inventory.MainSection.Items.Count}. Элемент "
-                    + item.itemData.itemStaticDataName
-                    + " будет выброшен");
-                _itemPicker.ThrowAwayFromGridSection(/*_inventory.MainSection, */item);
-            }
+        if (Input.GetKeyDown(KeyCode.F)) {
+            _interactor.Interact();
         }
+
+        // if (Input.GetKeyDown(KeyCode.G)) {
+        //     if (_inventory.MainSection.Items.Count != 0) {
+        //         var item = _inventory.MainSection.Items[0];
+        //         Debug.Log($"Inv. count: {_inventory.MainSection.Items.Count}. Элемент "
+        //             + item.itemData.itemStaticDataName
+        //             + " будет выброшен");
+        //         _itemPicker.ThrowAwayFromGridSection(/*_inventory.MainSection, */item);
+        //     }
+        // }
 
         if (Input.GetKeyDown(KeyCode.B)) {
             bool isAllAdded = _inventory.MainSection.AddTestItems();
@@ -246,37 +261,17 @@ public class Player : NetworkBehaviour
         }
 
         // Имитация открытия ящика
-        if (Input.GetKeyDown(KeyCode.F)) {
+        if (Input.GetKeyDown(KeyCode.K)) {
             MockInventoryInfoProvider inventoryInfo = new MockInventoryInfoProvider() {
                 InventoryInfo = new InventoryInfo(null, "Ящик", "Маленький")
             };
-
-            // Для управления инвентарем игроку требуется авторизация
-            // if (!_otherInventory.hasAuthority) {
-            //     if (isServer) {
-            //         Debug.Log("Assign authority on server");
-            //         _otherInventory.netIdentity.AssignClientAuthority(connectionToClient);
-            //     } else {
-            //         Debug.Log("Call command to assign authority on server");
-            //         CmdAssignClientAuthorityToOtherInventory();
-            //     }
-            // }
-            // Debug.Log("After setting authority: " + _otherInventory.hasAuthority);
             
             _itemsUIController.ShowOtherInventory(inventoryInfo, _otherInventory);
             _itemsUIController.ToggleUI();
         }
     }
 
-    // [Command]
-    // private void CmdAssignClientAuthorityToOtherInventory() {
-    //     Debug.Log("Cmd assign client authority");
-    //     _otherInventory.netIdentity.AssignClientAuthority(connectionToClient);
-    // }
-
     private void DamageFX() {
         overview.Shake(0.75f);
     }
-
-    
 }

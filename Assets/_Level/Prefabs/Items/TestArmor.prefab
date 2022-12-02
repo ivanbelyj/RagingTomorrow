@@ -147,3 +147,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  _initialItemData:
+    itemStaticDataName: TestArmor

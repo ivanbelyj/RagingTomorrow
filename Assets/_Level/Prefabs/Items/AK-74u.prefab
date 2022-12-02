@@ -118,6 +118,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  _initialItemData:
+    itemStaticDataName: TestWeapon
 --- !u!1 &9034034102653115340
 GameObject:
   m_ObjectHideFlags: 0

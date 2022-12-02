@@ -109,7 +109,7 @@ public class ItemPicker : NetworkBehaviour
         Item item = itemGO.GetComponent<Item>();
         if (item is null)
             Debug.LogError("Инстанцируемый префаб предмета не имеет компонента Item");
-        item.Initialize(itemGameData, itemStaticData);
+        item.Initialize(itemGameData);
 
         // Отправляем информацию о сетевом объекте всем игрокам
         NetworkServer.Spawn(itemGO);

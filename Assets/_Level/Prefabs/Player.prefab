@@ -191,10 +191,11 @@ GameObject:
   - component: {fileID: 707345098067341134}
   - component: {fileID: 879729973011753151}
   - component: {fileID: 2168946248158206767}
-  - component: {fileID: 144923770622983988}
   - component: {fileID: 4901890020522425594}
   - component: {fileID: 2088041632563891022}
   - component: {fileID: 8271884393692352404}
+  - component: {fileID: 2911137534806384720}
+  - component: {fileID: 8581439220760021475}
   m_Layer: 1
   m_Name: Player
   m_TagString: Untagged
@@ -484,7 +485,7 @@ MonoBehaviour:
     isVerticalInverted: 1
     sensitivity: 300
     horizontalRange: 0
-    verticalRange: 50
+    verticalRange: 90
     searchMask:
       serializedVersion: 2
       m_Bits: 0
@@ -493,24 +494,6 @@ MonoBehaviour:
     aimingFOV: 40
     referenceShakingAmount: 0.5
     camera: {fileID: 0}
-  _otherInventory: {fileID: 0}
---- !u!114 &144923770622983988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507993662015929204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a878b36a889e804faa98626d3826a11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  throwAwayForce: 0.8
-  _wearSectionToPick: {fileID: 8271884393692352404}
-  _sectionToPick: {fileID: 2088041632563891022}
 --- !u!114 &4901890020522425594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -556,6 +539,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+--- !u!114 &2911137534806384720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507993662015929204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93c54724edea04b8b617a377c01b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactRadius: 2
+--- !u!114 &8581439220760021475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507993662015929204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63f0a5d0eda10b847abcadece51f3d7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wearSectionToPick: {fileID: 8271884393692352404}
+  _sectionToPick: {fileID: 2088041632563891022}
 --- !u!1 &1709699199297977212
 GameObject:
   m_ObjectHideFlags: 0
