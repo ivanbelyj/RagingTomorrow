@@ -36,9 +36,6 @@ public class Player : NetworkBehaviour
 
     private ItemsUIController _itemsUIController;
 
-    // For test
-    private GridSection _otherInventory;
-
     private void Awake() {
         // _mainInvSection = GetComponent<GridInventorySection>();
         // _itemPicker = GetComponent<ItemPicker>();
@@ -53,9 +50,6 @@ public class Player : NetworkBehaviour
         _itemInteractorStrategy = GetComponent<ItemInteractorStrategy>();
         _itemInteractorStrategy.LookedAtItem += OnLookedAtItem;
         _itemInteractorStrategy.LookedAwayFromItem += OnLookedAwayFromItem;
-
-        // For test
-        _otherInventory = GameObject.Find("OtherInventoryTest").GetComponent<GridSection>();
     }
 
     public override void OnStartClient() {
@@ -239,7 +233,11 @@ public class Player : NetworkBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.F)) {
-            _interactor.Interact();
+            if (_itemsUIController.IsUIOpened) {
+                _itemsUIController.CloseUI();
+            } else {
+                _interactor.Interact();
+            }
         }
 
         // if (Input.GetKeyDown(KeyCode.G)) {
@@ -276,16 +274,6 @@ public class Player : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.I)) {
             _itemsUIController.ShowPlayersInventory();
-            _itemsUIController.ToggleUI();
-        }
-
-        // Имитация открытия ящика
-        if (Input.GetKeyDown(KeyCode.K)) {
-            MockInventoryInfoProvider inventoryInfo = new MockInventoryInfoProvider() {
-                InventoryInfo = new InventoryInfo(null, "Ящик", "Маленький")
-            };
-            
-            _itemsUIController.ShowOtherInventory(inventoryInfo, _otherInventory);
             _itemsUIController.ToggleUI();
         }
     }

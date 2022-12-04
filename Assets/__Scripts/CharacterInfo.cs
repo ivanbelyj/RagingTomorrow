@@ -14,7 +14,6 @@ public class CharacterInfo : NetworkBehaviour, IInventoryInfoProvider
 
     public delegate void CharacterInfoChangedEventHandler(CharacterInfoData newInfo);
 
-    // Object fields
     [SyncVar(hook = nameof(OnCharactersNameChanged))]
     private string _syncCharactersName;
     private string _nameCharacters;
@@ -33,7 +32,6 @@ public class CharacterInfo : NetworkBehaviour, IInventoryInfoProvider
     /// </summary>
     InventoryInfo IInventoryInfoProvider.InventoryInfo {
         get => _inventoryInfo;
-        set => _inventoryInfo = value;
     }
 
     private IInventoryInfoProvider.InfoChangedEventHandler _inventoryInfoChanged;

@@ -33,6 +33,7 @@ public class ItemsUIController : MonoBehaviour
     private Player _player;
 
     private bool _isUIOpened;
+    public bool IsUIOpened => _isUIOpened;
 
     private ItemsUI _openedComponents;
 

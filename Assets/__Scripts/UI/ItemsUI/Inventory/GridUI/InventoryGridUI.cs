@@ -36,8 +36,10 @@ public class InventoryGridUI : MonoBehaviour
     private List<InventorySlot> _slots;
 
     /// <summary>
-    /// Иконки предметов по своей сути универсальны, поэтому local id,
-    /// завязанный на позиции конкретного инвентаря, хранится отельно
+    /// Иконки отдельных предметов инвентаря. В качестве ключа используется id,
+    /// получаемый на основе положения предмета в инвентаре, оно уникально.
+    /// Использование словаря позволяет быстрее искать удаляемую иконку при удалении предмета
+    /// в инвентаре, за O(log(n))
     /// </summary>
     private Dictionary<uint, InventorySlotItem> _slotItems;
 
@@ -81,12 +83,16 @@ public class InventoryGridUI : MonoBehaviour
             foreach (var slot in _slots) {
                 Destroy(slot.gameObject);
             }
+            _slots.Clear();
             CreateSlots();
         }
-        // Созданные ранее UI объектов удаляются
+
+        // Созданные ранее иконки предметов удаляются (в любом случае)
         foreach (var pair in _slotItems) {
             Destroy(pair.Value.gameObject);
         }
+        _slotItems.Clear();
+
         CreateItems();
 
         _gridSection.InventoryChanged += OnInventoryChanged;
