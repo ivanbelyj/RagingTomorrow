@@ -27,6 +27,7 @@ public class Player : NetworkBehaviour
     // Components
     private CharactersInventory _inventory;
     // private ItemPicker _itemPicker;
+    private ItemThrower _itemThrower;
 
     private Interactor _interactor;
     private ItemInteractorStrategy _itemInteractorStrategy;
@@ -41,6 +42,7 @@ public class Player : NetworkBehaviour
         // _itemPicker = GetComponent<ItemPicker>();
         _entity = GetComponent<Entity>();
         _inventory = GetComponent<CharactersInventory>();
+        _itemThrower = GetComponent<ItemThrower>();
         _characterInfo = GetComponent<CharacterInfo>();
         _characterInfo.CharacterInfoChanged += (CharacterInfo.CharacterInfoData newInfo) => {
             // Debug.Log("Character info is changed");
@@ -240,15 +242,15 @@ public class Player : NetworkBehaviour
             }
         }
 
-        // if (Input.GetKeyDown(KeyCode.G)) {
-        //     if (_inventory.MainSection.Items.Count != 0) {
-        //         var item = _inventory.MainSection.Items[0];
-        //         Debug.Log($"Inv. count: {_inventory.MainSection.Items.Count}. Элемент "
-        //             + item.itemData.itemStaticDataName
-        //             + " будет выброшен");
-        //         _itemPicker.ThrowAwayFromGridSection(/*_inventory.MainSection, */item);
-        //     }
-        // }
+        if (Input.GetKeyDown(KeyCode.G)) {
+            if (_inventory.MainSection.Items.Count != 0) {
+                var item = _inventory.MainSection.Items[0];
+                Debug.Log($"Inv. count: {_inventory.MainSection.Items.Count}. Элемент "
+                    + item.itemData.itemStaticDataName
+                    + " будет выброшен");
+                _itemThrower.ThrowAwayFromGridSection(item);
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.B)) {
             bool isAllAdded = _inventory.MainSection.AddTestItems();

@@ -1,24 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
-using Mirror;
 using UnityEngine;
+using Mirror;
 
-/// <summary>
-/// Компонент, позволяющий перемещать предметы между сценой и инвентарем с помощью
-/// поднятия и выбрасывания
-/// </summary>
 [RequireComponent(typeof(Collider))]
-public class ItemPicker : NetworkBehaviour
+public class ItemThrower : NetworkBehaviour
 {
     public float throwAwayForce = 0.2f;
 
-    // Можно установить что-то стороннее в качестве инвентаря, например, рюкзак
     [SerializeField]
     private WearSection _wearSectionToPick;
     [SerializeField]
     private GridSection _sectionToPick;
-    private Collider _collider;
 
+    /// <summary>
+    /// Бросок происходит с отступом от бросающего, Collider требуется для определения
+    /// границ бросающего
+    /// </summary>
+    private Collider _collider;
     private ItemStaticDataManager _itemStaticDataManager;
 
     private void Awake() {
@@ -26,37 +25,11 @@ public class ItemPicker : NetworkBehaviour
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
     }
 
-    private void OnCollisionEnter(Collision col) {
-        // Если не добавить эту строчку, предметы добавляются дублированно
-        if (!isServer)
-            return;
-        
-        // Если столкнулись с GameObject, и это - предмет
-        Item item = col.gameObject.GetComponent<Item>();
-        if (item is not null) {
-            Debug.Log("Collision with item");
-
-            ItemData itemData = item.ItemData;
-
-            if (!_sectionToPick.TryToAddToSection(itemData)) {
-                Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
-            }
-
-            // Todo:
-            // if (!_wearSectionToPick.AddToAccordingSlot(itemData)) {
-                
-            // }
-
-            NetworkServer.Destroy(item.gameObject);
-            Debug.Log($"Item {item.ItemData.itemStaticDataName} is picked up to inventory");
-        }
-    }
-
     public void ThrowAwayFromWearSection(WearSection wearSection, WearSection.WearSlot slot) {
         // wearSection.RemoveFromSection(slot);
         ThrowAway(wearSection.Slots[slot]);
     }
-    public void ThrowAwayFromGridSection(/*GridSection gridSection,*/ GridSectionItem gridItem) {
+    public void ThrowAwayFromGridSection(GridSectionItem gridItem) {
         if (_sectionToPick.Items.Find(item => item.Equals(gridItem)) is null) {
             Debug.Log("Не удалось выбросить предмет, т.к. его нет в инвентаре");
             return;
@@ -68,8 +41,6 @@ public class ItemPicker : NetworkBehaviour
         for (int i = 0; i < gridItem.count; i++) {
             ThrowAway(gridItem.itemData);
         }
-        
-        // gridSection.RemoveFromSection(gridItem);
     }
 
     private void ThrowAway(ItemData itemData) {
@@ -99,10 +70,9 @@ public class ItemPicker : NetworkBehaviour
         Debug.Log("ThrowAway: itemData - " + itemStaticData.name +
             $". {itemStaticData.ItemName}, {itemStaticData.Description}, Item: {itemStaticData.ItemPrefab}");
         
-        // Небольшой отступ, чтобы предмет не подбирался сразу после выбрасывания
-        Vector3 offsetForNotToPick = transform.forward * (_collider.bounds.size.z * 1.5f) / 2;
+        Vector3 spawnOffset = transform.forward * (_collider.bounds.size.z / 2);
         GameObject itemGO = Instantiate(itemStaticData.ItemPrefab,
-            transform.position + offsetForNotToPick, Quaternion.identity);
+            transform.position + spawnOffset, Quaternion.identity);
         
         // Предметы должны быть инициализированы
         Item item = itemGO.GetComponent<Item>();

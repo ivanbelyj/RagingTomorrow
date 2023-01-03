@@ -7,7 +7,6 @@ using UnityEngine;
 /// <summary>
 /// Компонент, обеспечивающий взаимодействие с предметами, т.е. их сбор в инвентарь
 /// </summary>
-// Todo: вместо наследования от Interactor - агрегация нескольких обработчиков в Interactor
 public class ItemInteractorStrategy : NetworkBehaviour, IInteractorStrategy
 {
     public event Action<Item> LookedAtItem;

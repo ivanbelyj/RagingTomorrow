@@ -312,7 +312,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     // }
 
     /// <summary>
-    /// Убирает стак предметов из секции
+    /// Удаляет стак предметов из секции
     /// </summary>
     public bool RemoveFromSection(GridSectionItem invItem) {
         Debug.Log("Remove from section - has authority: " + this.hasAuthority);

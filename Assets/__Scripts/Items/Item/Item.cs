@@ -10,13 +10,14 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Item : NetworkBehaviour
 {
-    // [SerializeField]
-    // private ItemStaticData _staticData;
-
+    [Header("Set in inspector")]
+    /// <summary>
+    /// Изначальные данные о предмете для инициализации. Должны быть определены до спавна
+    /// предмета на сервере.
+    /// Устанавливаются в инспекторе, либо с помощью специального метода класса Item
     [SerializeField]
     private ItemData _initialItemData;
 
-    [Header("Set in inspector")]
 
     [SyncVar(hook = nameof(OnItemDataChanged))]
     private ItemData _syncItemData;
@@ -27,15 +28,23 @@ public class Item : NetworkBehaviour
 
     private void Awake() {
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
-        
     }
 
     public override void OnStartServer()
     {
         base.OnStartServer();
         if (_initialItemData is not null) {
-            Debug.Log("Call initialize item on server");
-            Initialize(_initialItemData);
+            _itemData = _initialItemData;
+            Debug.Log("Initializing Item on scene. name: " + _itemData.itemStaticDataName);
+
+            var staticData = _itemStaticDataManager.GetStaticDataByName(_itemData.itemStaticDataName);
+
+            Rigidbody rb = GetComponent<Rigidbody>();
+            Debug.Log($"Static data of item {staticData.ItemName}: mass: {staticData.Mass}." +
+                $"Rigidbody: {rb}");
+
+            rb.mass = staticData.Mass;
+            ChangeItemData(_itemData);
         }
     }
 
@@ -83,21 +92,8 @@ public class Item : NetworkBehaviour
     }
     #endregion
 
-    /// <summary>
-    /// Инициализация на сервере перед спавном
-    /// </summary>
-    [Server]
-    public void Initialize(ItemData itemData/*, ItemStaticData staticData*/) {
-        Debug.Log("Initializing Item on scene. name: " + itemData.itemStaticDataName);
-
-        var staticData = _itemStaticDataManager.GetStaticDataByName(itemData.itemStaticDataName);
-
-        Rigidbody rb = GetComponent<Rigidbody>();
-        Debug.Log($"Static data of item {staticData.ItemName}: mass: {staticData.Mass}." +
-            $"Rigidbody: {rb}");
-
-        rb.mass = staticData.Mass;
-        ChangeItemData(itemData);
+    public void Initialize(ItemData initialItemData) {
+        _initialItemData = initialItemData;
     }
 
 
