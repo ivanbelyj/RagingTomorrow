@@ -90,6 +90,8 @@ GameObject:
   - component: {fileID: 6392793714893132868}
   - component: {fileID: -5243362557848348484}
   - component: {fileID: 363601842791253545}
+  - component: {fileID: 7913364236621128464}
+  - component: {fileID: 8876686503967743455}
   m_Layer: 5
   m_Name: SlotItem
   m_TagString: Untagged
@@ -184,6 +186,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   test: {fileID: 5053350538395088363, guid: 9ad83da3f6f06444b9615607b5152341, type: 3}
+--- !u!114 &7913364236621128464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896952650148884524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98f18a098f0e29e49a6530fe560dc3a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 3214691543707022140, guid: a84d7fe621826274dbdeaa095c285ecb,
+    type: 3}
+--- !u!114 &8876686503967743455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896952650148884524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f35df8f3fb954f46ad0cf943ad77ee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8613867697275056219
 GameObject:
   m_ObjectHideFlags: 0
