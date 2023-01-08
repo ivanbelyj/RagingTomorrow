@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: -5243362557848348484}
   - component: {fileID: 363601842791253545}
   - component: {fileID: 7913364236621128464}
+  - component: {fileID: 7244975389546526394}
   - component: {fileID: 8876686503967743455}
   m_Layer: 5
   m_Name: SlotItem
@@ -200,6 +201,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tooltipPrefab: {fileID: 3214691543707022140, guid: a84d7fe621826274dbdeaa095c285ecb,
     type: 3}
+--- !u!114 &7244975389546526394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896952650148884524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfc3e27e95b3cf04a910e020d258d4d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8876686503967743455
 MonoBehaviour:
   m_ObjectHideFlags: 0

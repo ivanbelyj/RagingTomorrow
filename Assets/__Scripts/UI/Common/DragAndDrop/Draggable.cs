@@ -20,6 +20,9 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     protected Canvas _canvas;
     // private Vector3 _dragPos;
+
+    private RectTransform _parent;
+
     private Vector3 _initialPos;
     protected GraphicRaycaster _graphicRaycaster;
 
@@ -29,16 +32,26 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     /// </summary>
     // private Transform _uiParent;
 
-    private Transform _oldParent;
+    private Transform _parentBeforeDrag;
 
     /// <summary>
     /// true, если при следующем событии Drag нужно сбросить перетаскивание 
     /// </summary>
     private bool _shouldResetDrag = false;
 
+    /// <summary>
+    /// Не стоит выполнять лишние действия при отключении объекта, если перетаскивания не произошло
+    /// </summary>
+    private bool _shouldResetOnDisable = false;
+
+    /// <summary>
+    /// Нельзя установить объект в качестве родителя, пока он отключается, поэтому установка
+    /// откладывается до включения
+    /// </summary>
+    private bool _shouldSetParentAndPosOnEnable = false;
+
     protected virtual void Awake() {
         _canvas = FindObjectOfType<Canvas>();
-        // _uiParent = _canvas.transform;
 
         _graphicRaycaster = _canvas.GetComponent<GraphicRaycaster>();
         Debug.Log($"canvas: {_canvas}; raycaster: {_graphicRaycaster}");
@@ -48,20 +61,44 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         
     }
 
-    public virtual void Initialize(/*IDraggedDataProvider<T> draggedDataProvider*/T draggedData) {
-        // _draggedDataProvider = draggedDataProvider;
+    // В случае отключения объекта перетаскивание сбрасывается
+    private void OnDisable() {
+        
+        if (_shouldResetOnDisable) {
+            ResetDrag(deferredSetParentAndPos: true);
+        }
+    }
+
+    private void OnEnable() {
+        Debug.Log("On enable");
+        if (_shouldSetParentAndPosOnEnable) {
+            SetParentAndPos();
+            _shouldSetParentAndPosOnEnable = false;
+        }
+    }
+
+    /// <summary>
+    /// Каждый перетаскиваемый элемент несет какую-либо информацию, а также имеет родительский элемент,
+    /// при скрытии которого должен скрываться и перетаскиваемый
+    /// </summary>
+    public virtual void Initialize(T draggedData, RectTransform parent) {
         _draggedData = draggedData;
+        _parent = parent;
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         _shouldResetDrag = false;
+        _shouldResetOnDisable = true;
 
-        Debug.Log("Drag begins");
-        _initialPos = transform.position;
+        Debug.Log($"Drag begins. initial pos is changed from {_initialPos} to {transform.localPosition}");
+        _initialPos = transform.localPosition;
 
-        _oldParent = transform.parent;
-        transform.SetParent(_canvas.transform);
+        Debug.Log("Initial pos on set begin drag: " + _initialPos
+            + ". Actual: " + transform.localPosition);
+
+        _parentBeforeDrag = transform.parent;
+        transform.SetParent(_parent);
         transform.SetAsLastSibling();
     }
 
@@ -73,12 +110,14 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         if (_shouldResetDrag) {
             eventData.pointerDrag = null;
+            return;
         }
 
         // _dragPos += (Vector3)eventData.delta;
         // Vector3 mousePos = _dragPos;
 
         // transform.position = mousePos;
+
         transform.position += (Vector3)eventData.delta;
     }
 
@@ -93,18 +132,33 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             var dropAcceptor = hit.gameObject.GetComponent<IDropAcceptor<T>>();
             if (dropAcceptor is not null)
             {
-                Debug.Log("End drag on DropAcceptor");
                 dropAcceptor.AcceptDrop(this, _draggedData/*_draggedDataProvider.GetDraggedData()*/);
+                _shouldResetOnDisable = false;
                 return;
             }
         }
         ResetDrag();
     }
 
-    public virtual void ResetDrag() {
+    public void ResetDrag(bool deferredSetParentAndPos = false) {
         Debug.Log("Reset Drag");
-        transform.position = _initialPos;
-        transform.SetParent(_oldParent);
         _shouldResetDrag = true;
+        if (deferredSetParentAndPos) {
+            _shouldSetParentAndPosOnEnable = true;
+        } else {
+            SetParentAndPos();
+        }
+
+        // Уже сделано
+        _shouldResetOnDisable = false;
+    }
+
+    private void SetParentAndPos() {
+        Debug.Log("Set parent and pos. Initial pos before set parent and pos: " + _initialPos
+            + ". Actual: " + transform.localPosition);
+        transform.SetParent(_parentBeforeDrag);
+        transform.localPosition = _initialPos;
+        Debug.Log("Set parent and pos. Initial pos after set parent and pos: " + _initialPos
+            + ". Actual: " + transform.localPosition);
     }
 }

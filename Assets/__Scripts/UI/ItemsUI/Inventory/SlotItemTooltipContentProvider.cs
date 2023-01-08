@@ -14,11 +14,16 @@ public class SlotItemTooltipContentProvider : MonoBehaviour, ITooltipContentProv
     {
         TooltipContent content = new TooltipContentBuilder()
             .Ln()
-            .Text("Название:")
-            .Text("Test")
+            .Header("Название")
             .Ln()
-            .Text("Состояние:")
-            .Text("Идеальное")
+            .Text("Состояние")
+            .Text("Идеальное", Color.green)
+            .Ln()
+            .Text("Вес")
+            .Text("3 кг")
+            .Ln()
+            .Text("Test parameter")
+            .Text("Сносно", Color.yellow)
             .Build();
         return content;  // _invSlotItem.ItemData.ToTooltipData();
     }

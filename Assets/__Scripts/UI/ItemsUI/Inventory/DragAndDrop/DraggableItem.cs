@@ -5,6 +5,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(InventorySlotItem))]
+/// <summary>
+/// Перетаскиваемая иконка предмета. В отличие от базового класса, не требует внешнего вызова
+/// метода инициализации, т.к. данный компонент вызывает его с необходимыми данными сам
+/// </summary>
 public class DraggableItem : Draggable<DraggedItemData>
 {
     public GameObject test;
@@ -29,7 +33,11 @@ public class DraggableItem : Draggable<DraggedItemData>
             InventorySectionNetId = sectionNetId,
             DraggingPlayerNetId = playerNetId,
         };
-        this.Initialize(data);
+
+        // DraggableItem не требует явного вызова инициализации, как его базовый класс, т.к.
+        // все данные известны заранее.
+        // ItemsUI ищется в том числе среди неактивных GameObject, т.к. интерфейс может быть скрыт
+        this.Initialize(data, (RectTransform)(FindObjectOfType<ItemsUIController>(true).transform));
     }
 
     private uint GetLocalPlayersNetId() {

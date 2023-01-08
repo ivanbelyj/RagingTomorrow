@@ -29,6 +29,7 @@ public class ItemsUIController : MonoBehaviour
 
     [SerializeField]
     private GameObject _parentUI;
+    public RectTransform ParentUI { get => (RectTransform)(_parentUI.transform); }
 
     private Player _player;
 

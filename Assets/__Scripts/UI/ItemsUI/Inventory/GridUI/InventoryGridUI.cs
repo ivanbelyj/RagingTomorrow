@@ -183,6 +183,13 @@ public class InventoryGridUI : MonoBehaviour
         slotItem.Initialize(invItem.itemData, _slotSize, gridSpacing,
             invItem.Count, localId, _gridSection.GetComponent<NetworkIdentity>().netId);
 
+        // Интерактивная иконка работает как активатор всплывающей подсказки, а его необходимо
+        // инициализировать. Для этого используется специфическая надстройка над системой
+        // всплывающих подсказок, которая устанавливает родительский объект ItemsUI как родитель
+        // для новых всплывающих подсказок. Эта логика не включена в TooltipActivator,
+        // т.к. связана исключительно с ItemsUI
+        itemGO.GetComponent<ItemsUITooltipActivatorInitializer>().Initialize();
+
         _slotItems.Add(localId, slotItem);
         return slotItem;
 

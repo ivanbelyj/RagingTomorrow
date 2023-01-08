@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TooltipContentBuilder
 {
+    private float HEADER_BOTTOM_V_SPACE = 12f;
     private List<TooltipLine> _lines;
     private List<TooltipText> _lastLine;
     public TooltipContentBuilder() {
@@ -24,10 +25,14 @@ public class TooltipContentBuilder
         return Text(str, Color.white);
     }
 
-    public TooltipContentBuilder Text(string str, Color col) {
+    public TooltipContentBuilder Text(string str, Color col, bool isHeader = false, float bottomVSpace = 0) {
         if (_lastLine == null)
             Ln();
-        _lastLine.Add(new TooltipText(str, col));
+        _lastLine.Add(new TooltipText(str, col, isHeader, bottomVSpace));
         return this;
+    }
+
+    public TooltipContentBuilder Header(string str) {
+        return Text(str, Color.white, true, HEADER_BOTTOM_V_SPACE);
     }
 }
