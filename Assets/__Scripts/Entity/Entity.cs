@@ -72,12 +72,12 @@ public class Entity : NetworkBehaviour
         if (health.Value > health.minValue) {
             IsAlive = true;
         }
-        Debug.Log($"Is alive: {IsAlive}");
+        // Debug.Log($"Is alive: {IsAlive}");
         health.OnMin += Death;
 
         movement.Initialize();
         movement.OnChangeRunning += (bool isRunning) => {
-            Debug.Log("Running changed. isRunning == " + isRunning);
+            // Debug.Log("Running changed. isRunning == " + isRunning);
             if (isRunning) {
                 AddEffect(enduranceDecrease);
 
@@ -134,7 +134,7 @@ public class Entity : NetworkBehaviour
 
     [Command]
     private void CmdAddEffect(LifecycleEffect effect) {
-        Debug.Log($"Effect {effect.effectId} is added");
+        // Debug.Log($"Effect {effect.effectId} is added");
         effect.startTime = NetworkTime.time;
 
         _effects.Add(effect);
@@ -145,7 +145,7 @@ public class Entity : NetworkBehaviour
         LifecycleEffect effect = _effects.First(effect => effect.effectId == effectId);
         bool isRemoved = _effects.Remove(effect);
 
-        Debug.Log($"Effect {effectId} is " + (isRemoved ? "removed" : "NOT REMOVED"));
+        // Debug.Log($"Effect {effectId} is " + (isRemoved ? "removed" : "NOT REMOVED"));
     }
 
     bool IsPassed(LifecycleEffect effect)

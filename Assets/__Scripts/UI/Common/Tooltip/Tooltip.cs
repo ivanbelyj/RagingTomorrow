@@ -26,7 +26,7 @@ public class Tooltip : MonoBehaviour
         Destroy(this.gameObject);
     }
     
-    public void SetData(TooltipContent data) {
+    public void DisplayContent(TooltipContent data) {
         foreach (TooltipLine elem in data.Elements) {
             Line(elem.Elements);
         }

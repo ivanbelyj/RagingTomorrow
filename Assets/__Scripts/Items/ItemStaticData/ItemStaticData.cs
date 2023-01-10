@@ -30,7 +30,7 @@ public class ItemStaticData : ScriptableObject
     private float _mass;
 
     [SerializeField]
-    private string _name;
+    private string _itemName;
 
     [SerializeField]
     private string _description;
@@ -52,7 +52,7 @@ public class ItemStaticData : ScriptableObject
         }
     }
     public float Mass { get => _mass; }
-    public string ItemName => _name;
+    public string ItemName => _itemName;
     public string Description => _description;
 
     /// <summary>

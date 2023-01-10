@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 615705909
+CRC: 2854051293
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 34cf23ac92e1c477a1bb8e6025de7c64
+    Hash: 0945e398b16ca7b3ac95bd86617bd352
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9259c22fc8caa7365deb55fbff9f8f1a
+    Hash: aaf19d784cef77d4dca59d3b1decffda
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -40,7 +40,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: b0984e6b123a94a48ad866e885e5d0c3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0f8d585444b71c74e89f503cf2ab1b8b, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: a959e8eaffe445141aecb3767f64e6fc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f73bed990184d6c4cb9eff4d5c06453d, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
 - Class: 114
@@ -51,7 +57,11 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
+  ClassName: ItemData
+- AssemblyName: Assembly-CSharp
   ClassName: LifecycleEffect
+- AssemblyName: Assembly-CSharp
+  ClassName: LifecycleEffectItemData
 Assets:
 - Assets/BundledAssets/itemdata/FirstAidKit.asset
 - Assets/BundledAssets/itemdata/TestWeapon.asset

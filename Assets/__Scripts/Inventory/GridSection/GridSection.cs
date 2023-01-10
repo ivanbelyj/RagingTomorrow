@@ -68,7 +68,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     }
 
     public float GetTotalWeight()
-        => _items.Sum(item => GetItemData(item.itemData.itemStaticDataName).Mass);
+        => _items.Sum(item => GetItemData(item.itemData.ItemStaticDataName).Mass);
 
     #region Sync
     
@@ -79,13 +79,13 @@ public class GridSection : NetworkBehaviour, ITotalWeight
 
     [Server]
     private void RemoveItem(GridSectionItem item) {
-        Debug.Log($"Remove grid section item on server: " + item);
+        // Debug.Log($"Remove grid section item on server: " + item);
         _syncItems.Remove(item);
     }
 
     [Command(requiresAuthority = false)]
     private void CmdAddItem(GridSectionItem item) {
-        Debug.Log("From CmdAddItem: item is " + item);
+        // Debug.Log("From CmdAddItem: item is " + item);
         AddItem(item);
     }
 
@@ -128,7 +128,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     private bool FindFreePos(FillingMatrix sectionFilling, ItemData item, out int x, out int y) {
         // O(log(n))
         ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
-            item.itemStaticDataName);
+            item.ItemStaticDataName);
         
         // O(n^2)
         bool hasFreePlace = sectionFilling.FindFreeRectPos(
@@ -150,7 +150,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         for (int i = 0; i < _items.Count; i++) {
             // O(log(n))
             var itemStaticData = _itemStaticDataManager
-                .GetStaticDataByName(_items[i].itemData.itemStaticDataName);
+                .GetStaticDataByName(_items[i].itemData.ItemStaticDataName);
             fillingRects[i] = new FillingMatrix.FillingRect() {
                 height = itemStaticData.Height,
                 width = itemStaticData.Width,
@@ -167,7 +167,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     #region Add And Remove
     private FillingMatrix.FillingRect GetRectForItem(GridSectionItem gridItem) {
         ItemStaticData staticData = _itemStaticDataManager
-            .GetStaticDataByName(gridItem.itemData.itemStaticDataName);
+            .GetStaticDataByName(gridItem.itemData.ItemStaticDataName);
 
         FillingMatrix.FillingRect itemRect = new FillingMatrix.FillingRect() {
             width = staticData.Width,
@@ -210,12 +210,12 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     }
 
     public bool TryToAddToSection(ItemData itemData) {
-        Debug.Log("Попытка добавления элемента в секцию");
+        Debug.Log($"Попытка добавления элемента {itemData} в секцию");
         bool isAdded = TryToAddToUnfilledItemStack(itemData);
-        Debug.Log("\tУдалось добавить в имеющийся стак: " + isAdded);
+        // Debug.Log("\tУдалось добавить в имеющийся стак: " + isAdded);
         if (!isAdded) {
             bool res = TryToAddToFreePlace(itemData);
-            Debug.Log("\tНайдено свободное место: " + res);
+            // Debug.Log("\tНайдено свободное место: " + res);
             return res;
         } else {
             return true;
@@ -242,21 +242,21 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     /// </summary>
     private GridSectionItem FindUnfilledItemStack(ItemData itemData) {
         ItemStaticData staticData =
-            _itemStaticDataManager.GetStaticDataByName(itemData.itemStaticDataName);
+            _itemStaticDataManager.GetStaticDataByName(itemData.ItemStaticDataName);
         int stackSize = staticData.StackSize;
-        Debug.Log("Find unfilled item stack");
-        Debug.Log("_items.Count: " + _items.Count);
+        // Debug.Log("Find unfilled item stack");
+        // Debug.Log("_items.Count: " + _items.Count);
         foreach (var item in _items) {
             // Стаковать можно только одинаковое, чтобы не потерять различия
             bool sameItem = item.itemData.Equals(itemData);
-            Debug.Log($"\tМожно ли застаковать {itemData.itemStaticDataName} в "
-                + $"({item.itemData}, {item.count})?");
+            // Debug.Log($"\tМожно ли застаковать {itemData.itemStaticDataName} в "
+            //     + $"({item.itemData}, {item.count})?");
 
             // Некоторые предметы, например, не могут стаковаться
             bool itemStackLimitNotReached = item.count < stackSize;
 
-            Debug.Log($"\tЗаполнен ли стек {item.itemData.itemStaticDataName}?" +
-                $"{!itemStackLimitNotReached}");
+            // Debug.Log($"\tЗаполнен ли стек {item.itemData.itemStaticDataName}?" +
+                // $"{!itemStackLimitNotReached}");
 
             if (sameItem && itemStackLimitNotReached) {
                 return item;
@@ -269,8 +269,8 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     /// Находит свободное место в инвентаре и добавляет туда предмет
     /// </summary>
     private bool TryToAddToFreePlace(ItemData itemData) {
-        Debug.Log($"Добавление предмета {itemData.itemStaticDataName} в свободное место.");
-        Debug.Log($"\tПостроение матрицы заполненности");
+        // Debug.Log($"Добавление предмета {itemData.itemStaticDataName} в свободное место.");
+        // Debug.Log($"\tПостроение матрицы заполненности");
         // O(n * log(n))
         FillingMatrix fillingMatrix = GetFillingMatrix();
 
@@ -278,7 +278,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         bool freePosIsFound = FindFreePos(fillingMatrix, itemData, out int x, out int y);
         if (!freePosIsFound)
             return false;
-        Debug.Log($"\tНайдена свободная позиция: ({x}, {y})");
+        // Debug.Log($"\tНайдена свободная позиция: ({x}, {y})");
         
         GridSectionItem gridItem = new GridSectionItem() {
             itemData = itemData,
@@ -315,16 +315,16 @@ public class GridSection : NetworkBehaviour, ITotalWeight
     /// Удаляет стак предметов из секции
     /// </summary>
     public bool RemoveFromSection(GridSectionItem invItem) {
-        Debug.Log("Remove from section - has authority: " + this.hasAuthority);
+        // Debug.Log("Remove from section - has authority: " + this.hasAuthority);
         bool hasItem = Items.IndexOf(invItem) != -1;
         if (!hasItem)
             return false;
         
         if (isServer) {
-            Debug.Log("Remove Item");
+            // Debug.Log("Remove Item");
             RemoveItem(invItem);
         } else {
-            Debug.Log("Cmd Remove Item");
+            // Debug.Log("Cmd Remove Item");
             CmdRemoveItem(invItem);
         }
         return true;
@@ -340,7 +340,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         for (int n = 0; n < 1; n++) {
             var newItem = new ItemData() {
                 // itemStaticDataName = _itemStaticDataManager.NamesAndData.ElementAt(0).Key,
-                itemStaticDataName = "TestArmor"
+                ItemStaticDataName = "TestArmor"
             };
             bool isAdded = TryToAddToSection(newItem);
             if (!isAdded) {

@@ -19,5 +19,6 @@ MonoBehaviour:
   _height: 2
   _stackSize: 1
   _mass: 4
-  _name: TestWeapon
+  _itemName: "\u0410\u041A-74\u0443"
   _description: There is a test weaon
+  _Type: 0

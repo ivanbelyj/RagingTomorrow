@@ -27,10 +27,10 @@ public class ItemStaticDataManager : MonoBehaviour
 
         ItemStaticData[] assets = localAssetBundle.LoadAllAssets<ItemStaticData>();
         CreateItemDataDictionary(assets);
-        Debug.Log("ItemData dictionary is initialized");
+        // Debug.Log("ItemData dictionary is initialized");
         foreach (var pair in _namesAndData) {
             string typeName = pair.Value.GetType().Name;
-            Debug.Log($"\t{pair.Key}: {pair.Value}. ItemData type: " + typeName);
+            // Debug.Log($"\t{pair.Key}: {pair.Value}. ItemData type: " + typeName);
         }
 
         localAssetBundle.Unload(false);

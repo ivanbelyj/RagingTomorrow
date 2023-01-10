@@ -45,34 +45,86 @@ public static class CustomTypesReaderWriter
         return effect;
     }
 
-    public static void WriteItemDynamicData(this NetworkWriter writer, ItemDynamicData dynamicData)
+    private enum ItemType : int
     {
-        DynamicItemType type;
-        if (dynamicData is TestDynamicData) {
-            type = DynamicItemType.Test;
-        } else {
-            type = DynamicItemType.None;
-        }
-        writer.WriteInt((int)type);
+        None,
+        LifecycleEffectItem,
+        Armor,
+        Weapon,
+    }
 
+    private static ItemType GetItemType(ItemData itemData) {
+        if (itemData is LifecycleEffectItemData)
+            return ItemType.LifecycleEffectItem;
+        else
+            return ItemType.None;
+    }
+
+    public static void WriteItemData(this NetworkWriter writer, ItemData itemData) {
+        Debug.Log($"Write itemData: {itemData}");
+        ItemType type = GetItemType(itemData);
+        writer.WriteInt((int)type); // 1
+        writer.WriteString(itemData.ItemStaticDataName); // 2
         switch (type) {
-            case DynamicItemType.Test:
-                var testData = (TestDynamicData)dynamicData;
-                writer.WriteString(testData.bookNotes);
-                break;
-        }
-    }
-
-    public static ItemDynamicData ReadItemDynamicData(this NetworkReader reader) {
-        switch ((DynamicItemType)reader.ReadInt()) {
-            case DynamicItemType.Test:
-                string bookNotes = reader.ReadString();
-                return new TestDynamicData() {
-                    bookNotes = bookNotes
-                };
+            case ItemType.Armor:
+            break;
+            case ItemType.LifecycleEffectItem:
+            LifecycleEffectItemData lifecycleEffectItemData = (LifecycleEffectItemData)itemData;
+            writer.WriteInt(lifecycleEffectItemData.Uses); // 3
+            break;
+            case ItemType.Weapon:
+            break;
             default:
-                return null;
+            break;
         }
-        
     }
+    public static ItemData ReadItemData(this NetworkReader reader) {
+        ItemType itemType = (ItemType)reader.ReadInt();  // 1
+        string itemStaticDataName = reader.ReadString();  // 2
+        ItemData res = new ItemData();
+        switch (itemType) {
+            case ItemType.LifecycleEffectItem:
+            var lifecycleEffectItemData = new LifecycleEffectItemData();
+            lifecycleEffectItemData.Uses = reader.ReadInt();  // 3
+            res = lifecycleEffectItemData;
+            break;
+            case ItemType.Armor:
+            break;
+            case ItemType.Weapon:
+            break;
+        }
+        res.ItemStaticDataName = itemStaticDataName;
+        Debug.Log("Read itemData: " + res);
+        return res;
+    }
+    // public static void WriteItemDynamicData(this NetworkWriter writer, ItemDynamicData dynamicData)
+    // {
+    //     DynamicItemType type;
+    //     if (dynamicData is TestDynamicData) {
+    //         type = DynamicItemType.Test;
+    //     } else {
+    //         type = DynamicItemType.None;
+    //     }
+    //     writer.WriteInt((int)type);
+
+    //     switch (type) {
+    //         case DynamicItemType.Test:
+    //             var testData = (TestDynamicData)dynamicData;
+    //             writer.WriteString(testData.bookNotes);
+    //             break;
+    //     }
+    // }
+
+    // public static ItemDynamicData ReadItemDynamicData(this NetworkReader reader) {
+    //     switch ((DynamicItemType)reader.ReadInt()) {
+    //         case DynamicItemType.Test:
+    //             string bookNotes = reader.ReadString();
+    //             return new TestDynamicData() {
+    //                 bookNotes = bookNotes
+    //             };
+    //         default:
+    //             return null;
+    //     }
+        
+    // }
 }

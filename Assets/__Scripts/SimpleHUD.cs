@@ -43,7 +43,7 @@ public class SimpleHUD : MonoBehaviour
         slider.minValue = parameter.minValue;
         slider.maxValue = parameter.maxValue;
         slider.value = parameter.Value;
-        Debug.Log($"Slider is initialized. [{slider.minValue},{slider.maxValue}]."
-            + $"Current: {slider.value}");
+        // Debug.Log($"Slider is initialized. [{slider.minValue},{slider.maxValue}]."
+        //     + $"Current: {slider.value}");
     }
 }

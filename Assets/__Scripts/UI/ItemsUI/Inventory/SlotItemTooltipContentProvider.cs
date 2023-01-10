@@ -5,13 +5,19 @@ using UnityEngine;
 public class SlotItemTooltipContentProvider : MonoBehaviour, ITooltipContentProvider
 {
     private InventorySlotItem _invSlotItem;
+    private ItemStaticDataManager _itemStaticDataManager;
 
     private void Awake() {
         _invSlotItem = GetComponent<InventorySlotItem>();
+        _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
     }
     
     public TooltipContent GetTooltipContent()
     {
+        return _invSlotItem.ItemData.ToTooltipContent(_itemStaticDataManager);
+    }
+
+    private TooltipContent GetTestContent() {
         TooltipContent content = new TooltipContentBuilder()
             .Ln()
             .Header("Название")
@@ -25,6 +31,6 @@ public class SlotItemTooltipContentProvider : MonoBehaviour, ITooltipContentProv
             .Text("Test parameter")
             .Text("Сносно", Color.yellow)
             .Build();
-        return content;  // _invSlotItem.ItemData.ToTooltipData();
+        return content;
     }
 }

@@ -54,7 +54,7 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _canvas = FindObjectOfType<Canvas>();
 
         _graphicRaycaster = _canvas.GetComponent<GraphicRaycaster>();
-        Debug.Log($"canvas: {_canvas}; raycaster: {_graphicRaycaster}");
+        // Debug.Log($"canvas: {_canvas}; raycaster: {_graphicRaycaster}");
     }
 
     protected virtual void Start() {
@@ -70,7 +70,6 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     }
 
     private void OnEnable() {
-        Debug.Log("On enable");
         if (_shouldSetParentAndPosOnEnable) {
             SetParentAndPos();
             _shouldSetParentAndPosOnEnable = false;
@@ -91,11 +90,11 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _shouldResetDrag = false;
         _shouldResetOnDisable = true;
 
-        Debug.Log($"Drag begins. initial pos is changed from {_initialPos} to {transform.localPosition}");
+        // Debug.Log($"Drag begins. initial pos is changed from {_initialPos} to {transform.localPosition}");
         _initialPos = transform.localPosition;
 
-        Debug.Log("Initial pos on set begin drag: " + _initialPos
-            + ". Actual: " + transform.localPosition);
+        // Debug.Log("Initial pos on set begin drag: " + _initialPos
+        //     + ". Actual: " + transform.localPosition);
 
         _parentBeforeDrag = transform.parent;
         transform.SetParent(_parent);
@@ -123,8 +122,6 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("Drag ends");
-
         var results = new List<RaycastResult>();
         _graphicRaycaster.Raycast(eventData, results);
         foreach (var hit in results)
@@ -141,7 +138,6 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     }
 
     public void ResetDrag(bool deferredSetParentAndPos = false) {
-        Debug.Log("Reset Drag");
         _shouldResetDrag = true;
         if (deferredSetParentAndPos) {
             _shouldSetParentAndPosOnEnable = true;
@@ -154,11 +150,7 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     }
 
     private void SetParentAndPos() {
-        Debug.Log("Set parent and pos. Initial pos before set parent and pos: " + _initialPos
-            + ". Actual: " + transform.localPosition);
         transform.SetParent(_parentBeforeDrag);
         transform.localPosition = _initialPos;
-        Debug.Log("Set parent and pos. Initial pos after set parent and pos: " + _initialPos
-            + ". Actual: " + transform.localPosition);
     }
 }

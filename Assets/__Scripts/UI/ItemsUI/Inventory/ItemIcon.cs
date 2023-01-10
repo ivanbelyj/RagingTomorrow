@@ -49,7 +49,7 @@ public class ItemIcon : MonoBehaviour
     /// </summary>
     protected void SetItemUI(ItemData itemData) {
         ItemStaticData staticData = _itemStaticDataManager.GetStaticDataByName(
-            itemData.itemStaticDataName);
+            itemData.ItemStaticDataName);
         
         // Картинка предмета получает размер на некоторое кол-во слотов
         _itemRectTransform.sizeDelta =

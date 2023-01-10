@@ -8,7 +8,7 @@ using System;
 /// <summary>
 /// Компонент, предоставляющий возможность взаимодействовать с интерактивным объектом
 /// </summary>
-public class Interactor : MonoBehaviour
+public class Interactor : NetworkBehaviour
 {
     /// <summary>
     /// Для вызова событий LookedOnObject и LookedAwayFromObject недостаточно знать только
@@ -116,7 +116,16 @@ public class Interactor : MonoBehaviour
         }
     }
 
-    private void Awake() {
+    // Start вызывается на тот момент, когда isLocalPlayer уже установлено.
+    private void Start() {
+        string side = isLocalPlayer ? "local player" : "NOT local player";
+        Debug.Log("Interactor starts on " + side);
+        // Логика взаимодействия имеет смысл только на локальном устройстве
+        if (!isLocalPlayer) {
+            this.enabled = false;
+            return;
+        }
+
         _lastSeen = new Dictionary<IInteractorStrategy, InteractableInLastFrame>();
         foreach(var strategy in GetComponents<IInteractorStrategy>()) {
             _lastSeen.Add(strategy, new InteractableInLastFrame(
@@ -126,7 +135,8 @@ public class Interactor : MonoBehaviour
 
     /// <summary>
     /// Transfrom GameObject'а, к которому прикреплен ItemInteractor, может не быть направленным
-    /// в сторону предмета, с которым требуется взаимодействовать
+    /// в сторону предмета, с которым требуется взаимодействовать, этим и обусловлена необходимость
+    /// в целевом transform
     /// </summary>
     public void Initialize(Transform targetTransform) {
         _targetTransform = targetTransform;
@@ -149,7 +159,7 @@ public class Interactor : MonoBehaviour
         // }
     }
 
-    virtual protected void Update() {
+    private void Update() {
         if (!_isInitialized) {
             Debug.Log("Interactor is not initialized to interact!");
             return;
@@ -176,7 +186,6 @@ public class Interactor : MonoBehaviour
 
             // Вектор от interactor до интерактивного предмета
             Vector3 directionFromInteractor = col.transform.position - _targetTransform.position;
-            Debug.DrawRay(_targetTransform.position, directionFromInteractor, Color.blue);
 
             float dot = Vector3.Dot(_targetTransform.forward, directionFromInteractor.normalized);
             // Debug.Log("dot with " + col.gameObject.name + " is " + dot);

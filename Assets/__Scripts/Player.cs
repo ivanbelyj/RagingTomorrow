@@ -54,6 +54,9 @@ public class Player : NetworkBehaviour
         _itemInteractorStrategy.LookedAwayFromItem += OnLookedAwayFromItem;
     }
 
+    private void Start() {
+    }
+
     public override void OnStartClient() {
         /* Initialize lifecycle and add Damage FX */
         // lifecycle.Initialize();
@@ -62,7 +65,6 @@ public class Player : NetworkBehaviour
         /* Initialize movement and add camera shake when landing */
         // movement.Initialize();
         // _entity.movement.AssignLandingAction(() => overview.Shake(0.5f));
-
         BindFloatingInfo();
     }
 
@@ -96,6 +98,7 @@ public class Player : NetworkBehaviour
         overview.camera = Camera.main;
 
         _interactor = GetComponent<Interactor>();
+        Debug.Log($"Initialization of _interactor {_interactor} with transform {overview.camera.transform}");
         _interactor.Initialize(overview.camera.transform);
 
         // _interactor.LookingToInteractiveObject += OnLookingToItem;
@@ -106,12 +109,12 @@ public class Player : NetworkBehaviour
 
     private void OnLookedAtItem(Item item) {
         _pickableItemUI.ShowIcon(item.ItemData);
-        Debug.Log("Looked at item");
+        // Debug.Log("Looked at item");
     }
 
     private void OnLookedAwayFromItem() {
         _pickableItemUI.HideIcon();
-        Debug.Log("Looked away from item");
+        // Debug.Log("Looked away from item");
     }
 
     private void BindUI() {
@@ -216,10 +219,10 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.N)) {
             var dict = new Dictionary<string, int>();
             foreach (var item in _inventory.MainSection.Items) {
-                if (dict.ContainsKey(item.itemData.itemStaticDataName))
-                    dict[item.itemData.itemStaticDataName] += item.count;
+                if (dict.ContainsKey(item.itemData.ItemStaticDataName))
+                    dict[item.itemData.ItemStaticDataName] += item.count;
                 else
-                    dict.Add(item.itemData.itemStaticDataName, item.count);
+                    dict.Add(item.itemData.ItemStaticDataName, item.count);
             }
 
             Debug.Log("Инвентарь");
@@ -230,7 +233,7 @@ public class Player : NetworkBehaviour
             Debug.Log("Информация о том, что надето на персонажа");
             Debug.Log($"Всего надето/выбрано: {_inventory.WearSection.Slots.Count}");
             foreach (var pair in _inventory.WearSection.Slots) {
-                Debug.Log($"\tСлот {pair.Key.ToString()}: {pair.Value.itemStaticDataName}");
+                Debug.Log($"\tСлот {pair.Key.ToString()}: {pair.Value.ItemStaticDataName}");
             }
         }
 
@@ -245,9 +248,9 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.G)) {
             if (_inventory.MainSection.Items.Count != 0) {
                 var item = _inventory.MainSection.Items[0];
-                Debug.Log($"Inv. count: {_inventory.MainSection.Items.Count}. Элемент "
-                    + item.itemData.itemStaticDataName
-                    + " будет выброшен");
+                // Debug.Log($"Inv. count: {_inventory.MainSection.Items.Count}. Элемент "
+                //     + item.itemData.itemStaticDataName
+                //     + " будет выброшен");
                 _itemThrower.ThrowAwayFromGridSection(item);
             }
         }
@@ -259,8 +262,8 @@ public class Player : NetworkBehaviour
                     + "данного размера.");
             }
             bool isAddedToWear = _inventory.WearSection.AddTestItems();
-            if (isAddedToWear)
-                Debug.Log("Добавлен предмет в WearSection");
+            // if (isAddedToWear)
+                // Debug.Log("Добавлен предмет в WearSection");
         }
 
         LifecycleEffect damage = new LifecycleEffect() {

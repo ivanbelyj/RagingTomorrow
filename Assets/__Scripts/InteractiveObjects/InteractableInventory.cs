@@ -17,7 +17,9 @@ public class InteractableInventory : MonoBehaviour, IInventoryInfoProvider
 
     public GridSection Inventory { get; private set; }
 
+#pragma warning disable CS0067
     public event IInventoryInfoProvider.InfoChangedEventHandler InventoryInfoChanged;
+#pragma warning restore CS0067
 
     private void Awake() {
         Inventory = GetComponent<GridSection>();

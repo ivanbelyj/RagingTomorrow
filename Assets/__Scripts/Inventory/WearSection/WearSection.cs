@@ -86,7 +86,7 @@ public class WearSection : NetworkBehaviour, ITotalWeight
     }
 
     public float GetTotalWeight()
-        => _slots.Sum(pair => GetItemData(pair.Value.itemStaticDataName).Mass);
+        => _slots.Sum(pair => GetItemData(pair.Value.ItemStaticDataName).Mass);
 
     #region Sync
     
@@ -133,7 +133,7 @@ public class WearSection : NetworkBehaviour, ITotalWeight
     }
 
     private WearSlot GetAccordingSlot(ItemData itemData) {
-        var staticData = _itemStaticDataManager.GetStaticDataByName(itemData.itemStaticDataName);
+        var staticData = _itemStaticDataManager.GetStaticDataByName(itemData.ItemStaticDataName);
         if (staticData is WeaponItemStaticData weaponData) {
             if (weaponData.Type == WeaponItemStaticData.WeaponType.HandGun)
                 return WearSlot.HandGun;
@@ -186,7 +186,7 @@ public class WearSection : NetworkBehaviour, ITotalWeight
     public bool AddTestItems()
     {
         var newItem = new ItemData() {
-            itemStaticDataName = "TestArmor",
+            ItemStaticDataName = "TestArmor",
         };
         bool isAdded = AddToAccordingSlot(newItem);
         if (!isAdded) {

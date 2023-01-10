@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 9193935081771352012}
   - component: {fileID: 6775837700265308253}
   - component: {fileID: 4494829470696123349}
+  - component: {fileID: -7325738709282047}
   m_Layer: 0
   m_Name: FirstAidKit
   m_TagString: Untagged
@@ -185,5 +186,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+--- !u!114 &-7325738709282047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5277316773288308795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f73bed990184d6c4cb9eff4d5c06453d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _initialItemData:
-    itemStaticDataName: FirstAidKit
+    _itemStaticDataName: FirstAidKit
+    _uses: 5

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// Компонент активации всплывающей подсказки, когда на элемент UI наведен указатель
@@ -41,6 +42,13 @@ public class TooltipActivator : MonoBehaviour, IPointerEnterHandler, IPointerExi
         _dontCreateTooltip = false;
     }
 
+    // Например, уничтожает всплывающую подсказку в случае, когда другой игрок забрал предмет
+    // из общего инвентаря (допустим, ящика) и иконка пропала
+    private void OnDestroy() {
+        if (_tooltip != null)
+            Destroy(_tooltip);
+    }
+
     /// <summary>
     /// Всплывающие подсказки должны иметь родительский объект, чтобы скрываться вместе с ним
     /// </summary>
@@ -62,8 +70,7 @@ public class TooltipActivator : MonoBehaviour, IPointerEnterHandler, IPointerExi
         _tooltip.transform.SetParent(_parent);
         _tooltip.transform.SetAsLastSibling();
 
-        _tooltip.SetData(_dataProvider.GetTooltipContent());
-
+        _tooltip.DisplayContent(_dataProvider.GetTooltipContent());
         _tooltip.transform.localPosition = GetLocalPosInParentWithOffset(mousePos);
     }
 
@@ -125,15 +132,18 @@ public class TooltipActivator : MonoBehaviour, IPointerEnterHandler, IPointerExi
         Vector2 windowSize = new Vector2(windowWidth, windowHeight);
 
         Vector2 tooltipSize = ((RectTransform)_tooltip.transform).sizeDelta;
+        if (tooltipSize.y < 1) {
+            // Debug.LogWarning("Tooltip height is less than 1!");
+        }
         
         // Если какое-либо след. значение отрицательно, то по соотв. стороне 
         // переполнение, => необходим соотв. отступ, чтобы все поместилось на экране
         float overflowX = windowWidth - mousePos.x - tooltipSize.x;
         float overflowY = mousePos.y - tooltipSize.y;
-        Debug.Log($"windowWidth: {windowWidth}; tooltipWidth: {tooltipSize.x}; mousePos.x: {mousePos.x}; "
-            + $"negOverflow.x: {overflowX}");
-        Debug.Log($"windowHeight: {windowHeight}; tooltipHeight: {tooltipSize.y}; mousePos.y: {mousePos.y}; "
-            + $"negOverflow.y: {overflowY}");
+        // Debug.Log($"windowWidth: {windowWidth}; tooltipWidth: {tooltipSize.x}; mousePos.x: {mousePos.x}; "
+        //     + $"negOverflow.x: {overflowX}");
+        // Debug.Log($"windowHeight: {windowHeight}; tooltipHeight: {tooltipSize.y}; mousePos.y: {mousePos.y}; "
+        //     + $"negOverflow.y: {overflowY}");
         return new Vector2(overflowX >= 0 ? 0 : overflowX,
             overflowY >= 0 ? 0 : -overflowY);
     }

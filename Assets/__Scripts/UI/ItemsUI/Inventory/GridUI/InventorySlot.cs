@@ -40,7 +40,7 @@ public class InventorySlot : MonoBehaviour, IDropAcceptor<DraggedItemData>
         Debug.Log($"Found section by id. Size: {oldSection.Width}x{oldSection.Height}");
         GridSectionItem oldGridItem = oldSection
             .Items.Find(x => x.GetLocalIdByInventoryPosition() == draggedData.ItemLocalId);
-        Debug.Log($"Old item by local id: {oldGridItem.itemData.itemStaticDataName}. ");
+        Debug.Log($"Old item by local id: {oldGridItem.itemData.ItemStaticDataName}. ");
 
         GridSectionItem newItem = new GridSectionItem() {
             inventoryX = _col - draggedData.MouseSlotsOffsetX,

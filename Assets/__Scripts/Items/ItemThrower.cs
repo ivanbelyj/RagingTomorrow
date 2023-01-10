@@ -44,8 +44,6 @@ public class ItemThrower : NetworkBehaviour
     }
 
     private void ThrowAway(ItemData itemData) {
-        Debug.Log("ThrowAway: itemData - " + itemData.itemStaticDataName);
-        
         if (isServer) {
             SpawnAndThrowAway(itemData);
         } else {
@@ -65,10 +63,10 @@ public class ItemThrower : NetworkBehaviour
         // Полная неизменная информация о предмете берется на основе названия,
         // которое используется для эффективной синхронизации инвентаря
         ItemStaticData itemStaticData = _itemStaticDataManager.GetStaticDataByName(
-            itemGameData.itemStaticDataName);
+            itemGameData.ItemStaticDataName);
 
-        Debug.Log("ThrowAway: itemData - " + itemStaticData.name +
-            $". {itemStaticData.ItemName}, {itemStaticData.Description}, Item: {itemStaticData.ItemPrefab}");
+        // Debug.Log("ThrowAway: itemData - " + itemStaticData.name +
+        //     $". {itemStaticData.ItemName}, {itemStaticData.Description}, Item: {itemStaticData.ItemPrefab}");
         
         Vector3 spawnOffset = transform.forward * (_collider.bounds.size.z / 2);
         GameObject itemGO = Instantiate(itemStaticData.ItemPrefab,
@@ -85,7 +83,7 @@ public class ItemThrower : NetworkBehaviour
         
         // Бросок
         Rigidbody itemRb = itemGO.GetComponent<Rigidbody>();
-        Debug.Log($"Масса бросаемого предмета: {itemRb.mass}; сила броска: {throwAwayForce}");
+        // Debug.Log($"Масса бросаемого предмета: {itemRb.mass}; сила броска: {throwAwayForce}");
         // Сила броска зависит от массы: и легкая аптечка, и тяжелый автомат слегка отбрасываются
         itemRb.AddForce(transform.forward * throwAwayForce * itemRb.mass, ForceMode.Impulse);
     }

@@ -6,8 +6,8 @@ using UnityEngine;
 /// Для десериализации динамической информации о предмете (при передачи Mirror по сети)
 /// требуется знать, объект какого типа пришел в виде байтов.
 /// </summary>
-public enum DynamicItemType : int
-{
-    None,
-    Test
-}
+// public enum DynamicItemType : int
+// {
+//     None,
+//     Test
+// }

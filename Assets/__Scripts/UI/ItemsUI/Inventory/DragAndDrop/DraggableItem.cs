@@ -26,8 +26,8 @@ public class DraggableItem : Draggable<DraggedItemData>
         uint sectionNetId = _slotItem.SectionNetId;
         uint playerNetId = GetLocalPlayersNetId();
         // К методу Start local id уже должен быть инициализирован
-        Debug.Log($"Initialize draggable item: local id {_slotItem.ItemLocalId}; "
-            + $"sectionNetId: {sectionNetId}; playerNetId: {playerNetId}");
+        // Debug.Log($"Initialize draggable item: local id {_slotItem.ItemLocalId}; "
+        //     + $"sectionNetId: {sectionNetId}; playerNetId: {playerNetId}");
         DraggedItemData data = new DraggedItemData() {
             ItemLocalId = _slotItem.ItemLocalId,
             InventorySectionNetId = sectionNetId,
@@ -51,7 +51,7 @@ public class DraggableItem : Draggable<DraggedItemData>
         DraggedData.MouseSlotsOffsetX = offset.x;
         DraggedData.MouseSlotsOffsetY = offset.y;
         
-        Debug.Log($"Отступ мыши от left top угла предмета в слотах: {offset}");
+        // Debug.Log($"Отступ мыши от left top угла предмета в слотах: {offset}");
         // Debug.Log($"Dragged item with " + DraggedData.ItemLocalId);
     }
 
@@ -69,13 +69,13 @@ public class DraggableItem : Draggable<DraggedItemData>
     }
 
     private Vector2Int GetMouseOffset(Vector2 mousePos) {
-        Debug.Log("Позиция мыши: " + mousePos);
+        // Debug.Log("Позиция мыши: " + mousePos);
         // Позиция мыши преобразуется в координаты DraggableItem относительно canvas
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             (RectTransform)_canvas.transform,
             mousePos, _canvas.worldCamera,
             out Vector2 posInCanvas);
-        Debug.Log("Позиция мыши в canvas (yellow): " + posInCanvas);
+        // Debug.Log("Позиция мыши в canvas (yellow): " + posInCanvas);
         // SetDebugPoint(_canvas.transform, posInCanvas, Color.yellow);
 
         // Vector2 worldMousePos = (Vector2)_canvas.transform.TransformPoint(posInCanvas);
@@ -90,7 +90,7 @@ public class DraggableItem : Draggable<DraggedItemData>
         // SetDebugPoint(transform, Vector2.zero);
         // SetDebugPoint(transform, offset);
 
-        Debug.Log("Отступ от left top угла предмета: " + offset);
+        // Debug.Log("Отступ от left top угла предмета: " + offset);
         Vector2Int inSlots = _slotItem.ToSlots(offset);
         inSlots.y *= -1;
         return inSlots;

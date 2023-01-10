@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6573114641734709637}
   - component: {fileID: -3264787555173451924}
   - component: {fileID: 7777979969227588679}
+  - component: {fileID: -639962278378658832}
   m_Layer: 0
   m_Name: TestArmor
   m_TagString: Untagged
@@ -147,5 +148,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+--- !u!114 &-639962278378658832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984017026522479328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f8d585444b71c74e89f503cf2ab1b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _initialItemData:
-    itemStaticDataName: TestArmor
+    _itemStaticDataName: TestArmor

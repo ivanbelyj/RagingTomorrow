@@ -20,7 +20,7 @@ public class GridSectionItem : IEquatable<GridSectionItem>, ICountableItem
 
     public override string ToString()
     {
-        return $"GridSectionItem: {itemData.itemStaticDataName}; ({inventoryX}, {inventoryY}); " +
+        return $"GridSectionItem: {itemData.ItemStaticDataName}; ({inventoryX}, {inventoryY}); " +
             $"count: {count}";
     }
 
@@ -35,7 +35,6 @@ public class GridSectionItem : IEquatable<GridSectionItem>, ICountableItem
     /// </summary>
     public uint GetLocalIdByInventoryPosition() {
         uint res = 100_000 * (uint)inventoryX + (uint)inventoryY;
-        Debug.Log($"local id of item: {res}");
         return res;
         // Для 40к: 4_000_000_000 + 40_000 = 4_000_040_000
     }

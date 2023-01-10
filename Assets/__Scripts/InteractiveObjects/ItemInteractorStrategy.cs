@@ -48,8 +48,6 @@ public class ItemInteractorStrategy : NetworkBehaviour, IInteractorStrategy
         } else {
             CmdDestroy(item.netId);
         }
-        
-        Debug.Log($"Item {item.ItemData.itemStaticDataName} is picked up to inventory");
     }
 
     [Command]
