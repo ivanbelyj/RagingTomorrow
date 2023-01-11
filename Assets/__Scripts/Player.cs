@@ -15,6 +15,9 @@ public class Player : NetworkBehaviour
 {
     // Todo: refactor player; separate responsibilities
 
+    // Todo: Только для теста! Удалить после
+    public static bool dontEndDrag;
+
     // UI
     public GameObject floatingInfo;
     public TextMeshPro playerNameText;
@@ -264,6 +267,14 @@ public class Player : NetworkBehaviour
             bool isAddedToWear = _inventory.WearSection.AddTestItems();
             // if (isAddedToWear)
                 // Debug.Log("Добавлен предмет в WearSection");
+        }
+
+        // Todo: только для теста! убрать после
+        if (Input.GetKeyDown(KeyCode.Y)) {
+            Player.dontEndDrag = !Player.dontEndDrag;
+            var str = Player.dontEndDrag ? "не " : "";
+            Debug.Log($"Drag End drop {str}будет заканчиваться!");
+            
         }
 
         LifecycleEffect damage = new LifecycleEffect() {

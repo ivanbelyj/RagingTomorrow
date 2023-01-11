@@ -13,7 +13,7 @@ public class InventoryGridUI : MonoBehaviour
     /// Расстояние между слотами в сетке по вертикали и горизонтали
     /// </summary>
     [SerializeField]
-    private float gridSpacing = 3;
+    private float gridSpacing = 0;
 
     [SerializeField]
     private RectTransform _gridParent;

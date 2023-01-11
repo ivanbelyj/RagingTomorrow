@@ -122,6 +122,10 @@ public class Draggable<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
+        // Todo: только для теста, убрать
+        if (Player.dontEndDrag)
+            return;
+
         var results = new List<RaycastResult>();
         _graphicRaycaster.Raycast(eventData, results);
         foreach (var hit in results)

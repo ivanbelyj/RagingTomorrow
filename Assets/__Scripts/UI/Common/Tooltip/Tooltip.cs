@@ -56,15 +56,15 @@ public class Tooltip : MonoBehaviour
             textGO.transform.SetAsLastSibling();
         }
 
-        StartCoroutine(UpdateTooltipLayoutGroup());
+        // StartCoroutine(UpdateTooltipLayoutGroup());
     }
 
-    private IEnumerator UpdateTooltipLayoutGroup()
-    {
-        yield return new WaitForEndOfFrame();
-        _layoutGroup.enabled = false;
-        _layoutGroup.CalculateLayoutInputVertical();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutGroup.transform as RectTransform);
-        _layoutGroup.enabled = true;
-    }
+    // private IEnumerator UpdateTooltipLayoutGroup()
+    // {
+    //     yield return new WaitForEndOfFrame();
+    //     _layoutGroup.enabled = false;
+    //     _layoutGroup.CalculateLayoutInputVertical();
+    //     LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutGroup.transform as RectTransform);
+    //     _layoutGroup.enabled = true;
+    // }
 }

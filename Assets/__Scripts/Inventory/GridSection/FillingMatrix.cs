@@ -80,7 +80,8 @@ public class FillingMatrix
     public bool HasPlaceForRect(int width, int height, int x, int y) {
         // Если проверяемая на занятость область выходит за пределы, прямоугольник
         // гарантированно не поместится в нее, т.к. она урезана границами матрицы
-        if (x >= _cols || y >= _rows
+        if (x < 0 || y < 0
+            || x >= _cols || y >= _rows
             || x + width > _cols || y + height > _rows)
             return false;
         for (int row = y; row < y + height; row++) {

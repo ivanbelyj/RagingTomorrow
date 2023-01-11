@@ -61,7 +61,6 @@ public static class CustomTypesReaderWriter
     }
 
     public static void WriteItemData(this NetworkWriter writer, ItemData itemData) {
-        Debug.Log($"Write itemData: {itemData}");
         ItemType type = GetItemType(itemData);
         writer.WriteInt((int)type); // 1
         writer.WriteString(itemData.ItemStaticDataName); // 2
@@ -94,9 +93,9 @@ public static class CustomTypesReaderWriter
             break;
         }
         res.ItemStaticDataName = itemStaticDataName;
-        Debug.Log("Read itemData: " + res);
         return res;
     }
+    
     // public static void WriteItemDynamicData(this NetworkWriter writer, ItemDynamicData dynamicData)
     // {
     //     DynamicItemType type;

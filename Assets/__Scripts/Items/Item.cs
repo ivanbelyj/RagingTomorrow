@@ -37,48 +37,36 @@ public class Item : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-        Debug.Log("Change item data of item on server to initial item data");
-        Debug.Log("OnStartServer; _initialItemData: " + _initialItemData);
         ChangeItemData(_initialItemData);
     }
 
     // Вызывается после OnStartServer()
     private void Start()
     {
-        Debug.Log("Initializing Item on scene. name: " + _itemData.ItemStaticDataName);
-        Debug.Log("Type of itemData: " + _itemData.GetType().Name);
-
         var staticData = _itemStaticDataManager.GetStaticDataByName(_itemData.ItemStaticDataName);
 
         Rigidbody rb = GetComponent<Rigidbody>();
-        Debug.Log($"Static data of item {staticData.ItemName}: mass: {staticData.Mass}." +
-            $"Rigidbody: {rb}");
 
         rb.mass = staticData.Mass;
     }
 
     #region Sync
     private void OnItemDataChanged(ItemData oldData, ItemData newData) {
-        Debug.Log("OnItemDataChanged; " + newData);
         _itemData = newData;
     }
 
     [Server]
     public void ChangeItemData(ItemData newData) {
-        Debug.Log("ChangeItemData; " + newData);
         _syncItemData = newData;
     }
 
     [Command]
     public void CmdChangeItemData(ItemData newData) {
-        Debug.Log("CmdChangeItemData; " + newData);
-        
         ChangeItemData(newData);
     }
     #endregion
 
     public void Initialize(ItemData initialItemData) {
-        Debug.Log("Initialize; " + initialItemData);
         _initialItemData = initialItemData;
     }
 }

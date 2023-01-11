@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb38c71805350724e8c43f87754c450f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSpacing: 3
+  gridSpacing: 0
   _gridParent: {fileID: 4749637529522628056}
   _slotPrefab: {fileID: 3961998801308958019, guid: 38e6f631bd11d7043b028c3be4ab7c95,
     type: 3}
