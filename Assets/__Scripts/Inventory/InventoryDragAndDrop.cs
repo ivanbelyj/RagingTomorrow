@@ -92,5 +92,7 @@ public class InventoryDragAndDrop : NetworkBehaviour
     /// </summary>
     private void ResetDragAndDrop(DraggedItemData item) {
         // Todo
+        // Странно, но логика сброса при конкурирующем перетаскивании и так работает
+        // (но не тестировал на абсолютно синхронном конце перетаскивания обоих игроков)
     }
 }

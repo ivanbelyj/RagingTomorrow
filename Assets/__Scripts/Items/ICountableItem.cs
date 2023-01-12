@@ -5,4 +5,5 @@ using UnityEngine;
 public interface ICountableItem
 {
     public int Count { get; }
+    public ItemData ItemData { get; }
 }

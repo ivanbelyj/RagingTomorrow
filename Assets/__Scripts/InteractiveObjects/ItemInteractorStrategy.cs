@@ -13,11 +13,14 @@ public class ItemInteractorStrategy : NetworkBehaviour, IInteractorStrategy
     public event Action LookedAwayFromItem;
 
     // Можно установить что-то стороннее в качестве инвентаря, например, рюкзак
-    [SerializeField]
-    private WearSection _wearSectionToPick;
-    [SerializeField]
-    private GridSection _sectionToPick;
+    // [SerializeField]
+    // private WearSection _wearSectionToPick;
+    // [SerializeField]
+    // private GridSection _sectionToPick;
+    
     // Todo: character inventory
+    [SerializeField]
+    private CharactersInventory _characterInventory;
 
     private ItemStaticDataManager _itemStaticDataManager;
 
@@ -34,7 +37,7 @@ public class ItemInteractorStrategy : NetworkBehaviour, IInteractorStrategy
         Item item = col.GetComponent<Item>();
         ItemData itemData = item.ItemData;
 
-        if (!_sectionToPick.TryToAddToSection(itemData)) {
+        if (!_characterInventory.MainSection.TryToAddToSection(itemData)) {
             Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
         }
 

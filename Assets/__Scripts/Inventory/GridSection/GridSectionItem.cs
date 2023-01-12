@@ -11,6 +11,8 @@ public class GridSectionItem : IEquatable<GridSectionItem>, ICountableItem
     public int inventoryY;
     public int count;
 
+    public ItemData ItemData => itemData;
+
     public bool Equals(GridSectionItem other)
     {
         return (this.itemData.Equals(other.itemData) &&

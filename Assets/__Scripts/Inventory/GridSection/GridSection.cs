@@ -5,7 +5,7 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 
-public class GridSection : NetworkBehaviour, ITotalWeight
+public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
 {
     // Для удобства в инспекторе
     [SerializeField]
@@ -209,6 +209,15 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         return true;
     }
 
+    public bool CanAddToSection(ItemData itemData) {
+        bool canAddToUnfilledItemStack = CanAddToUnfilledItemStack(itemData, out _);
+        if (!canAddToUnfilledItemStack) {
+            return CanAddToFreePlace(itemData, out _, out _);
+        } else {
+            return false;
+        }
+    }
+
     public bool TryToAddToSection(ItemData itemData) {
         Debug.Log($"Попытка добавления элемента {itemData} в секцию");
         bool isAdded = TryToAddToUnfilledItemStack(itemData);
@@ -222,11 +231,16 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         }
     }
 
+    private bool CanAddToUnfilledItemStack(ItemData itemData, out GridSectionItem unfilled) {
+        unfilled = FindUnfilledItemStack(itemData);
+        return unfilled != null;
+    }
+
     private bool TryToAddToUnfilledItemStack(ItemData itemData) {
-        GridSectionItem unfilled = FindUnfilledItemStack(itemData);
-        if (unfilled is null) {
+        bool canAdd = CanAddToUnfilledItemStack(itemData, out GridSectionItem unfilled);
+        if (!canAdd)
             return false;
-        }
+        
         RemoveFromSection(unfilled);
         unfilled.count += 1;
         if (isServer) {
@@ -234,6 +248,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         } else {
             CmdAddItem(unfilled);
         }
+
         return true;
     }
 
@@ -265,18 +280,23 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         return null;
     }
 
-    /// <summary>
-    /// Находит свободное место в инвентаре и добавляет туда предмет
-    /// </summary>
-    private bool TryToAddToFreePlace(ItemData itemData) {
-        // Debug.Log($"Добавление предмета {itemData.itemStaticDataName} в свободное место.");
-        // Debug.Log($"\tПостроение матрицы заполненности");
+    private bool CanAddToFreePlace(ItemData itemData, out int x, out int y) {
         // O(n * log(n))
         FillingMatrix fillingMatrix = GetFillingMatrix();
 
         // O(n^2)
-        bool freePosIsFound = FindFreePos(fillingMatrix, itemData, out int x, out int y);
-        if (!freePosIsFound)
+        bool isFreePosFound = FindFreePos(fillingMatrix, itemData, out int resX, out int resY);
+        x = resX;
+        y = resY;
+        return isFreePosFound;
+    }
+
+    /// <summary>
+    /// Находит свободное место в инвентаре и добавляет туда предмет
+    /// </summary>
+    private bool TryToAddToFreePlace(ItemData itemData) {
+        bool canAdd = CanAddToFreePlace(itemData, out int x, out int y);
+        if (!canAdd)
             return false;
         // Debug.Log($"\tНайдена свободная позиция: ({x}, {y})");
         
@@ -293,8 +313,6 @@ public class GridSection : NetworkBehaviour, ITotalWeight
             CmdAddItem(gridItem);
         }
         return true;
-        
-        // return AddToSection(gridItem);
     }
 
     // private bool AddToSection(GridSectionItem gridItem) {
@@ -350,5 +368,47 @@ public class GridSection : NetworkBehaviour, ITotalWeight
         }
         return true;
     }
+
+    #endregion
+
+    #region IItemsProvider
+    // public IEnumerable<ItemData> TakeAllItems()
+    // {
+    //     List<ItemData> res = new List<ItemData>();
+    //     foreach (GridSectionItem gridItem in Items) {
+    //         res.Add(gridItem.itemData);
+    //         RemoveFromSection(gridItem);
+    //     }
+    //     return res;
+    // }
+
+    // public void TakeBack(ItemData itemData)
+    // {
+    //     TryToAddToSection(itemData);
+    // }
+
+    public ItemData PeekNext()
+    {
+        if (Items.Count == 0)
+            return null;
+        else
+            return Items[Items.Count - 1].itemData;
+    }
+
+    public ItemData TakeNextItem()
+    {
+        ItemData itemData = PeekNext();
+        if (itemData == null)
+            return null;
+        
+        GridSectionItem gridItem = Items.Find(gridItem => gridItem.itemData.Equals(itemData));
+        int countToAdd = gridItem.count - 1;
+        RemoveFromSection(gridItem);
+        for (int i = 0; i < countToAdd; i++) {
+            TryToAddToSection(itemData);
+        }
+        return itemData;
+    }
+
     #endregion
 }

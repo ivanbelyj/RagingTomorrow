@@ -24,6 +24,11 @@ public class InventoryUI : MonoBehaviour
 
     #region Sources
     private GridSection _gridSection;
+    public GridSection GridSection {
+        get => _gridSection;
+        private set => _gridSection = value;
+    }
+
     private IInventoryInfoProvider _infoProvider;
     // private ITotalWeight _totalWeight;
     #endregion

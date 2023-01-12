@@ -29,6 +29,8 @@ public class Player : NetworkBehaviour
 
     // Components
     private CharactersInventory _inventory;
+    public CharactersInventory Inventory => _inventory;
+
     // private ItemPicker _itemPicker;
     private ItemThrower _itemThrower;
 

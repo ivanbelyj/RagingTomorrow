@@ -570,8 +570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _wearSectionToPick: {fileID: 8271884393692352404}
-  _sectionToPick: {fileID: 2088041632563891022}
+  _characterInventory: {fileID: 4901890020522425594}
 --- !u!114 &4178382809326399703
 MonoBehaviour:
   m_ObjectHideFlags: 0

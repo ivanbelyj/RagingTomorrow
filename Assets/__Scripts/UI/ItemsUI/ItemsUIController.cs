@@ -31,6 +31,12 @@ public class ItemsUIController : MonoBehaviour
     private GameObject _parentUI;
     public RectTransform ParentUI { get => (RectTransform)(_parentUI.transform); }
 
+    /// <summary>
+    /// Кнопка для взятия всех предметов из стороннего инвентаря
+    /// </summary>
+    [SerializeField]
+    private TakeAllButton _takeAllButton;
+
     private Player _player;
 
     private bool _isUIOpened;
@@ -48,10 +54,12 @@ public class ItemsUIController : MonoBehaviour
         
         _playersInventoryUI.Set(_player.GetInventoryInfoProvider(),
             _player.GetMainInventorySection());
+        _takeAllButton.SetRecipient(player.Inventory);
     }
 
     private void SetOtherInventory(IInventoryInfoProvider inventoryInfo, GridSection inventory) {
         _otherInventoryUI.Set(inventoryInfo, inventory);
+        _takeAllButton.SetItemsProvider(inventory);
     }
 
     public void ToggleUI() {
