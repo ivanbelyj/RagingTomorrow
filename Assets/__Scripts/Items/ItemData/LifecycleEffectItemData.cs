@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class LifecycleEffectItemData : ItemData, IEquatable<LifecycleEffectItemData>
+public class LifecycleEffectItemData : ItemData
 {
     [SerializeField]
     private int _uses = 4;
@@ -21,14 +21,10 @@ public class LifecycleEffectItemData : ItemData, IEquatable<LifecycleEffectItemD
 
     public override bool Equals(object obj)
     {
-        return obj is LifecycleEffectItemData itemData ? Equals(itemData) : false;
+        return obj is LifecycleEffectItemData itemData ?
+            base.Equals(itemData) && itemData.Uses == _uses : false;
     }
-
-    public bool Equals(LifecycleEffectItemData other)
-    {
-        return base.Equals(other) && other.Uses == _uses;
-    }
-
+    
     public override int GetHashCode()
     {
         return HashCode.Combine(this.ItemStaticDataName, this._uses);

@@ -44,7 +44,7 @@ public class InventorySlotItem : ItemIcon
     // }
 
     private void SetItemsCountUI(int itemsCount) {
-        if (itemsCount > 1) {
+        if (itemsCount != 1) {
             _itemsCountGO.SetActive(true);
             _itemsCountText.text = itemsCount.ToString();
         } else {

@@ -261,7 +261,7 @@ public class Player : NetworkBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {
-            bool isAllAdded = _inventory.MainSection.AddTestItems();
+            bool isAllAdded = _inventory.MainSection.TryToAddTestItems();
             if (!isAllAdded) {
                 Debug.Log("Не все предметы были добавлены. Нет места в инвентаре для предметов "
                     + "данного размера.");

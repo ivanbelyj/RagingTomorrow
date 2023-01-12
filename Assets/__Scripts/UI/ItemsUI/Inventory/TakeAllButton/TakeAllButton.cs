@@ -25,14 +25,14 @@ public class TakeAllButton : MonoBehaviour
             //     _itemsProvider.TakeBack(notAddedItem);
             // }
 
-            ItemData itemData;
+            ICountableItem countableItem;
             do {
-                itemData = _itemsProvider.PeekNext();
-                if (itemData != null && _inventory.MainSection.CanAddToSection(itemData)) {
-                    _inventory.MainSection.TryToAddToSection(itemData);
-                    _itemsProvider.TakeNextItem();
+                countableItem = _itemsProvider.PeekNext();
+                if (countableItem != null && _inventory.MainSection.CanAddToSection(countableItem)) {
+                    _inventory.MainSection.TryToAddToSection(countableItem);
+                    _itemsProvider.RemoveLastPeekedItem();
                 }
-            } while (itemData != null);
+            } while (countableItem != null);
         });
     }
 

@@ -9,7 +9,7 @@ using UnityEngine;
 /// так и динамическую информацию
 /// </summary>
 [Serializable]
-public class ItemData : IEquatable<ItemData>
+public class ItemData
 {
     [SerializeField]
     private string _itemStaticDataName;
@@ -19,16 +19,9 @@ public class ItemData : IEquatable<ItemData>
     }
     // public ItemDynamicData dynamicData;
 
-    public bool Equals(ItemData other)
-    {
-        return other.ItemStaticDataName == this.ItemStaticDataName;
-        // return itemStaticDataName.Equals(other.itemStaticDataName) &&
-        //     (this.dynamicData is null ? true : this.dynamicData.Equals(other.dynamicData));
-    }
-
     public override bool Equals(object obj)
     {
-        return obj is ItemData itemData ? Equals(itemData) : false;
+        return obj is ItemData itemData ? itemData.ItemStaticDataName == this.ItemStaticDataName : false;
     }
 
     public override int GetHashCode()
