@@ -111,7 +111,7 @@ public class InventoryGridUI : MonoBehaviour
                 // items.Remove(oldGridItem);
                 // Todo: Equals
                 
-                uint oldItemId = oldItem.GetLocalIdByInventoryPosition();
+                uint oldItemId = oldItem.PlacementId.LocalId;
                 InventorySlotItem slotItemToDestroy = _slotItems[oldItemId];
                     // _slotItems.Find(x => x.GridSectionItem.inventoryX == oldItem.inventoryX
                     // && x.GridSectionItem.inventoryY == oldItem.inventoryY);
@@ -179,9 +179,7 @@ public class InventoryGridUI : MonoBehaviour
         SetPositionInGrid(itemGO, row, col);
 
         InventorySlotItem slotItem = itemGO.GetComponent<InventorySlotItem>();
-        uint localId = invItem.GetLocalIdByInventoryPosition();
-        slotItem.Initialize(invItem.itemData, _slotSize, gridSpacing,
-            invItem.Count, localId, _gridSection.GetComponent<NetworkIdentity>().netId);
+        slotItem.Initialize(invItem, _slotSize, gridSpacing);
 
         // Интерактивная иконка работает как активатор всплывающей подсказки, а его необходимо
         // инициализировать. Для этого используется специфическая надстройка над системой
@@ -190,7 +188,7 @@ public class InventoryGridUI : MonoBehaviour
         // т.к. связана исключительно с ItemsUI
         itemGO.GetComponent<ItemsUITooltipActivatorInitializer>().Initialize();
 
-        _slotItems.Add(localId, slotItem);
+        _slotItems.Add(invItem.PlacementId.LocalId, slotItem);
         return slotItem;
 
         // Debug.Log($"Set slot [{x}, {y}] with item {invItem.itemGameData.itemDataName}; "

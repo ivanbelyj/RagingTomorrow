@@ -5,18 +5,16 @@ using UnityEngine;
 /// <summary>
 /// Компонент, предоставляющий доступ к секциям инвентаря персонажа
 /// </summary>
-public class CharactersInventory : MonoBehaviour, ITotalWeight
+public class CharactersInventory : MonoBehaviour, IInventory
 {
+    #region Inventory sections
     [Header("Set in inspector")]
-    #region Inventory sections fields
     [SerializeField]
     private GridSection _mainSection;
     
     [SerializeField]
     private WearSection _wearSection;
-    #endregion
 
-    #region Sections properties
     public GridSection MainSection {
         get => _mainSection;
         private set => _mainSection = value;
@@ -28,5 +26,16 @@ public class CharactersInventory : MonoBehaviour, ITotalWeight
     }
     #endregion
 
-    public float GetTotalWeight() => MainSection.GetTotalWeight() + WearSection.GetTotalWeight();
+    public float TotalWeight => MainSection.GetTotalWeight() + WearSection.GetTotalWeight();
+
+    public bool TryToAdd(IInventoryItem item)
+    {
+        // Todo: Wear section
+        return MainSection.TryToAddToSection(item.ItemData, item.Count);
+    }
+
+    public void Remove(IInventoryItem item)
+    {
+        // Todo
+    }
 }

@@ -7,12 +7,17 @@ public class DraggedItemData
     /// <summary>
     /// Net Id секции инвентаря, в которой находится предмет до перетаскивания
     /// </summary>
-    public uint InventorySectionNetId { get; set; }
+    // public uint InventorySectionNetId { get; set; }
 
     /// <summary>
     /// Id предмета, уникальный в пределах секции
     /// </summary>
-    public uint ItemLocalId { get; set; }
+    // public uint ItemLocalId { get; set; }
+
+    /// <summary>
+    /// Идентификатор размещения предмета в инвентаре
+    /// </summary>
+    public ItemPlacementId PlacementId { get; set; }
 
     /// <summary>
     /// Net Id игрока, который перетаскивает предмет

@@ -5,7 +5,7 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 
-public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
+public class GridSection : NetworkBehaviour, IItemsProvider
 {
     // Для удобства в инспекторе
     [SerializeField]
@@ -159,17 +159,17 @@ public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
     /// В некоторых случаях возвращаемое значение отрицательно: выбранные стаки могут принять еще больше
     /// предметов, чем требуется
     /// </summary>
-    private int FindUnfilledItemStacksForCount(ICountableItem countableItem,
+    private int FindUnfilledItemStacksForCount(ItemData itemData, int count,
         out List<GridSectionItem> unfilled) {
         int maxStackSize = _itemStaticDataManager
-            .GetStaticDataByName(countableItem.ItemData.ItemStaticDataName).StackSize;
+            .GetStaticDataByName(itemData.ItemStaticDataName).StackSize;
         
         // Количество, для которого ищутся незаполненные стаки
-        int countToAdd = countableItem.Count;
+        int countToAdd = count;
         unfilled = new List<GridSectionItem>();
         foreach (GridSectionItem gridItem in _items) {
             // Стаковать можно только одинаковое, чтобы не потерять различия
-            bool areSameItems = gridItem.itemData.Equals(countableItem.ItemData);
+            bool areSameItems = gridItem.itemData.Equals(itemData);
 
             // Сколько предметов может принять стак
             // Некоторые предметы, например, не могут стаковаться, либо полностью заполнены
@@ -242,22 +242,16 @@ public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
     /// <summary>
     /// true, если все предметы в заданном количестве возможно добавить в секцию инвентаря 
     /// </summary>
-    public bool CanAddToSection(ICountableItem countableItem) {
-        int toAddToFreePlace = FindUnfilledItemStacksForCount(countableItem, out _);
+    public bool CanAddToSection(ItemData itemData, int count) {
+        int toAddToFreePlace = FindUnfilledItemStacksForCount(itemData, count, out _);
         if (toAddToFreePlace <= 0)
             return true;
         
-        return CanAddToFreePlaces(countableItem.ItemData, toAddToFreePlace, out _);
+        return CanAddToFreePlaces(itemData, toAddToFreePlace, out _);
     }
     #endregion
 
     #region Add And Remove
-    private class ItemDataAndCount : ICountableItem
-    {
-        public int Count { get; set; }
-        public ItemData ItemData { get; set; }
-    }
-
     private FillingMatrix.FillingRect GetRectForItem(GridSectionItem gridItem) {
         ItemStaticData staticData = _itemStaticDataManager
             .GetStaticDataByName(gridItem.itemData.ItemStaticDataName);
@@ -306,14 +300,14 @@ public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
     /// Пробует добавить предмет в заданном количестве. Либо добавляются все предметы,
     /// либо ни один
     /// </summary>
-    public bool TryToAddToSection(ICountableItem countableItem) {
-        int canNotAddToStacks = FindUnfilledItemStacksForCount(countableItem, out var unfilled);
+    public bool TryToAddToSection(ItemData itemData, int count = 1) {
+        int canNotAddToStacks = FindUnfilledItemStacksForCount(itemData, count, out var unfilled);
         if (canNotAddToStacks <= 0) {
-            TryToAddToUnfilledItemStacks(countableItem);
+            TryToAddToUnfilledItemStacks(itemData, count);
             return true;
         }
 
-        bool canAddToFreePlaces = CanAddToFreePlaces(countableItem.ItemData,
+        bool canAddToFreePlaces = CanAddToFreePlaces(itemData,
             canNotAddToStacks, out var freePlaces);
         // To optimize: CanAddToFreePlaces выполняется дополнительно в TryToAddToFreePlaces
         // (также и FindUnfilledItemStacksForCount в TryToAddToUnfilledItemStacks).
@@ -322,22 +316,18 @@ public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
             return false;
         
         // Если каждый из этапов возможен, "транзакция" выполняется
-        TryToAddToUnfilledItemStacks(countableItem);
-        TryToAddToFreePlaces(countableItem.ItemData, canNotAddToStacks);
+        TryToAddToUnfilledItemStacks(itemData, count);
+        TryToAddToFreePlaces(itemData, canNotAddToStacks);
         return true;
-    }
-
-    public bool TryToAddToSection(ItemData itemData, int count = 1) {
-        return TryToAddToSection(new ItemDataAndCount() { ItemData = itemData, Count = count });
     }
 
     /// <summary>
     /// Возвращает число предметов, которые не были добавлены. Если оно 0 или отриц., то все предметы были
     /// добавлены
     /// </summary>
-    private int TryToAddToUnfilledItemStacks(ICountableItem countableItem) {
-        int notAdded = FindUnfilledItemStacksForCount(countableItem, out List<GridSectionItem> unfilled);
-        if (notAdded >= countableItem.Count)
+    private int TryToAddToUnfilledItemStacks(ItemData itemData, int count) {
+        int notAdded = FindUnfilledItemStacksForCount(itemData, count, out List<GridSectionItem> unfilled);
+        if (notAdded >= count)
             return notAdded;
         
         // Удаляем все незаполненные стаки, чтобы добавить их в уже заполненном виде
@@ -345,9 +335,9 @@ public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
             RemoveFromSection(unfilledStack);
         }
 
-        int countToAdd = countableItem.Count;
+        int countToAdd = count;
         int maxStackSize = _itemStaticDataManager
-            .GetStaticDataByName(countableItem.ItemData.ItemStaticDataName).StackSize;
+            .GetStaticDataByName(itemData.ItemStaticDataName).StackSize;
         foreach (GridSectionItem unfilledToFill in unfilled) {
             // Сколько осталось до максимально возможного размера стака?
             int canAddToStack = maxStackSize - unfilledToFill.Count;
@@ -379,7 +369,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
         foreach (Vector2Int freePlace in freePlaces) {
             // Добавляется либо полный новый стак, либо та часть, которая осталась
             int countInNewStack = countToAdd >= maxStackSize ? maxStackSize : countToAdd;
-            GridSectionItem gridItem = new GridSectionItem() {
+            GridSectionItem gridItem = new GridSectionItem(netId) {
                 itemData = itemData,
                 count = countInNewStack,
                 inventoryX = freePlace.x,
@@ -446,7 +436,7 @@ public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
     #endregion
 
     #region IItemsProvider
-    public ICountableItem PeekNext()
+    public IInventoryItem PeekNext()
     {
         if (Items.Count == 0)
             return null;
@@ -454,9 +444,9 @@ public class GridSection : NetworkBehaviour, ITotalWeight, IItemsProvider
             return Items[Items.Count - 1];
     }
 
-    public ICountableItem RemoveLastPeekedItem()
+    public IInventoryItem RemoveLastPeekedItem()
     {
-        ICountableItem itemData = PeekNext();
+        IInventoryItem itemData = PeekNext();
         if (itemData == null)
             return null;
         

@@ -23,14 +23,12 @@ public class DraggableItem : Draggable<DraggedItemData>
     protected override void Start()
     {
         base.Start();
-        uint sectionNetId = _slotItem.SectionNetId;
         uint playerNetId = GetLocalPlayersNetId();
         // К методу Start local id уже должен быть инициализирован
         // Debug.Log($"Initialize draggable item: local id {_slotItem.ItemLocalId}; "
         //     + $"sectionNetId: {sectionNetId}; playerNetId: {playerNetId}");
         DraggedItemData data = new DraggedItemData() {
-            ItemLocalId = _slotItem.ItemLocalId,
-            InventorySectionNetId = sectionNetId,
+            PlacementId = _slotItem.InventoryItem.PlacementId,
             DraggingPlayerNetId = playerNetId,
         };
 
@@ -83,7 +81,7 @@ public class DraggableItem : Draggable<DraggedItemData>
         // SetDebugPoint(_canvas.transform, transform.position, Color.blue);
 
         // Разница между коорд. верхнего левого угла DraggableItem и преобразованной позицией
-        // мыши
+        // указателя
         Vector2 offset = posInCanvas - (Vector2)transform.localPosition;
 
         // debug

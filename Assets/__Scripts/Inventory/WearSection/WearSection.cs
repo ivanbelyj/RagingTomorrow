@@ -11,7 +11,7 @@ using UnityEngine;
 /// В некоторых случаях предметы могут занимать сразу несколько слотов. Например, если надет
 /// экзоскелет, то надеть бронежилет или шлем уже нельзя
 /// </summary>
-public class WearSection : NetworkBehaviour, ITotalWeight
+public class WearSection : NetworkBehaviour
 {
     /// <summary>
     /// Для хранения информации о заполненности WearSection и обращения к хранимым предметам

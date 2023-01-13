@@ -23,11 +23,11 @@ public interface IItemsProvider
     /// Получателю может потребоваться "посмотреть" на предмет. Перед тем, как забрать,
     /// он может проверить, возможно ли это. null, если больше элементов в хранилище нет
     /// </summary>
-    ICountableItem PeekNext();
+    IInventoryItem PeekNext();
 
     /// <summary>
     /// Возвращает очередной предмет в качестве результата и удаляет его из хранилища.
     /// null, если больше элементов в хранилище нет
     /// </summary>
-    ICountableItem RemoveLastPeekedItem();
+    IInventoryItem RemoveLastPeekedItem();
 }

@@ -4,7 +4,7 @@ using Mirror;
 using UnityEngine;
 
 /// <summary>
-/// Каждый персонаж уникален некоторой информацией: в первую очередь, именем
+/// Информация о личности персонажа
 /// </summary>
 public class CharacterInfo : NetworkBehaviour, IInventoryInfoProvider
 {
