@@ -42,7 +42,6 @@ using UnityEngine;
 //                 Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
 //             }
 
-//             // Todo:
 //             // if (!_wearSectionToPick.AddToAccordingSlot(itemData)) {
                 
 //             // }

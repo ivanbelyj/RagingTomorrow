@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public interface IInventory
 {
-    bool TryToAdd(IInventoryItem item);
+    bool TryToAdd(ItemData itemData, int count);
     void Remove(IInventoryItem item);
     float TotalWeight { get; }
 }

@@ -10,6 +10,7 @@ using UnityEngine;
 /// Данный идентификатор не зависит от конкретного типа инвентаря: в WearSection он определяется
 /// на основе слота, в GridSection - на основе позиции в сетке
 /// </summary>
+[Serializable]
 public struct ItemPlacementId
 {
     /// <summary>

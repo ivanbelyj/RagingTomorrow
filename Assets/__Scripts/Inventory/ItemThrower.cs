@@ -38,8 +38,8 @@ public class ItemThrower : NetworkBehaviour
         _sectionToPick.RemoveFromSection(gridItem);
 
         // Но каждый предмет из стака спавнится отдельно
-        for (int i = 0; i < gridItem.count; i++) {
-            ThrowAway(gridItem.itemData);
+        for (int i = 0; i < gridItem.Count; i++) {
+            ThrowAway(gridItem.ItemData);
         }
     }
 

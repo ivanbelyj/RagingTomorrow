@@ -15,6 +15,11 @@ public class ItemUIActions : MonoBehaviour, IPointerClickHandler
     private IInventory _otherInventory;
     private IInventoryItemProvider _itemDataProvider;
     private ItemUIActionType _doubleClickAction;
+
+    private void Awake() {
+        _itemDataProvider = GetComponent<IInventoryItemProvider>();
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.clickCount == 2) {
@@ -28,7 +33,7 @@ public class ItemUIActions : MonoBehaviour, IPointerClickHandler
 
     private void MoveToOtherInventory() {
         IInventoryItem item = _itemDataProvider.InventoryItem;
-        if (_otherInventory.TryToAdd(item)) {
+        if (_otherInventory.TryToAdd(item.ItemData, item.Count)) {
             _currentInventory.Remove(item); 
         }
         SwapInventories();

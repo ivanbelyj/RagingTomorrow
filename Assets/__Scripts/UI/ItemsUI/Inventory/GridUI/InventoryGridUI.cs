@@ -109,7 +109,6 @@ public class InventoryGridUI : MonoBehaviour
             case SyncList<GridSectionItem>.Operation.OP_REMOVEAT:
             {
                 // items.Remove(oldGridItem);
-                // Todo: Equals
                 
                 uint oldItemId = oldItem.PlacementId.LocalId;
                 InventorySlotItem slotItemToDestroy = _slotItems[oldItemId];
@@ -168,8 +167,8 @@ public class InventoryGridUI : MonoBehaviour
     }
     
     private InventorySlotItem CreateItem(GridSectionItem invItem) {
-        int col = invItem.inventoryX;
-        int row = invItem.inventoryY;
+        int col = invItem.InventoryX;
+        int row = invItem.InventoryY;
         // Debug.Log("Добавление элемента в сетку. Позиция: (" + col + ", " + row + ")");
 
         // Добавляем в сетку

@@ -27,6 +27,8 @@ public class DraggableItem : Draggable<DraggedItemData>
         // К методу Start local id уже должен быть инициализирован
         // Debug.Log($"Initialize draggable item: local id {_slotItem.ItemLocalId}; "
         //     + $"sectionNetId: {sectionNetId}; playerNetId: {playerNetId}");
+        Debug.Log("Инициализация DraggableItem. PlacementId: " + _slotItem.InventoryItem.PlacementId
+            + "; DraggingPlayerNetId: " + playerNetId);
         DraggedItemData data = new DraggedItemData() {
             PlacementId = _slotItem.InventoryItem.PlacementId,
             DraggingPlayerNetId = playerNetId,

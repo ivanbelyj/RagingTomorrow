@@ -37,16 +37,19 @@ public class InventorySlot : MonoBehaviour, IDropAcceptor<DraggedItemData>
         // Удаление элемента из его предыдущей секции инвентаря
         GridSection oldSection =
             GetGridSectionByNetId(draggable.DraggedData.PlacementId.InventoryNetId);
-        Debug.Log($"Found section by id. Size: {oldSection.Width}x{oldSection.Height}");
+        Debug.Log($"Found old section by id. Size: {oldSection.Width}x{oldSection.Height}. It's items: ");
+        foreach (var item in oldSection.Items) {
+            Debug.Log($"\t{item}");
+        }
         GridSectionItem oldGridItem = oldSection
             .Items.Find(x => x.PlacementId.LocalId == draggedData.PlacementId.LocalId);
-        Debug.Log($"Old item by local id: {oldGridItem.itemData.ItemStaticDataName}. ");
+        Debug.Log($"Old item by local id: {oldGridItem.ItemData}");
 
-        GridSectionItem newItem = new GridSectionItem(oldGridItem.PlacementId.InventoryNetId) {
-            inventoryX = _col - draggedData.MouseSlotsOffsetX,
-            inventoryY = _row - draggedData.MouseSlotsOffsetY,
-            count = oldGridItem.count,
-            itemData = oldGridItem.itemData
+        GridSectionItem newItem = new GridSectionItem(_gridSection.netId) {
+            InventoryX = _col - draggedData.MouseSlotsOffsetX,
+            InventoryY = _row - draggedData.MouseSlotsOffsetY,
+            Count = oldGridItem.Count,
+            ItemData = oldGridItem.ItemData
         };
 
         bool isAdded;

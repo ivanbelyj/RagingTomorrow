@@ -224,10 +224,10 @@ public class Player : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.N)) {
             var dict = new Dictionary<string, int>();
             foreach (var item in _inventory.MainSection.Items) {
-                if (dict.ContainsKey(item.itemData.ItemStaticDataName))
-                    dict[item.itemData.ItemStaticDataName] += item.count;
+                if (dict.ContainsKey(item.ItemData.ItemStaticDataName))
+                    dict[item.ItemData.ItemStaticDataName] += item.Count;
                 else
-                    dict.Add(item.itemData.ItemStaticDataName, item.count);
+                    dict.Add(item.ItemData.ItemStaticDataName, item.Count);
             }
 
             Debug.Log("Инвентарь");

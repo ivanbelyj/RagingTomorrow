@@ -18,7 +18,6 @@ public class ItemInteractorStrategy : NetworkBehaviour, IInteractorStrategy
     // [SerializeField]
     // private GridSection _sectionToPick;
     
-    // Todo: character inventory
     [SerializeField]
     private CharactersInventory _characterInventory;
 
@@ -37,14 +36,9 @@ public class ItemInteractorStrategy : NetworkBehaviour, IInteractorStrategy
         Item item = col.GetComponent<Item>();
         ItemData itemData = item.ItemData;
 
-        if (!_characterInventory.MainSection.TryToAddToSection(itemData)) {
+        if (!_characterInventory.TryToAdd(itemData, 1)) {
             Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
         }
-
-        // Todo:
-        // if (!_wearSectionToPick.AddToAccordingSlot(itemData)) {
-            
-        // }
 
         if (isServer) {
             NetworkServer.Destroy(item.gameObject);

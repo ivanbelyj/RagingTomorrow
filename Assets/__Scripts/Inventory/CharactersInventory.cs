@@ -28,10 +28,10 @@ public class CharactersInventory : MonoBehaviour, IInventory
 
     public float TotalWeight => MainSection.GetTotalWeight() + WearSection.GetTotalWeight();
 
-    public bool TryToAdd(IInventoryItem item)
+    public bool TryToAdd(ItemData itemData, int count)
     {
         // Todo: Wear section
-        return MainSection.TryToAddToSection(item.ItemData, item.Count);
+        return MainSection.TryToAddToSection(itemData, count);
     }
 
     public void Remove(IInventoryItem item)

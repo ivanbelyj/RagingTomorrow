@@ -62,7 +62,7 @@ public class GridSection : NetworkBehaviour, IItemsProvider
     }
 
     public float GetTotalWeight()
-        => _items.Sum(item => GetItemData(item.itemData.ItemStaticDataName).Mass);
+        => _items.Sum((Func<GridSectionItem, float>)(item => GetItemData((string)item.ItemData.ItemStaticDataName).Mass));
 
     #region Sync
     
@@ -136,12 +136,12 @@ public class GridSection : NetworkBehaviour, IItemsProvider
         for (int i = 0; i < _items.Count; i++) {
             // O(log(n))
             var itemStaticData = _itemStaticDataManager
-                .GetStaticDataByName(_items[i].itemData.ItemStaticDataName);
+                .GetStaticDataByName(_items[i].ItemData.ItemStaticDataName);
             fillingRects[i] = new FillingMatrix.FillingRect() {
                 height = itemStaticData.Height,
                 width = itemStaticData.Width,
-                x = _items[i].inventoryX,
-                y = _items[i].inventoryY,
+                x = _items[i].InventoryX,
+                y = _items[i].InventoryY,
             };
         }
 
@@ -169,11 +169,11 @@ public class GridSection : NetworkBehaviour, IItemsProvider
         unfilled = new List<GridSectionItem>();
         foreach (GridSectionItem gridItem in _items) {
             // Стаковать можно только одинаковое, чтобы не потерять различия
-            bool areSameItems = gridItem.itemData.Equals(itemData);
+            bool areSameItems = gridItem.ItemData.Equals(itemData);
 
             // Сколько предметов может принять стак
             // Некоторые предметы, например, не могут стаковаться, либо полностью заполнены
-            int stackCanAccept = maxStackSize - gridItem.count;
+            int stackCanAccept = maxStackSize - gridItem.Count;
             bool itemStackLimitNotReached = stackCanAccept > 0;
 
             if (areSameItems && itemStackLimitNotReached) {
@@ -254,13 +254,13 @@ public class GridSection : NetworkBehaviour, IItemsProvider
     #region Add And Remove
     private FillingMatrix.FillingRect GetRectForItem(GridSectionItem gridItem) {
         ItemStaticData staticData = _itemStaticDataManager
-            .GetStaticDataByName(gridItem.itemData.ItemStaticDataName);
+            .GetStaticDataByName(gridItem.ItemData.ItemStaticDataName);
 
         FillingMatrix.FillingRect itemRect = new FillingMatrix.FillingRect() {
             width = staticData.Width,
             height = staticData.Height,
-            x = gridItem.inventoryX,
-            y = gridItem.inventoryY
+            x = gridItem.InventoryX,
+            y = gridItem.InventoryY
         };
         return itemRect;
     }
@@ -343,7 +343,7 @@ public class GridSection : NetworkBehaviour, IItemsProvider
             int canAddToStack = maxStackSize - unfilledToFill.Count;
             // Сколько можно фактически добавить (учитывая, сколько еще есть предметов)?
             int addToStack = countToAdd < canAddToStack ? countToAdd : canAddToStack;
-            unfilledToFill.count += addToStack;
+            unfilledToFill.Count += addToStack;
             countToAdd -= addToStack;
 
             if (isServer) {
@@ -370,10 +370,10 @@ public class GridSection : NetworkBehaviour, IItemsProvider
             // Добавляется либо полный новый стак, либо та часть, которая осталась
             int countInNewStack = countToAdd >= maxStackSize ? maxStackSize : countToAdd;
             GridSectionItem gridItem = new GridSectionItem(netId) {
-                itemData = itemData,
-                count = countInNewStack,
-                inventoryX = freePlace.x,
-                inventoryY = freePlace.y
+                ItemData = itemData,
+                Count = countInNewStack,
+                InventoryX = freePlace.x,
+                InventoryY = freePlace.y
             };
 
             if (isServer) {
