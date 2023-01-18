@@ -52,14 +52,13 @@ public class ItemsUIController : MonoBehaviour
         // _playersInventoryUI = GameObject.FindGameObjectWithTag("PlayersInventory")
         //     .GetComponent<InventoryUI>();
         
-        _playersInventoryUI.Set(_player.GetInventoryInfoProvider(),
-            _player.GetMainInventorySection());
+        _playersInventoryUI.SetAsPlayersInventory(_player.Inventory, _player.GetInventoryInfoProvider());
         _takeAllButton.SetRecipient(player.Inventory);
     }
 
-    private void SetOtherInventory(IInventoryInfoProvider inventoryInfo, GridSection inventory) {
-        _otherInventoryUI.Set(inventoryInfo, inventory);
-        _takeAllButton.SetItemsProvider(inventory);
+    private void SetOtherInventory(IInventoryInfoProvider inventoryInfo, IGridSectionInventory inventory) {
+        _otherInventoryUI.SetAsOtherInventory(_player.Inventory, inventory, inventoryInfo);
+        _takeAllButton.SetSupplier(inventory);
     }
 
     public void ToggleUI() {
@@ -114,7 +113,7 @@ public class ItemsUIController : MonoBehaviour
     /// тождественно его установке (в отличие от инвентаря игрока, который постоянен).
     /// </summary>
     public void ShowOtherInventory(IInventoryInfoProvider inventoryInfo,
-        GridSection inventory) {
+        IGridSectionInventory inventory) {
         SetOtherInventory(inventoryInfo, inventory);
         Show(ItemsUI.PlayerLootsInventory);
     }

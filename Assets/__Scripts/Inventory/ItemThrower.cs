@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System.Linq;
 
 [RequireComponent(typeof(Collider))]
 public class ItemThrower : NetworkBehaviour
@@ -25,17 +26,20 @@ public class ItemThrower : NetworkBehaviour
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
     }
 
-    public void ThrowAwayFromWearSection(WearSection wearSection, WearSection.WearSlot slot) {
+    public void ThrowAwayFirstIfExists() {
+        if (_sectionToPick.Items.Count == 0)
+            return;
+        GridSectionItem first = _sectionToPick.Items.Values.First();
+        ThrowAwayFromGridSection(first);
+    }
+
+    private void ThrowAwayFromWearSection(WearSection wearSection, WearSection.WearSlot slot) {
         // wearSection.RemoveFromSection(slot);
         ThrowAway(wearSection.Slots[slot]);
     }
-    public void ThrowAwayFromGridSection(GridSectionItem gridItem) {
-        if (_sectionToPick.Items.Find(item => item.Equals(gridItem)) is null) {
-            Debug.Log("Не удалось выбросить предмет, т.к. его нет в инвентаре");
-            return;
-        }
+    private void ThrowAwayFromGridSection(GridSectionItem gridItem) {
         // За раз удаляется весь стак
-        _sectionToPick.RemoveFromSection(gridItem);
+        _sectionToPick.RemoveFromSection(gridItem.PlacementId.LocalId);
 
         // Но каждый предмет из стака спавнится отдельно
         for (int i = 0; i < gridItem.Count; i++) {

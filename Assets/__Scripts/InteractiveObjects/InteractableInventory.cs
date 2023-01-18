@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +8,7 @@ using UnityEngine;
 /// складывать предметы
 /// </summary>
 [RequireComponent(typeof(GridSection))]
-public class InteractableInventory : MonoBehaviour, IInventoryInfoProvider
+public class InteractableInventory : MonoBehaviour, IInventoryInfoProvider, IGridSectionInventory
 {
     [SerializeField]
     private InventoryInfo _inventoryInfo;
@@ -15,13 +16,37 @@ public class InteractableInventory : MonoBehaviour, IInventoryInfoProvider
         get => _inventoryInfo;
     }
 
-    public GridSection Inventory { get; private set; }
+    public GridSection GridSection { get; private set; }
+
+    public float TotalWeight => GridSection.TotalWeight;
+
+    private void Awake() {
+        GridSection = GetComponent<GridSection>();
+    }
+
+    public bool Remove(ItemPlacementId placementId)
+    {
+        if (placementId.InventorySectionNetId == GridSection.netId) {
+            return GridSection.RemoveFromSection(placementId.LocalId);
+        } else {
+            Debug.Log("Предмет нельзя удалить из инвентаря, т.к. он находится в секции, " +
+                "не относящейся к нему");
+            return false;
+        }
+    }
+
+    public bool TryToAdd(ItemData itemData, int count)
+    {
+        return GridSection.TryToAddToSection(itemData, count);
+    }
+
+    public bool CanAdd(ItemData itemData, int count)
+    {
+        return GridSection.CanAddToSection(itemData, count);
+    }
 
 #pragma warning disable CS0067
     public event IInventoryInfoProvider.InfoChangedEventHandler InventoryInfoChanged;
-#pragma warning restore CS0067
 
-    private void Awake() {
-        Inventory = GetComponent<GridSection>();
-    }
+#pragma warning restore CS0067
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 
-public class GridSection : NetworkBehaviour, IItemsProvider
+public class GridSection : NetworkBehaviour
 {
     // Для удобства в инспекторе
     [SerializeField]
@@ -13,10 +13,14 @@ public class GridSection : NetworkBehaviour, IItemsProvider
 
     private readonly SyncList<GridSectionItem> _syncItems = new SyncList<GridSectionItem>();
     
-    private List<GridSectionItem> _items;
-    public List<GridSectionItem> Items => _items;
+    private Dictionary<uint, GridSectionItem> _items;
 
-    protected ItemStaticDataManager _itemStaticDataManager;
+    /// <summary>
+    /// Элементы секции организованы в словарь, ключ - локальный id предмета в инвентаре
+    /// </summary>
+    public Dictionary<uint, GridSectionItem> Items => _items;
+
+    private ItemStaticDataManager _itemStaticDataManager;
 
     public event SyncList<GridSectionItem>.SyncListChanged InventoryChanged {
         add {
@@ -28,24 +32,17 @@ public class GridSection : NetworkBehaviour, IItemsProvider
     }
 
     [SerializeField]
-    private int _initialWidth;
+    private int _width;
     [SerializeField]
-    private int _initialHeight;
-    public int Width { get; private set; }
-    public int Height { get; private set; }
-
-    public ItemStaticData GetItemData(string itemDataName)
-    {
-        return _itemStaticDataManager.NamesAndData[itemDataName];
-    }
+    private int _height;
+    public int Width { get => _width; private set => _width = value; }
+    public int Height { get => _height; private set => _height = value; }
 
     private void Awake() {
         _syncItems.Callback += SyncItems;
-        Width = _initialWidth;
-        Height = _initialHeight;
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
 
-        _items = new List<GridSectionItem>();
+        _items = new Dictionary<uint, GridSectionItem>();
     }
 
     public override void OnStartClient()
@@ -55,31 +52,35 @@ public class GridSection : NetworkBehaviour, IItemsProvider
         // При старте в _syncItems уже могут быть элементы
         for (int i = 0; i < _syncItems.Count; i++)
         {
-            _items.Add(_syncItems[i]);
+            _items.Add(_syncItems[i].PlacementId.LocalId, _syncItems[i]);
         }
 
         // Debug.Log("Grid section items are initialized");
     }
 
-    public float GetTotalWeight()
-        => _items.Sum((Func<GridSectionItem, float>)(item => GetItemData((string)item.ItemData.ItemStaticDataName).Mass));
+    public float TotalWeight
+        => _items.Values.Sum(item => _itemStaticDataManager
+            .GetStaticDataByName(((string)item.ItemData.ItemStaticDataName)).Mass * item.Count);
 
     #region Sync
     
     [Server]
     private void AddItem(GridSectionItem item) {
+        Debug.Log("AddItem. " + item);
         _syncItems.Add(item);
     }
 
     [Server]
     private void RemoveItem(GridSectionItem item) {
         // Debug.Log($"Remove grid section item on server: " + item);
-        _syncItems.Remove(item);
+        if (!_syncItems.Remove(item)) {
+            Debug.LogError("Предмет не был удален из инвентаря");
+        }
     }
 
     [Command(requiresAuthority = false)]
     private void CmdAddItem(GridSectionItem item) {
-        // Debug.Log("From CmdAddItem: item is " + item);
+        Debug.Log("CmdAddItem. " + item);
         AddItem(item);
     }
 
@@ -93,12 +94,12 @@ public class GridSection : NetworkBehaviour, IItemsProvider
         switch (op) {
             case SyncList<GridSectionItem>.Operation.OP_ADD:
             {
-                _items.Add(newItem);
+                _items.Add(newItem.PlacementId.LocalId, newItem);
                 break;
             }
             case SyncList<GridSectionItem>.Operation.OP_REMOVEAT:
             {
-                _items.Remove(oldItem);
+                _items.Remove(oldItem.PlacementId.LocalId);
                 break;
             }
         }
@@ -133,20 +134,22 @@ public class GridSection : NetworkBehaviour, IItemsProvider
     private FillingMatrix GetFillingMatrix() {
         // O(n * log(n))
         var fillingRects = new FillingMatrix.FillingRect[_items.Count];
-        for (int i = 0; i < _items.Count; i++) {
+        GridSectionItem[] itemsArr = _items.Values.ToArray();
+        for (int i = 0; i < itemsArr.Length; i++) {
+            GridSectionItem currItem = itemsArr[i];
             // O(log(n))
             var itemStaticData = _itemStaticDataManager
-                .GetStaticDataByName(_items[i].ItemData.ItemStaticDataName);
+                .GetStaticDataByName(itemsArr[i].ItemData.ItemStaticDataName);
             fillingRects[i] = new FillingMatrix.FillingRect() {
                 height = itemStaticData.Height,
                 width = itemStaticData.Width,
-                x = _items[i].InventoryX,
-                y = _items[i].InventoryY,
+                x = itemsArr[i].InventoryX,
+                y = itemsArr[i].InventoryY,
             };
         }
 
         // O(n)
-        return FillingMatrix.Create(_initialHeight, _initialWidth, fillingRects);
+        return FillingMatrix.Create(Height, Width, fillingRects);
     }
     #endregion
 
@@ -167,7 +170,7 @@ public class GridSection : NetworkBehaviour, IItemsProvider
         // Количество, для которого ищутся незаполненные стаки
         int countToAdd = count;
         unfilled = new List<GridSectionItem>();
-        foreach (GridSectionItem gridItem in _items) {
+        foreach (GridSectionItem gridItem in _items.Values) {
             // Стаковать можно только одинаковое, чтобы не потерять различия
             bool areSameItems = gridItem.ItemData.Equals(itemData);
 
@@ -301,6 +304,7 @@ public class GridSection : NetworkBehaviour, IItemsProvider
     /// либо ни один
     /// </summary>
     public bool TryToAddToSection(ItemData itemData, int count = 1) {
+        Debug.Log("TryToAddToSection. " + itemData + " count: " + 1);
         int canNotAddToStacks = FindUnfilledItemStacksForCount(itemData, count, out var unfilled);
         if (canNotAddToStacks <= 0) {
             TryToAddToUnfilledItemStacks(itemData, count);
@@ -332,7 +336,7 @@ public class GridSection : NetworkBehaviour, IItemsProvider
         
         // Удаляем все незаполненные стаки, чтобы добавить их в уже заполненном виде
         foreach (GridSectionItem unfilledStack in unfilled) {
-            RemoveFromSection(unfilledStack);
+            RemoveFromSection(unfilledStack.PlacementId.LocalId);
         }
 
         int countToAdd = count;
@@ -369,11 +373,12 @@ public class GridSection : NetworkBehaviour, IItemsProvider
         foreach (Vector2Int freePlace in freePlaces) {
             // Добавляется либо полный новый стак, либо та часть, которая осталась
             int countInNewStack = countToAdd >= maxStackSize ? maxStackSize : countToAdd;
-            GridSectionItem gridItem = new GridSectionItem(netId) {
+            GridSectionItem gridItem = new GridSectionItem() {
                 ItemData = itemData,
                 Count = countInNewStack,
                 InventoryX = freePlace.x,
-                InventoryY = freePlace.y
+                InventoryY = freePlace.y,
+                InventoryNetId = netId
             };
 
             if (isServer) {
@@ -387,27 +392,14 @@ public class GridSection : NetworkBehaviour, IItemsProvider
         return true;
     }
 
-    // private bool AddToSection(GridSectionItem gridItem) {
-    //     bool isPlaceFree = FindFreePos(gridItem.itemData, out int x, out int y);;
-    //     if (!isPlaceFree)
-    //         return false;
-        
-    //     if (isServer) {
-    //         AddItem(gridItem);
-    //     } else {
-    //         CmdAddItem(gridItem);
-    //     }
-
-    //     return true;
-    // }
-
-    /// <summary>
-    /// Удаляет стак предметов из секции
-    /// </summary>
-    public bool RemoveFromSection(GridSectionItem invItem) {
+    public bool RemoveFromSection(uint localItemId) {
         // Debug.Log("Remove from section - has authority: " + this.hasAuthority);
-        bool hasItem = Items.IndexOf(invItem) != -1;
-        if (!hasItem)
+        // bool hasItem = _items.IndexOf(invItem) != -1;
+        if (!_items.ContainsKey(localItemId))
+            return false;
+        
+        GridSectionItem invItem = _items[localItemId];
+        if (invItem == null)
             return false;
         
         if (isServer) {
@@ -428,30 +420,19 @@ public class GridSection : NetworkBehaviour, IItemsProvider
             Uses = 8
         };
         bool areFirstAidKitsAdded = TryToAddToSection(newItem, 31);
-        ItemData armor = new ItemData() {
-            ItemStaticDataName = "TestArmor"
-        };
-        return areFirstAidKitsAdded && TryToAddToSection(armor, 3);
-    }
-    #endregion
-
-    #region IItemsProvider
-    public IInventoryItem PeekNext()
-    {
-        if (Items.Count == 0)
-            return null;
-        else
-            return Items[Items.Count - 1];
+        PrintItems();
+        return areFirstAidKitsAdded;
+        // ItemData armor = new ItemData() {
+        //     ItemStaticDataName = "TestArmor"
+        // };
+        // return true && TryToAddToSection(armor, 3);
     }
 
-    public IInventoryItem RemoveLastPeekedItem()
-    {
-        IInventoryItem itemData = PeekNext();
-        if (itemData == null)
-            return null;
-        
-        RemoveFromSection((GridSectionItem)itemData);
-        return itemData;
+    private void PrintItems() {
+        Debug.Log("Содержимое инвентаря");
+        foreach (var pair in Items) {
+            Debug.Log($"\t{pair.Key}: {pair.Value}");
+        }
     }
     #endregion
 }

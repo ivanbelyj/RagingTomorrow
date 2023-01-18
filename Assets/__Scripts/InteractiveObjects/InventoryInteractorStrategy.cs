@@ -21,8 +21,8 @@ public class InventoryInteractorStrategy : MonoBehaviour, IInteractorStrategy
 
     public void InteractObject(Collider col)
     {
-        var interactInv = col.GetComponent<InteractableInventory>();
-        _itemsUIController.ShowOtherInventory(interactInv, interactInv.Inventory);
+        InteractableInventory interactInv = col.GetComponent<InteractableInventory>();
+        _itemsUIController.ShowOtherInventory(interactInv, interactInv);
 
         if (!_itemsUIController.IsUIOpened) {
             _itemsUIController.OpenUI();

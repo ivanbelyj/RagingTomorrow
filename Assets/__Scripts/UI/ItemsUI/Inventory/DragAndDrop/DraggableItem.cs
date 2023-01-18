@@ -1,36 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(InventorySlotItem))]
 /// <summary>
 /// Перетаскиваемая иконка предмета. В отличие от базового класса, не требует внешнего вызова
 /// метода инициализации, т.к. данный компонент вызывает его с необходимыми данными сам
 /// </summary>
+[RequireComponent(typeof(InventorySlotItem))]
 public class DraggableItem : Draggable<DraggedItemData>
 {
     public GameObject test;
 
-    private InventorySlotItem _slotItem;
+    private InventorySlotItem _itemProvider;
 
     override protected void Awake() {
         base.Awake();
-        _slotItem = GetComponent<InventorySlotItem>();
+        _itemProvider = GetComponent<InventorySlotItem>();
     }
 
     protected override void Start()
     {
         base.Start();
-        uint playerNetId = GetLocalPlayersNetId();
+        uint playerNetId = NetworkClient.localPlayer.netId;
         // К методу Start local id уже должен быть инициализирован
         // Debug.Log($"Initialize draggable item: local id {_slotItem.ItemLocalId}; "
         //     + $"sectionNetId: {sectionNetId}; playerNetId: {playerNetId}");
-        Debug.Log("Инициализация DraggableItem. PlacementId: " + _slotItem.InventoryItem.PlacementId
+        Debug.Log("Инициализация DraggableItem. PlacementId: " + _itemProvider.InventoryItem.PlacementId
             + "; DraggingPlayerNetId: " + playerNetId);
         DraggedItemData data = new DraggedItemData() {
-            PlacementId = _slotItem.InventoryItem.PlacementId,
+            PlacementId = _itemProvider.InventoryItem.PlacementId,
             DraggingPlayerNetId = playerNetId,
         };
 
@@ -38,10 +39,6 @@ public class DraggableItem : Draggable<DraggedItemData>
         // все данные известны заранее.
         // ItemsUI ищется в том числе среди неактивных GameObject, т.к. интерфейс может быть скрыт
         this.Initialize(data, (RectTransform)(FindObjectOfType<ItemsUIController>(true).transform));
-    }
-
-    private uint GetLocalPlayersNetId() {
-        return 0;
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
@@ -91,7 +88,7 @@ public class DraggableItem : Draggable<DraggedItemData>
         // SetDebugPoint(transform, offset);
 
         // Debug.Log("Отступ от left top угла предмета: " + offset);
-        Vector2Int inSlots = _slotItem.ToSlots(offset);
+        Vector2Int inSlots = _itemProvider.ToSlots(offset);
         inSlots.y *= -1;
         return inSlots;
     }

@@ -85,7 +85,7 @@ public class WearSection : NetworkBehaviour
         _syncSlots.Callback += SyncItems;
     }
 
-    public float GetTotalWeight()
+    public float TotalWeight
         => _slots.Sum(pair => GetItemData(pair.Value.ItemStaticDataName).Mass);
 
     #region Sync

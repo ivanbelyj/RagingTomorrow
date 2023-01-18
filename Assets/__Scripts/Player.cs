@@ -203,10 +203,6 @@ public class Player : NetworkBehaviour
         return _characterInfo;
     }
 
-    public GridSection GetMainInventorySection() {
-        return _inventory.MainSection;
-    }
-
     private void ReadInput() {
         // if (Input.GetKeyDown (KeyCode.R)) entity.lifecycle.Damage(50);
         // if (Input.GetKeyDown (KeyCode.H)) entity.lifecycle.Heal(50);
@@ -223,7 +219,7 @@ public class Player : NetworkBehaviour
         // Информация об инвентаре
         if (Input.GetKeyDown(KeyCode.N)) {
             var dict = new Dictionary<string, int>();
-            foreach (var item in _inventory.MainSection.Items) {
+            foreach (var item in _inventory.MainSection.Items.Values) {
                 if (dict.ContainsKey(item.ItemData.ItemStaticDataName))
                     dict[item.ItemData.ItemStaticDataName] += item.Count;
                 else
@@ -251,13 +247,7 @@ public class Player : NetworkBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.G)) {
-            if (_inventory.MainSection.Items.Count != 0) {
-                var item = _inventory.MainSection.Items[0];
-                // Debug.Log($"Inv. count: {_inventory.MainSection.Items.Count}. Элемент "
-                //     + item.itemData.itemStaticDataName
-                //     + " будет выброшен");
-                _itemThrower.ThrowAwayFromGridSection(item);
-            }
+            _itemThrower.ThrowAwayFirstIfExists();
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {

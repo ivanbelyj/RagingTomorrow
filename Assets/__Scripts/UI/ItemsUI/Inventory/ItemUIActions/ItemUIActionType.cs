@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public enum ItemUIActionType
 {
+    None,
     MoveToOtherInventory,  // Например, когда открыт другой инвентарь, double click осуществляет перенос
     MoveToWearSection,  // Предмет отправляется на тело игрока
     // Также может быть использование предмета

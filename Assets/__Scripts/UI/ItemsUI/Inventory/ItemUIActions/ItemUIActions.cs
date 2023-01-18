@@ -27,37 +27,53 @@ public class ItemUIActions : MonoBehaviour, IPointerClickHandler
                 case ItemUIActionType.MoveToOtherInventory:
                     MoveToOtherInventory();
                     break;
+                case ItemUIActionType.MoveToWearSection:
+                    Debug.Log("(Не реализовано) Добавление предмета в WearSection");
+                    break;
+                case ItemUIActionType.None:
+                    Debug.Log("По нажатию на иконку предмета ничего не происходит");
+                    break;
             }
         }
     }
 
     private void MoveToOtherInventory() {
         IInventoryItem item = _itemDataProvider.InventoryItem;
+        Debug.Log($"{item.ItemData} отправляется в другой инвентарь");
         if (_otherInventory.TryToAdd(item.ItemData, item.Count)) {
-            _currentInventory.Remove(item); 
+            _currentInventory.Remove(item.PlacementId); 
         }
-        SwapInventories();
-    }
-
-    private void SwapInventories() {
-        IInventory tmp = _otherInventory;
-        _otherInventory = _currentInventory;
-        _currentInventory = tmp;
     }
 
     private void SetWearSection(WearSection wearSection) {
         _wearSection = wearSection;
     }
 
+    /// <summary>
+    /// Устанавливает инвентарь, в котором предмет расположен изначально
+    /// </summary>
     public void SetCurrentInventory(IInventory inv) {
         _currentInventory = inv;
     }
 
-    public void SetOtherInventory(IInventory inv) {
-        _otherInventory = inv;
+    /// <summary>
+    /// Заставляет компонент работать  в режиме одного открытого инвентаря с особой интерпретацией
+    /// действий пользователя в UI: по двойному нажатию не происходит ничего
+    /// </summary>
+    public void SwitchToOneInventoryOpenedActions() {
+        _otherInventory = null;
+
+        // Todo: действие - переместить в WearSection
+        _doubleClickAction = ItemUIActionType.MoveToWearSection;
     }
 
-    public void SetActionByDoubleClick(ItemUIActionType actionType) {
-        _doubleClickAction = actionType;
+    /// <summary>
+    /// Заставляет компонент работать в режиме двух открытых инвентарей. Действия пользователя в UI
+    /// интерпретируются особым образом: по двойному нажатию предмет будет перемещаться
+    /// в другой инвентарь.
+    /// </summary>
+    public void SwitchToTwoInventoriesOpenedActions(IInventory second) {
+        _otherInventory = second;
+        _doubleClickAction = ItemUIActionType.MoveToOtherInventory;
     }
 }

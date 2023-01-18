@@ -25,31 +25,27 @@ public class InventorySlot : MonoBehaviour, IDropAcceptor<DraggedItemData>
         _col = col;
     }
 
-    private GridSection GetGridSectionByNetId(uint netId) {
-        return NetworkClient.spawned[netId].GetComponent<GridSection>();
-    }
-
     public void AcceptDrop(Draggable<DraggedItemData> draggable, DraggedItemData draggedData)
     {
         Debug.Log($"Accepted: {draggedData.DraggingPlayerNetId} " +
             $" {draggedData.PlacementId}");
         
         // Удаление элемента из его предыдущей секции инвентаря
-        GridSection oldSection =
-            GetGridSectionByNetId(draggable.DraggedData.PlacementId.InventoryNetId);
+        uint netId = draggable.DraggedData.PlacementId.InventorySectionNetId;
+        GridSection oldSection = NetworkClient.spawned[netId].GetComponent<GridSection>();
         Debug.Log($"Found old section by id. Size: {oldSection.Width}x{oldSection.Height}. It's items: ");
         foreach (var item in oldSection.Items) {
             Debug.Log($"\t{item}");
         }
-        GridSectionItem oldGridItem = oldSection
-            .Items.Find(x => x.PlacementId.LocalId == draggedData.PlacementId.LocalId);
+        GridSectionItem oldGridItem = oldSection.Items[draggedData.PlacementId.LocalId];
         Debug.Log($"Old item by local id: {oldGridItem.ItemData}");
 
-        GridSectionItem newItem = new GridSectionItem(_gridSection.netId) {
+        GridSectionItem newItem = new GridSectionItem() {
             InventoryX = _col - draggedData.MouseSlotsOffsetX,
             InventoryY = _row - draggedData.MouseSlotsOffsetY,
             Count = oldGridItem.Count,
-            ItemData = oldGridItem.ItemData
+            ItemData = oldGridItem.ItemData,
+            InventoryNetId = _gridSection.netId
         };
 
         bool isAdded;
@@ -64,7 +60,7 @@ public class InventorySlot : MonoBehaviour, IDropAcceptor<DraggedItemData>
             isAdded = _gridSection.TryToAddGridSectionItem(newItem,
                 oldSection.netId == _gridSection.netId ? oldGridItem : null);
             if (isAdded) {
-                bool isRemoved = oldSection.RemoveFromSection(oldGridItem);
+                bool isRemoved = oldSection.RemoveFromSection(oldGridItem.PlacementId.LocalId);
                 if (isRemoved) {
                     Debug.Log("Item is removed from old section");
                     Destroy(draggable);

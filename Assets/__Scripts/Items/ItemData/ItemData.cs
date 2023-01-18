@@ -11,6 +11,7 @@ using UnityEngine;
 [Serializable]
 public class ItemData
 {
+    // : устанавливать ItemStaticData при сериализации / десериализации
     [SerializeField]
     private string _itemStaticDataName;
     public string ItemStaticDataName {

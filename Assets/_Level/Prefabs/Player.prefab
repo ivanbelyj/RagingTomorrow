@@ -525,8 +525,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _sectionName: main
-  _initialWidth: 7
-  _initialHeight: 13
+  _width: 7
+  _height: 13
 --- !u!114 &8271884393692352404
 MonoBehaviour:
   m_ObjectHideFlags: 0

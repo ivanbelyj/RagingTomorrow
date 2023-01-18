@@ -9,12 +9,6 @@ using Mirror;
 /// </summary>
 public class InventoryGridUI : MonoBehaviour
 {
-    /// <summary>
-    /// Расстояние между слотами в сетке по вертикали и горизонтали
-    /// </summary>
-    [SerializeField]
-    private float gridSpacing = 0;
-
     [SerializeField]
     private RectTransform _gridParent;
 
@@ -26,20 +20,18 @@ public class InventoryGridUI : MonoBehaviour
 
     // private InventorySlot[,] _slots;
     private float _slotSize;
-    // private float _slotHeight;
 
     private ItemStaticDataManager _itemStaticDataManager;
     private GridSection _gridSection;
-    // private string _inventorySectionName;
-    // private InventorySection _invSection;
 
     private List<InventorySlot> _slots;
+    private SlotItemCreator _slotItemCreator;
 
     /// <summary>
     /// Иконки отдельных предметов инвентаря. В качестве ключа используется id,
-    /// получаемый на основе положения предмета в инвентаре, оно уникально.
+    /// получаемый на основе положения предмета в инвентаре, оно уникально в пределах инвентаря.
     /// Использование словаря позволяет быстрее искать удаляемую иконку при удалении предмета
-    /// в инвентаре, за O(log(n))
+    /// в инвентаре, за O(1)
     /// </summary>
     private Dictionary<uint, InventorySlotItem> _slotItems;
 
@@ -58,11 +50,30 @@ public class InventoryGridUI : MonoBehaviour
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
     }
 
+    // public void SetAsPlayersInventoryGrid(IGridSectionInventory inventory) {
+    //     SetInventorySection(inventory.GridSection);
+    //     SetInventoriesAndCreateItems(inventory, null);
+    // }
+
+    // public void SetAsSecondInventoryGrid(IGridSectionInventory inventory,
+    //     IGridSectionInventory secondInventory) {
+    //     SetInventorySection(secondInventory.GridSection);
+    //     SetInventoriesAndCreateItems(secondInventory, inventory);
+    // }
+
+    public void Set(GridSection gridSection, SlotItemCreator slotItemCreator) {
+        _slotItemCreator = slotItemCreator;
+        SetInventorySection(gridSection);
+        foreach (GridSectionItem invItem in _gridSection.Items.Values) {
+            CreateSlotItem(invItem);
+        }
+    }
+
     /// <summary>
     /// Для UI устанавливается новый инвентарь. Например, игрок открывает ящик, и для UI инвентаря
     /// устанавливается инвентарь ящика
     /// </summary>
-    public void SetInventorySection(GridSection gridSection) {
+    private void SetInventorySection(GridSection gridSection) {
         // Сбрасываем все, что связано со старой сеткой
         GridSection oldInvGrid = _gridSection;
         _gridSection = gridSection;
@@ -93,8 +104,6 @@ public class InventoryGridUI : MonoBehaviour
         }
         _slotItems.Clear();
 
-        CreateItems();
-
         _gridSection.InventoryChanged += OnInventoryChanged;
     }
 
@@ -103,22 +112,13 @@ public class InventoryGridUI : MonoBehaviour
         switch (op) {
             case SyncList<GridSectionItem>.Operation.OP_ADD:
             {
-                CreateItem(newItem);
+                CreateSlotItem(newItem);
                 break;
             }
             case SyncList<GridSectionItem>.Operation.OP_REMOVEAT:
             {
-                // items.Remove(oldGridItem);
-                
                 uint oldItemId = oldItem.PlacementId.LocalId;
                 InventorySlotItem slotItemToDestroy = _slotItems[oldItemId];
-                    // _slotItems.Find(x => x.GridSectionItem.inventoryX == oldItem.inventoryX
-                    // && x.GridSectionItem.inventoryY == oldItem.inventoryY);
-                
-                // Debug.Log("_slotItems.Count: " + _slotItems.Count);
-                // Debug.Log("slotItemToRemove: " + slotItemToDestroy
-                //     + $"; name: {slotItemToDestroy.GridSectionItem.itemData.itemStaticDataName}");
-                // Debug.Log("Удален ли slotItem? " + _slotItems.Remove(slotItemToDestroy));
 
                 _slotItems.Remove(oldItemId);
                 Destroy(slotItemToDestroy.gameObject);
@@ -127,12 +127,18 @@ public class InventoryGridUI : MonoBehaviour
         }
     }
 
+    private void CreateSlotItem(GridSectionItem invItem) {
+        InventorySlotItem slotItem = _slotItemCreator.CreateItem(invItem, _slotItemPrefab,
+            _gridParent, _slotSize);
+        _slotItems.Add(invItem.PlacementId.LocalId, slotItem);
+    }
+
     private void CreateSlots() {
         int rows = _gridSection.Height;
         int cols = _gridSection.Width;
 
-        float gridHeight = rows * _slotSize + gridSpacing * rows;
-        float gridWidth = cols * _slotSize +  + gridSpacing * cols;
+        float gridHeight = rows * _slotSize;
+        float gridWidth = cols * _slotSize;
         _gridParent.sizeDelta = new Vector2(gridWidth, gridHeight);
 
         // _slots = new InventorySlot[rows, cols];
@@ -143,19 +149,13 @@ public class InventoryGridUI : MonoBehaviour
         }
     }
 
-    private void CreateItems() {
-        foreach (GridSectionItem invItem in _gridSection.Items) {
-            CreateItem(invItem);
-        }
-    }
-
     private InventorySlot CreateSlot(int row, int col) {
         // Добавляем в сетку
         GameObject slotGO = Instantiate(_slotPrefab);
         slotGO.transform.SetParent(_gridParent.transform);
         slotGO.transform.localScale = Vector3.one;
+        slotGO.transform.localPosition = new Vector3(col * _slotSize, -row * _slotSize);
 
-        SetPositionInGrid(slotGO, row, col);
         InventorySlot invSlot = slotGO.GetComponent<InventorySlot>();
         invSlot.Initialize(_gridSection, row, col);
         _slots.Add(invSlot);
@@ -164,45 +164,5 @@ public class InventoryGridUI : MonoBehaviour
         // Обеспечение дальнейшей работы
         // InventorySlot slot = slotGO.GetComponent<InventorySlot>();
         // _slots[row, col] = slot;
-    }
-    
-    private InventorySlotItem CreateItem(GridSectionItem invItem) {
-        int col = invItem.InventoryX;
-        int row = invItem.InventoryY;
-        // Debug.Log("Добавление элемента в сетку. Позиция: (" + col + ", " + row + ")");
-
-        // Добавляем в сетку
-        GameObject itemGO = Instantiate(_slotItemPrefab);
-        itemGO.transform.SetParent(_gridParent.transform);
-        itemGO.transform.localScale = Vector3.one;
-        SetPositionInGrid(itemGO, row, col);
-
-        InventorySlotItem slotItem = itemGO.GetComponent<InventorySlotItem>();
-        slotItem.Initialize(invItem, _slotSize, gridSpacing);
-
-        // Интерактивная иконка работает как активатор всплывающей подсказки, а его необходимо
-        // инициализировать. Для этого используется специфическая надстройка над системой
-        // всплывающих подсказок, которая устанавливает родительский объект ItemsUI как родитель
-        // для новых всплывающих подсказок. Эта логика не включена в TooltipActivator,
-        // т.к. связана исключительно с ItemsUI
-        itemGO.GetComponent<ItemsUITooltipActivatorInitializer>().Initialize();
-
-        _slotItems.Add(invItem.PlacementId.LocalId, slotItem);
-        return slotItem;
-
-        // Debug.Log($"Set slot [{x}, {y}] with item {invItem.itemGameData.itemDataName}; "
-        //     + $"_slots is {_slots.GetLength(0)}x{_slots.GetLength(1)}");
-    }
-
-    /// <summary>
-    /// Устанавливает позицию в сетке для GameObject. Например, для слота или предмета слота
-    /// </summary>
-    private void SetPositionInGrid(GameObject go, int row, int col) {
-        // Положение в сетке
-        float posX = col * _slotSize;
-        float posY = row * _slotSize;
-        float spacingX = col * gridSpacing;
-        float spacingY = row * gridSpacing;
-        go.transform.localPosition = new Vector3(posX + spacingX, -posY - spacingY);
     }
 }

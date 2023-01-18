@@ -6,42 +6,44 @@ using UnityEngine;
 // Todo: Отображение текущего/макс. веса инвентаря персонажа (для других
 // инвентарей, как правило, это не имеет смысла)
 /// <summary>
-/// UI, представляющий информацию инвентаря, определенную сеточную секцию и информацию об
+/// UI, представляющий информацию инвентаря, его сеточную секцию и информацию об
 /// общем весе
 /// </summary>
 public class InventoryUI : MonoBehaviour
 {
-    #region UI
     [SerializeField]
     private InventoryInfoUI _invInfoUI;
 
     [SerializeField]
     private InventoryGridUI _invGridUI;
 
-    // [SerializeField]
-    // private InventoryWeightBar _weightBar;
-    #endregion
+    [Header("Опционально")]
+    [SerializeField]
+    private InventoryWeightBar _weightBar;
 
-    #region Sources
-    private GridSection _gridSection;
-    public GridSection GridSection {
-        get => _gridSection;
-        private set => _gridSection = value;
+    private IGridSectionInventory _inventory;
+    private IInventoryInfoProvider _infoProvider;
+
+    public void SetAsPlayersInventory(IGridSectionInventory inventory, IInventoryInfoProvider invInfoProvider) {
+        Set(inventory, invInfoProvider);
+        _invGridUI.Set(inventory.GridSection, new SlotItemCreator(inventory, null));
     }
 
-    private IInventoryInfoProvider _infoProvider;
-    // private ITotalWeight _totalWeight;
-    #endregion
+    public void SetAsOtherInventory(IGridSectionInventory inventory,
+        IGridSectionInventory otherInventory, IInventoryInfoProvider invInfoProvider) {
+        Set(otherInventory, invInfoProvider);
+        _invGridUI.Set(otherInventory.GridSection, new SlotItemCreator(otherInventory, inventory));
+    }
 
-    public void Set(IInventoryInfoProvider invInfoProvider, GridSection gridSection) {
+    private void Set(IGridSectionInventory inventory, IInventoryInfoProvider invInfoProvider) {
         // Если до установки инвентаря был старый, необходимо отвязаться от него
-        GridSection oldInventory = _gridSection;
+        GridSection oldInventory = _inventory?.GridSection;
         if (oldInventory is not null) {
             oldInventory.InventoryChanged -= OnInventoryChanged;
         }
-        _gridSection = gridSection;
-        _gridSection.InventoryChanged += OnInventoryChanged;
-        _invGridUI.SetInventorySection(_gridSection);
+        _inventory = inventory;
+        _inventory.GridSection.InventoryChanged += OnInventoryChanged;
+        // _invGridUI.SetInventorySection(_inventory.GridSection);
         
         // Привязаться к изменениям информации
         _infoProvider = invInfoProvider;
@@ -59,14 +61,10 @@ public class InventoryUI : MonoBehaviour
 
     private void OnInventoryChanged(SyncList<GridSectionItem>.Operation op, int index,
         GridSectionItem oldItem, GridSectionItem newItem) {
-        // _weightBar.UpdateWeightInfoText(GetTotalWeight(), GetMaxWeight());
+        // Todo: максимальный вес
+        if (_weightBar != null)
+            _weightBar.UpdateWeightInfoText(_inventory.TotalWeight, 0);
     }
-
-    // private float GetTotalWeight() {
-    //     // To optimize: можно кэшировать вес, а не считать заново
-    //     // Todo: определение общего веса
-    //     return -1;    
-    // }
 
     // private float GetMaxWeight() {
     //     // Todo: сделать максимальный переносимый вес свойством живого существа,

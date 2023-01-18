@@ -13,36 +13,35 @@ using UnityEngine;
 [Serializable]
 public struct ItemPlacementId
 {
+    [SerializeField]
+    private uint _localId;
     /// <summary>
     /// Однозначно определяет предмет в инвентаре какого-либо типа, но не содержит данных о
     /// экземпляре инвентаря
     /// </summary>
-    public uint LocalId { get; set; }
+    public uint LocalId { get => _localId; set => _localId = value; }
 
+    [SerializeField]
+    private uint _inventorySectionNetId;
     /// <summary>
     /// Однозначно определяет секцию инвентаря, к которой принадлежит предмет, с помощью netId
     /// сетевого компонента Mirror
     /// </summary>
-    public uint InventoryNetId { get; set; }
-
-    public ItemPlacementId(uint localId, uint inventoryNetId) {
-        LocalId = localId;
-        InventoryNetId = inventoryNetId;
-    }
+    public uint InventorySectionNetId { get => _inventorySectionNetId; set => _inventorySectionNetId = value; }
 
     public override bool Equals(object obj)
     {
         return obj is ItemPlacementId id && id.LocalId == LocalId
-            && id.InventoryNetId == InventoryNetId;
+            && id.InventorySectionNetId == InventorySectionNetId;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(LocalId, InventoryNetId);
+        return HashCode.Combine(LocalId, InventorySectionNetId);
     }
 
     public override string ToString()
     {
-        return $"InventoryNetId: {InventoryNetId}; LocalId: {LocalId}";
+        return $"InventoryNetId: {InventorySectionNetId}; LocalId: {LocalId}";
     }
 }

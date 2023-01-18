@@ -36,14 +36,14 @@ public class ItemInteractorStrategy : NetworkBehaviour, IInteractorStrategy
         Item item = col.GetComponent<Item>();
         ItemData itemData = item.ItemData;
 
-        if (!_characterInventory.TryToAdd(itemData, 1)) {
-            Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
-        }
-
-        if (isServer) {
-            NetworkServer.Destroy(item.gameObject);
+        if (_characterInventory.TryToAdd(itemData, 1)) {
+            if (isServer) {
+                NetworkServer.Destroy(item.gameObject);
+            } else {
+                CmdDestroy(item.netId);
+            }
         } else {
-            CmdDestroy(item.netId);
+            Debug.Log("Не удалось поместить поднятый предмет в инвентарь");
         }
     }
 

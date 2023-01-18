@@ -15,11 +15,9 @@ public class InventoryInfo
     public Sprite Avatar { get => _avatar; }
     public string Title { get => _title; }
     public string SubTitle { get => _subTitle; }
-    // public float TotalWeight { get; private set; }
-    public InventoryInfo(Sprite avatar, string title, string subTitle/*, float totalWeight*/) {
+    public InventoryInfo(Sprite avatar, string title, string subTitle) {
         _avatar = avatar;
         _title = title;
         _subTitle = subTitle;
-        // TotalWeight = totalWeight;
     }
 }

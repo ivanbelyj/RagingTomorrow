@@ -24,18 +24,7 @@ public class GridSectionItem : IInventoryItem
 
     [SerializeField]
     private uint _inventoryNetId;
-
-    /// <summary>
-    /// Конструктор без параметров для десериализации. Внимание: используйте 
-    /// конструктор с параметрами для установки обязательных закрытых полей
-    /// </summary>
-    public GridSectionItem() {
-
-    }
-
-    public GridSectionItem(uint inventoryNetId) {
-        _inventoryNetId = inventoryNetId;    
-    }
+    public uint InventoryNetId { get => _inventoryNetId; set => _inventoryNetId = value; }
 
     public override bool Equals(object obj)
     {
@@ -51,12 +40,14 @@ public class GridSectionItem : IInventoryItem
 
     public override string ToString()
     {
-        return $"GridSectionItem: {ItemData.ItemStaticDataName}; ({InventoryX}, {InventoryY}); " +
+        return $"GridSectionItem. ItemData: {ItemData}; ({InventoryX}, {InventoryY}); " +
             $"count: {Count}; Placement: {PlacementId}";
     }
 
-    public ItemPlacementId PlacementId => new ItemPlacementId(GetLocalIdByInventoryPosition(),
-        _inventoryNetId);
+    public ItemPlacementId PlacementId => new ItemPlacementId() {
+        LocalId = GetLocalIdByInventoryPosition(),
+        InventorySectionNetId = _inventoryNetId
+    };
 
     /// <summary>
     /// В некоторых случаях требуется идентифицировать элемент в рамках секции инвентаря по его

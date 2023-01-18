@@ -8,7 +8,12 @@ using UnityEngine;
 /// </summary>
 public interface IInventory
 {
+    bool CanAdd(ItemData itemData, int count);
     bool TryToAdd(ItemData itemData, int count);
-    void Remove(IInventoryItem item);
+    
+    /// <summary>
+    /// Удаляет из инвентаря предмет по расположению, заданному id
+    /// </summary>
+    bool Remove(ItemPlacementId itemId);
     float TotalWeight { get; }
 }

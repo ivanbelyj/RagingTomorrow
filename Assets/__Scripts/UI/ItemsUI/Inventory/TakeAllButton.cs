@@ -7,44 +7,52 @@ using UnityEngine.UI;
 public class TakeAllButton : MonoBehaviour
 {
     private Button _button;
-    private IItemsProvider _itemsProvider;
-    private CharactersInventory _inventory;
+    private IInventory _supplier;
+    private IInventory _recipient;
+    
     private void Awake() {
         _button = GetComponent<Button>();
         _button.onClick.AddListener(() => {
-            // var items = _itemsProvider.TakeAllItems();
-            // List<ItemData> notAdded = new List<ItemData>();
-            // foreach (ItemData item in items) {
-            //     bool isAdded = _inventory.MainSection.TryToAddToSection(item);
-            //     if (!isAdded) {
-            //         notAdded.Add(item);
-            //     }
-            // }
-
-            // foreach (ItemData notAddedItem in notAdded) {
-            //     _itemsProvider.TakeBack(notAddedItem);
-            // }
-
             IInventoryItem invItem;
-            do {
-                invItem = _itemsProvider.PeekNext();
-                if (invItem != null && _inventory.MainSection.CanAddToSection(invItem.ItemData,
-                    invItem.Count)) {
-                    _inventory.MainSection.TryToAddToSection(invItem.ItemData, invItem.Count);
-                    _itemsProvider.RemoveLastPeekedItem();
+
+            Debug.Log("Взятие всех предметов инвентаря");
+            for (int i = 0; true; i++) {
+                // Todo: проход по всем предметам и взятие в инвентарь
+                invItem = null;
+                if (invItem == null) {
+                    break;
                 }
-            } while (invItem != null);
+                
+                Debug.Log("\tПредмет: " + invItem);
+                if (!_recipient.CanAdd(invItem.ItemData, invItem.Count))
+                    continue;
+                
+                bool isNotAdded = !_recipient.TryToAdd(invItem.ItemData, invItem.Count);
+                Debug.Log("isNotAdded: " + isNotAdded);
+                if (isNotAdded) {
+                    Debug.LogError("CanAdd вернул true, но TryToAdd завершился неудачей");
+                    Debug.Break();
+                }
+
+                bool isRemoved = _supplier.Remove(invItem.PlacementId);
+                Debug.Log("isRemoved: " + isRemoved);
+                if (!isRemoved) {
+                    Debug.LogError("Предмет не был удален");
+                    Debug.Break();
+                    break;
+                }
+            };
         });
     }
 
     /// <summary>
-    /// Устанавливает инвентарь персонажа, который будет получать предметы по нажатию кнопки
+    /// Устанавливает инвентарь, который будет получать предметы по нажатию кнопки
     /// </summary>
-    public void SetRecipient(CharactersInventory inventory) {
-        _inventory = inventory;
+    public void SetRecipient(IInventory inventory) {
+        _recipient = inventory;
     }
 
-    public void SetItemsProvider(IItemsProvider itemsProvider) {
-        _itemsProvider = itemsProvider;
+    public void SetSupplier(IInventory supplier) {
+        _supplier = supplier;
     }
 }
