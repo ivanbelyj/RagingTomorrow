@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 62295873
+CRC: 3341434686
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: itemdata
+      Dependencies: {}
+    Info_1:
+      Name: appearancetype
       Dependencies: {}
