@@ -13,7 +13,7 @@ namespace AppearanceCustomization3D {
         [SerializeField]
         private List<AppearanceElement> _initialApperanceElements;
 
-        private Dictionary<int, AppearanceElement> _appearanceElements;
+        private Dictionary<uint, AppearanceElement> _appearanceElements;
 
         [SerializeField]
         private bool _hasRig;
@@ -35,14 +35,14 @@ namespace AppearanceCustomization3D {
         /// объекту данного типа.
         /// Словарь используется для удобства и ускорения доступа к частям по id 
         /// </summary>
-        public Dictionary<int, AppearanceElement> AppearanceElements {
+        public Dictionary<uint, AppearanceElement> AppearanceElements {
             get => _appearanceElements;
             set => _appearanceElements = value;
         }
 
         public void Awake() {
-            _appearanceElements = new Dictionary<int, AppearanceElement>();
-            foreach (var item in _initialApperanceElements) {
+            _appearanceElements = new Dictionary<uint, AppearanceElement>();
+            foreach (AppearanceElement item in _initialApperanceElements) {
                 _appearanceElements.Add(item.LocalId, item);
             }
         }

@@ -34,15 +34,12 @@ public class ItemStaticData : ScriptableObject
 
     [SerializeField]
     private string _description;
-
-    // [SerializeField]
-    // private WearSlot _allowedWearSlot;
     #endregion
 
     public GameObject ItemPrefab => _itemPrefab;
     public Sprite Sprite => _icon;
-    public int Width { get => _width; }
-    public int Height { get => _height; }
+    public int Width => _width;
+    public int Height => _height;
     public int StackSize {
         get => _stackSize;
         set {
@@ -51,12 +48,7 @@ public class ItemStaticData : ScriptableObject
             _stackSize = value;
         }
     }
-    public float Mass { get => _mass; }
+    public float Mass => _mass;
     public string ItemName => _itemName;
     public string Description => _description;
-
-    /// <summary>
-    /// Слот инвентаря, в который допустимо помещать предмет.
-    /// </summary>
-    // public WearSlot AllowedWearSlot => _allowedWearSlot;
 }

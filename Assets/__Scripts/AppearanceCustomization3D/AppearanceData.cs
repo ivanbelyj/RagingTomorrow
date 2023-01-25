@@ -10,9 +10,9 @@ namespace AppearanceCustomization3D {
     [Serializable]
     public class AppearanceData
     {
-        [SerializeField]
-        private string _appearanceTypeId;
-        public string AppearanceTypeId { get => _appearanceTypeId; set => _appearanceTypeId = value; }
+        // [SerializeField]
+        // private string _appearanceTypeId;
+        // public string AppearanceTypeId { get => _appearanceTypeId; set => _appearanceTypeId = value; }
 
         [SerializeField]
         private List<int> _appearanceElementIds;

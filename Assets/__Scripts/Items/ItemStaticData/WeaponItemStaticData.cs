@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New WeaponItemData",
     menuName = "Item Data/Weapon Item Data",
     order = 51)]
-public class WeaponItemStaticData : ItemStaticData
+public class WeaponItemStaticData : AppearanceItemStaticData
 {
     // Пока что enum нужен лишь для логического разделения оружия, чтобы можно было определить,
     // что поместить в слот пистолета, а что - винтовки
