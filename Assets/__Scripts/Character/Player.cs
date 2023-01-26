@@ -72,8 +72,8 @@ public class Player : NetworkBehaviour
 
         // _interactor.LookingToInteractiveObject += OnLookingToItem;
 
+        // Данные для игрока устанавливаются и синхронизируются лишь раз, когда он появился
         _characterDataProvider.SetInitialData();
-        BindUI();
     }
 
     private void OnLookedAtItem(Item item) {
@@ -107,12 +107,21 @@ public class Player : NetworkBehaviour
             _characterDataProvider.CharacterData.AppearanceData);
     }
 
-    private bool _appearanceIsSet; 
+    private bool _appearanceIsSet;
+    private bool _uiIsBinded;
 
     private void Update() {
+        // Данные персонажа устанавливаются в OnStartLocalPlayer, а внешний вид должен установиться
+        // на их основе на всех объектах игрока. На практике оказалось, что, видимо,
+        // синхронизация CharacterData происходит не сразу, и в методе Start CharacterData == null
         if (!_appearanceIsSet && _characterDataProvider.CharacterData != null) {
             SetAppearance();
             _appearanceIsSet = true;
+        }
+        // BindUI тоже опирается на CharacterData (например, для отображения в инвентаре)
+        if (!_uiIsBinded && isLocalPlayer && _characterDataProvider.CharacterData != null) {
+            BindUI();
+            _uiIsBinded = true;
         }
         if (!isLocalPlayer || !hasAuthority) {
             return;
