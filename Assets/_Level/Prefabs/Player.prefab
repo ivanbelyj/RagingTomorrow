@@ -199,8 +199,6 @@ GameObject:
   - component: {fileID: 4178382809326399703}
   - component: {fileID: -3515168272240670215}
   - component: {fileID: 1986895825739135081}
-  - component: {fileID: 7283632789705068818}
-  - component: {fileID: 2124414366534548251}
   m_Layer: 1
   m_Name: Player
   m_TagString: Untagged
@@ -505,6 +503,7 @@ MonoBehaviour:
     aimingFOV: 40
     referenceShakingAmount: 0.5
     camera: {fileID: 0}
+  _customizableAppearance: {fileID: 8936790839250713208}
 --- !u!114 &4901890020522425594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -627,31 +626,6 @@ MonoBehaviour:
   floatingInfo: {fileID: 1709699199297977212}
   characterNameText: {fileID: 5942551270749010761}
   characterHealthText: {fileID: 6370469275099971039}
---- !u!114 &7283632789705068818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507993662015929204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecb3a9e0b8b28de4e8aa7d79c656e4bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2124414366534548251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507993662015929204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 607f8da7392da8541941e12655eed8d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _appearance: {fileID: 8936790839250713208}
 --- !u!1 &1709699199297977212
 GameObject:
   m_ObjectHideFlags: 0

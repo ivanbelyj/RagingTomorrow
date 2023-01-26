@@ -17,4 +17,9 @@ public class CharacterData
     [SerializeField]
     private AppearanceData _appearanceData;
     public AppearanceData AppearanceData { get => _appearanceData; set => _appearanceData = value; }
+
+    public override string ToString()
+    {
+        return $"CharacterData. Name: {Name}; Subtitle: {Subtitle}; AppearanceData: {AppearanceData}";
+    }
 }

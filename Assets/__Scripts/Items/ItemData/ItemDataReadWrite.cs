@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public static class ItemDataReaderWriter
+public static class ItemDataReadWrite
 {
     private enum ItemType : int
     {

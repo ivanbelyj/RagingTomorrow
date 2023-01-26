@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace AppearanceCustomization3D {
@@ -28,6 +30,14 @@ namespace AppearanceCustomization3D {
         public List<AppearanceElementLocalId> AppearanceElementIds {
             get => _appearanceElementIds;
             set => _appearanceElementIds = value;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder res = new StringBuilder($"AppearanceType: {_appearanceTypeId}; Ids: ");
+            foreach (var elem in AppearanceElementIds)
+                res.Append(" " + elem);
+            return res.ToString();
         }
     }
 }

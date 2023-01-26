@@ -52,6 +52,7 @@ public class InventoryUI : MonoBehaviour
             oldInvInfo.InventoryInfoChanged -= OnInfoChanged;
         }
         _infoProvider.InventoryInfoChanged += OnInfoChanged;
+        // Предполагается, что на данный момент данные уже определны и синхронизированы
         _invInfoUI.SetInfo(_infoProvider.InventoryInfo);
     }
 

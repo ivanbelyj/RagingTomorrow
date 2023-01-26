@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public static class GridSectionItemReaderWriter
+public static class GridSectionItemReadWrite
 {
     public static void WriteGridSectionItem(this NetworkWriter writer, GridSectionItem gridItem) {
         writer.WriteInt(gridItem.Count);

@@ -4,6 +4,7 @@ using AFPC;
 using UnityEngine;
 using Mirror;
 using TMPro;
+using AppearanceCustomization3D;
 
 [RequireComponent(typeof(Entity))]
 [RequireComponent(typeof(CharactersInventory))]
@@ -22,6 +23,9 @@ public class Player : NetworkBehaviour
 
     private ItemsUIController _itemsUIController;
 
+    private Entity _entity;
+    public Overview overview;
+
     // Components
     private CharactersInventory _inventory;
     public CharactersInventory Inventory => _inventory;
@@ -29,8 +33,8 @@ public class Player : NetworkBehaviour
     private Interactor _interactor;
     private ItemInteractorStrategy _itemInteractorStrategy;
     private CharacterDataProvider _characterDataProvider;
-    private Entity _entity;
-    public Overview overview;
+    [SerializeField]
+    private CustomizableAppearance _customizableAppearance;
 
     private void Awake() {
         // _mainInvSection = GetComponent<GridInventorySection>();
@@ -43,9 +47,6 @@ public class Player : NetworkBehaviour
         _itemInteractorStrategy = GetComponent<ItemInteractorStrategy>();
         _itemInteractorStrategy.LookedAtItem += OnLookedAtItem;
         _itemInteractorStrategy.LookedAwayFromItem += OnLookedAwayFromItem;
-    }
-
-    private void Start() {
     }
 
     public override void OnStartClient() {
@@ -71,6 +72,7 @@ public class Player : NetworkBehaviour
 
         // _interactor.LookingToInteractiveObject += OnLookingToItem;
 
+        _characterDataProvider.SetInitialData();
         BindUI();
     }
 
@@ -100,7 +102,18 @@ public class Player : NetworkBehaviour
         _pickableItemUI.HideIcon();
     }
 
+    private void SetAppearance() {
+        _customizableAppearance.InstantiateByAppearanceData(
+            _characterDataProvider.CharacterData.AppearanceData);
+    }
+
+    private bool _appearanceIsSet; 
+
     private void Update() {
+        if (!_appearanceIsSet && _characterDataProvider.CharacterData != null) {
+            SetAppearance();
+            _appearanceIsSet = true;
+        }
         if (!isLocalPlayer || !hasAuthority) {
             return;
         }
@@ -220,6 +233,20 @@ public class Player : NetworkBehaviour
             } else {
                 Debug.Log("Предметы не были добавлены в WearSection");
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            var oldData = _characterDataProvider.CharacterData;
+            string[] fuorianNames = new[] { "Kaur", "Kafwex", "Xafri", "Xesawi", "Fowex", "Fathi", "Ngurae" };
+            int rndIndex = Random.Range(0, fuorianNames.Length);
+            string newName = fuorianNames[rndIndex] + $" {Random.Range(100, 1000)}";
+            CharacterData charData = new CharacterData() {
+                AppearanceData = oldData.AppearanceData,
+                Subtitle = oldData.Subtitle,
+                Name = newName
+            };
+            _characterDataProvider.SetData(charData);
+            Debug.Log("Новые данные игрока " + charData.ToString());
         }
 
         // Todo: только для теста! убрать после

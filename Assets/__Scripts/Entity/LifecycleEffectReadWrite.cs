@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public static class LifecycleEffectReaderWriter
+public static class LifecycleEffectReadWrite
 {
     public static void WriteLifecycleEffect(this NetworkWriter writer,
         LifecycleEffect effect) {

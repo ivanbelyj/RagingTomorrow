@@ -9,6 +9,12 @@ namespace AppearanceCustomization3D {
     {
         [SerializeField]
         private uint _value;
+        public uint Value => _value;
+
+        public OccupancyId(uint value) {
+            _value = value;
+        }
+
         public override bool Equals(object obj)
         {
             return obj is OccupancyId other && Equals(other);
@@ -26,5 +32,10 @@ namespace AppearanceCustomization3D {
 
         public static bool operator ==(OccupancyId id1, OccupancyId id2) => id1._value == id2._value;
         public static bool operator !=(OccupancyId id1, OccupancyId id2) => id1._value != id2._value;
+
+        public override string ToString()
+        {
+            return _value.ToString();
+        }
     }
 }

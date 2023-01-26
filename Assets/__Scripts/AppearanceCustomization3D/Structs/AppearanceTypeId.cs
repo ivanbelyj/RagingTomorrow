@@ -9,6 +9,7 @@ namespace AppearanceCustomization3D {
     {
         [SerializeField]
         private string _value;
+        public string Value => _value;
 
         public AppearanceTypeId(string value) {
             _value = value;
@@ -33,5 +34,10 @@ namespace AppearanceCustomization3D {
             => id1._value == id2._value;
         public static bool operator !=(AppearanceTypeId id1, AppearanceTypeId id2)
             => id1._value != id2._value;
+
+        public override string ToString()
+        {
+            return _value;
+        }
     }
 }
