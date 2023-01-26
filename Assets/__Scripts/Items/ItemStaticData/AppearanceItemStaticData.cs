@@ -9,11 +9,11 @@ using UnityEngine;
 public class AppearanceItemStaticData : ItemStaticData
 {
     [SerializeField]
-    private uint[] _characterAppearanceElementsLocalIds;
+    private AppearanceElementLocalId[] _characterAppearanceElementsLocalIds;
     /// <summary>
     /// Локальные для типа кастомизации, персонажа, id элементов кастомизации. Эти данные могут быть
     /// использованы для активирования / скрытия соотв. элементов составной модели
     /// </summary>
-    private uint[] CharacterAppearanceElementsLocalIds => _characterAppearanceElementsLocalIds;
-
+    public AppearanceElementLocalId[] CharacterAppearanceElementsLocalIds
+        => _characterAppearanceElementsLocalIds;
 }

@@ -1,196 +1,158 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AppearanceCustomization3D;
 using Mirror;
 using UnityEngine;
 
 /// <summary>
-/// Секция инвентаря для предметов, в настоящий момент используемых персонажем.
-/// Данная секция состоит из слотов, в каждом слоте может находиться максимум 1 предмет.
-/// Todo:
-/// В некоторых случаях предметы могут занимать сразу несколько слотов. Например, если надет
-/// экзоскелет, то надеть бронежилет или шлем уже нельзя
+/// Секция инвентаря для предметов, в настоящий момент используемых персонажем
 /// </summary>
 public class WearSection : NetworkBehaviour
 {
-    /// <summary>
-    /// Для хранения информации о заполненности WearSection и обращения к хранимым предметам
-    /// извне
-    /// </summary>
-    public enum WearSlot
-    {
-        None,  // Для преметов, которые нельзя поместить в какой-либо слот
-        Head,
-        Vest,
-        Legs,
-        Feet,
-        Tail,
-        HandGun,
-        Rifle,
-    }
-
-    private readonly SyncDictionary<WearSlot, ItemData> _syncSlots
-        = new SyncDictionary<WearSlot, ItemData>();
-
-    // Каждый слот выполняет конкретную функцию и может быть использован кодом в процессе игры.
-    // Например, в слоте оружия лежит объект определенного класса, поэтому логично
-    // добавлять предметы не по WearSlot, который не привязан к классам, а по кастомным
-    // признакам добавляемого предмета. С реализацией с WearSlot ничего не мешает добавить в
-    // слот для оружия еду, у которой установлено WearSlot соотв. образом.
-    // С другой стороны, WearSlot позволяет содержать словарь, который легче синхронизировать,
-    // чем множество отдельных полей
-
+    private readonly SyncList<ItemData> _syncItems = new SyncList<ItemData>();
     protected ItemStaticDataManager _itemStaticDataManager;
 
-    public event SyncDictionary<WearSlot, ItemData>.SyncDictionaryChanged InventoryChanged {
+    public event SyncList<ItemData>.SyncListChanged InventoryChanged {
         add {
-            _syncSlots.Callback += value;
+            _syncItems.Callback += value;
         }
         remove {
-            _syncSlots.Callback -= value;
+            _syncItems.Callback -= value;
         }
     }
 
-    private Dictionary<WearSlot, ItemData> _slots;
-    public Dictionary<WearSlot, ItemData> Slots => _slots;
+    private List<ItemData> _items;
+    public List<ItemData> Items => _items;
 
-    public ItemStaticData GetItemData(string itemDataName)
-    {
-        return _itemStaticDataManager.NamesAndData[itemDataName];
-    }
+    [SerializeField]
+    private CustomizableAppearance _appearance;
 
     public override void OnStartClient()
     {
         base.OnStartClient();
 
         // При старте в _syncSlots уже могут быть элементы
-        _slots = new Dictionary<WearSlot, ItemData>();
-        foreach (var pair in _syncSlots)
+        _items = new List<ItemData>();
+        foreach (ItemData itemData in _syncItems)
         {
-            _slots.Add(pair.Key, pair.Value);
+            _items.Add(itemData);
         }
     }
 
     private void Awake() {
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
-        // if (_limitations is null)
-        //     _limitations = new List<ISectionLimitation>();
-        // foreach (var limitation in _limitations) {
-        //     limitation.Initialize(_itemStaticDataManager);
-        // }
     }
 
     private void Start()
     {
-        _syncSlots.Callback += SyncItems;
+        _syncItems.Callback += SyncItems;
     }
 
-    public float TotalWeight
-        => _slots.Sum(pair => GetItemData(pair.Value.ItemStaticDataName).Mass);
+    public float TotalWeight => _items.Sum(itemData => _itemStaticDataManager
+        .GetStaticDataByName(itemData.ItemStaticDataName).Mass);
 
     #region Sync
-    
     [Server]
-    private void AddItem(WearSlot slot, ItemData itemData) {
-        _syncSlots.Add(slot, itemData);
+    private void AddItem(ItemData itemData) {
+        _syncItems.Add(itemData);
     }
 
     [Server]
-    private void RemoveItem(WearSlot slot) {
-        _syncSlots.Remove(slot);
+    private void RemoveItem(ItemData itemData) {
+        _syncItems.Remove(itemData);
     }
 
     [Command]
-    private void CmdAddItem(WearSlot slot, ItemData itemData) {
-        AddItem(slot, itemData);
+    private void CmdAddItem(ItemData itemData) {
+        AddItem(itemData);
     }
 
     [Command]
-    private void CmdRemoveItem(WearSlot slot) {
-        RemoveItem(slot);
+    private void CmdRemoveItem(ItemData itemData) {
+        RemoveItem(itemData);
     }
 
-    private void SyncItems(SyncDictionary<WearSlot, ItemData>.Operation op,
-        WearSlot key, ItemData item) {
+    private void SyncItems(SyncList<ItemData>.Operation op, int index,
+        ItemData oldItem, ItemData newItem) {
         switch (op) {
-            case SyncDictionary<WearSlot, ItemData>.Operation.OP_ADD:
+            case SyncList<ItemData>.Operation.OP_ADD:
             {
-                _slots.Add(key, item);
+                _appearance.ActivateNonStaticElementsAndDeactivateOccupied(
+                    GetAppearanceItemStaticData(newItem).CharacterAppearanceElementsLocalIds
+                );
+                _items.Add(newItem);
                 break;
             }
-            case SyncDictionary<WearSlot, ItemData>.Operation.OP_REMOVE:
+            case SyncList<ItemData>.Operation.OP_REMOVEAT:
             {
-                _slots.Remove(key);
+                _appearance.DeactivateNonStaticElements(
+                    GetAppearanceItemStaticData(oldItem).CharacterAppearanceElementsLocalIds
+                );
+                _items.Remove(oldItem);
                 break;
             }
         }
     }
     #endregion
 
+    private AppearanceItemStaticData GetAppearanceItemStaticData(ItemData itemData) =>
+        (AppearanceItemStaticData)_itemStaticDataManager.GetStaticDataByName(itemData.ItemStaticDataName);
+
     #region Add And Remove
-    public bool AddToAccordingSlot(ItemData itemData) {
-        return AddToSection(GetAccordingSlot(itemData), itemData);
+
+    /// <summary>
+    /// true, если возможно надеть предмет, не снимая предыдущие, занимающие те же части тела
+    /// <summary>
+    public bool CanAdd(ItemData itemData) {
+        return CanAdd(itemData, out _);
     }
 
-    private WearSlot GetAccordingSlot(ItemData itemData) {
-        var staticData = _itemStaticDataManager.GetStaticDataByName(itemData.ItemStaticDataName);
-        if (staticData is WeaponItemStaticData weaponData) {
-            if (weaponData.Type == WeaponItemStaticData.WeaponType.HandGun)
-                return WearSlot.HandGun;
-            else if (weaponData.Type == WeaponItemStaticData.WeaponType.Rifle)
-                return WearSlot.Rifle;
-        } else if (staticData is ArmorItemStaticData armorData) {
-            return WearSlot.Vest;
+    private List<AppearanceElement> GetOccupied(AppearanceItemStaticData appearanceItemStaticData)
+        => _appearance.GetOccupied(appearanceItemStaticData.CharacterAppearanceElementsLocalIds);
+
+    private bool CanAdd(ItemData itemData, out List<AppearanceElement> occupied) {
+        if (_itemStaticDataManager.GetStaticDataByName(itemData.ItemStaticDataName)
+            is AppearanceItemStaticData appearanceItemStaticData) {
+            occupied = GetOccupied(appearanceItemStaticData);
+            return occupied.Count == 0;
         }
-        return WearSlot.None;
+        occupied = null;
+        return false;
     }
 
-    // Например, автомат нельзя положить в слот для шлема или пистолета
-    // private bool IsItemAllowed(WearSlot slot, ItemData item) {
-    //     var staticData = _itemStaticDataManager.GetStaticDataByName(item.itemStaticDataName);
-    //     if (staticData.AllowedWearSlot == WearSlot.None || slot == WearSlot.None) {
-    //         return false;
-    //     }
-    //     return staticData.AllowedWearSlot == slot;
-    // }
-
-    private bool AddToSection(WearSlot slot, ItemData item) {
-        // if (!IsItemAllowed(slot, item)) {
-        //     return false;
-        // }
-
-        // В занятый слот нельзя добавить предмет
-        bool isSlotFree = !_slots.ContainsKey(slot);
-        if (!isSlotFree || slot == WearSlot.None) {
+    private bool TryToAddToSection(ItemData itemData) {
+        bool canAdd = CanAdd(itemData);
+        if (!canAdd) {
             return false;
         }
 
         if (isServer) {
-            AddItem(slot, item);
+            AddItem(itemData);
         } else {
-            CmdAddItem(slot, item);
+            CmdAddItem(itemData);
         }
 
         return true;
     }
 
-    public void RemoveFromSection(WearSlot slot) {
+    public void RemoveFromSection(ItemData itemData) {
         if (isServer) {
-            RemoveItem(slot);
+            RemoveItem(itemData);
         } else {
-            CmdRemoveItem(slot);
+            CmdRemoveItem(itemData);
         }
     }
 
-    // For test
+    // Для теста
     public bool AddTestItems()
     {
         var newItem = new ItemData() {
             ItemStaticDataName = "TestArmor",
         };
-        bool isAdded = AddToAccordingSlot(newItem);
+        bool isAdded = TryToAddToSection(newItem);
         if (!isAdded) {
-            // В инвентаре нет места для предметов данного размера
+            Debug.Log("Не удалось надеть предмет " + newItem);
             return false;
         }
         return true;

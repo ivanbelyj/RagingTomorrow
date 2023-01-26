@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public interface IInventoryInfoProvider {
-    public delegate void InfoChangedEventHandler(InventoryInfo newInventoryInfo);
+    public delegate void InventoryInfoChangedEventHandler(InventoryInfo newInventoryInfo);
     InventoryInfo InventoryInfo { get; }
-    event InfoChangedEventHandler InventoryInfoChanged;
+    event InventoryInfoChangedEventHandler InventoryInfoChanged;
 }

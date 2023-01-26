@@ -10,10 +10,15 @@ namespace AppearanceCustomization3D {
     [CreateAssetMenu(fileName = "New AppearanceType", menuName = "Appearance Type/Appearance Type", order = 52)]
     public class AppearanceType : ScriptableObject
     {
+        /// <summary>
+        /// Используется только для установки некоторых данных в инспекторе. Во время выполнения
+        /// эти данные становятся неактуальными
+        /// </summary>
+        [Tooltip("Порядок элементов имеет значение: на его основе определяются локальные id элементов")]
         [SerializeField]
         private List<AppearanceElement> _initialApperanceElements;
 
-        private Dictionary<uint, AppearanceElement> _appearanceElements;
+        private Dictionary<AppearanceElementLocalId, AppearanceElement> _appearanceElements;
 
         [SerializeField]
         private bool _hasRig;
@@ -35,14 +40,16 @@ namespace AppearanceCustomization3D {
         /// объекту данного типа.
         /// Словарь используется для удобства и ускорения доступа к частям по id 
         /// </summary>
-        public Dictionary<uint, AppearanceElement> AppearanceElements {
+        public Dictionary<AppearanceElementLocalId, AppearanceElement> AppearanceElements {
             get => _appearanceElements;
             set => _appearanceElements = value;
         }
 
         public void Awake() {
-            _appearanceElements = new Dictionary<uint, AppearanceElement>();
+            _appearanceElements = new Dictionary<AppearanceElementLocalId, AppearanceElement>();
+            uint newId = 0;
             foreach (AppearanceElement item in _initialApperanceElements) {
+                item.LocalId = new AppearanceElementLocalId(newId++);
                 _appearanceElements.Add(item.LocalId, item);
             }
         }

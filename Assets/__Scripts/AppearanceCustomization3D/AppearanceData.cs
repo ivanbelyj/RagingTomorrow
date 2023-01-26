@@ -5,18 +5,27 @@ using UnityEngine;
 
 namespace AppearanceCustomization3D {
     /// <summary>
-    /// Компактные данные о кастомизируемой сущности
+    /// Компактные данные о кастомизируемой сущности, позволяющие воссоздать ее внешний вид
     /// </summary>
     [Serializable]
     public class AppearanceData
     {
-        // [SerializeField]
-        // private string _appearanceTypeId;
-        // public string AppearanceTypeId { get => _appearanceTypeId; set => _appearanceTypeId = value; }
+        [SerializeField]
+        private AppearanceTypeId _appearanceTypeId;
+        /// <summary>
+        /// Id типа кастомизации
+        /// </summary>
+        public AppearanceTypeId AppearanceTypeId {
+            get => _appearanceTypeId;
+            set => _appearanceTypeId = value;
+        }
 
         [SerializeField]
-        private List<int> _appearanceElementIds;
-        public List<int> AppearanceElementIds {
+        private List<AppearanceElementLocalId> _appearanceElementIds;
+        /// <summary>
+        /// Список локальных для типа кастомизации id элементов внешнего вида
+        /// </summary>
+        public List<AppearanceElementLocalId> AppearanceElementIds {
             get => _appearanceElementIds;
             set => _appearanceElementIds = value;
         }

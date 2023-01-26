@@ -6,11 +6,16 @@ using System.Linq;
 namespace AppearanceCustomization3D {
     public class CustomizableAppearance : MonoBehaviour
     {
-        [SerializeField]
-        private string _appearanceTypeId;
+        /// <summary>
+        /// Предполагается, что кастомизируемый объект данного компонента принадлежит только
+        /// к одному типу кастомизации на протяжении жизни
+        /// </summary>
+        // [SerializeField]
+        // private AppearanceTypeId _appearanceTypeId;
 
-        [SerializeField]
-        private AppearanceData _initialAppearanceData;
+        // [SerializeField]
+        // private AppearanceData _initialAppearanceData;
+
         private AppearanceTypesManager _appearanceTypesManager;
         private AppearanceOccupancy _occupancy;
 
@@ -19,39 +24,37 @@ namespace AppearanceCustomization3D {
         /// которые могут активироваться / деактивироваться во время игры,
         /// доступные по local id элемента кастомизации
         /// </summary>
-        private Dictionary<uint, GameObject> _nonStaticElements;
+        private Dictionary<AppearanceElementLocalId, GameObject> _nonStaticElements;
+        private AppearanceData _appearanceData;
 
         private void Awake() {
             _appearanceTypesManager = FindObjectOfType<AppearanceTypesManager>();
             _occupancy = new AppearanceOccupancy();
             _occupancy.Initialize();
-            _nonStaticElements = new Dictionary<uint, GameObject>();
+            _nonStaticElements = new Dictionary<AppearanceElementLocalId, GameObject>();
         }
 
         private void Start() {
-            InstantiateByAppearanceData(_initialAppearanceData);
+            // InstantiateByAppearanceData(_initialAppearanceData);
         }
 
-        public void Initialize(AppearanceData initialAppearanceData) {
-            _initialAppearanceData = initialAppearanceData;
-        }
+        // public void Initialize(AppearanceData initialAppearanceData) {
+        //     _initialAppearanceData = initialAppearanceData;
+        // }
 
         public void InstantiateByAppearanceData(AppearanceData data) {
-            // Todo: network destroy old appearance
-
-            // Какого типа создать кастомизируемый объект?
-            AppearanceType appearanceType = _appearanceTypesManager
-                .AppearanceTypes[this._appearanceTypeId];
+            _appearanceData = data;
+            AppearanceType appearanceType = _appearanceTypesManager.AppearanceTypes[data.AppearanceTypeId];
             
-            HashSet<uint> dataElemIdsSet = new HashSet<uint>();
-            foreach (uint elemId in data.AppearanceElementIds) {
+            HashSet<AppearanceElementLocalId> dataElemIdsSet = new HashSet<AppearanceElementLocalId>();
+            foreach (AppearanceElementLocalId elemId in data.AppearanceElementIds) {
                 dataElemIdsSet.Add(elemId);
             }
 
             Transform[] bones = null;
             GameObject armature = null;
             if (appearanceType.HasRig) {
-                // Создание GameObject со скелетом и получение костей для дальнейшей установки 
+                // Создание GameObject со скелетом и получение костей для установки элементам 
                 GameObject bonesAndArmatureHolder = Instantiate(appearanceType.BonesAndArmatureHolder);
                 bonesAndArmatureHolder.transform.SetParent(transform);
                 bonesAndArmatureHolder.transform.localPosition = Vector3.zero;
@@ -66,13 +69,11 @@ namespace AppearanceCustomization3D {
                 // Создаем нестатическое (например, одежду, броню, что может потребоваться потом),
                 // а также статическое, что может быть разве что потеряно (например, глаза, голову, бедра)
                 if (!element.IsStatic || dataElemIdsSet.Contains(element.LocalId)) {
-                    Debug.Log("Создание элемента кастомизации с local id " + element.LocalId);
                     GameObject elemGO = Instantiate(element.Prefab);
                     elemGO.transform.SetParent(appearanceElementsRoot);
                     if (appearanceType.HasRig) {
                         elemGO.GetComponent<SkinnedMeshRenderer>().bones = bones;
                     }
-                    // Todo: network spawn
 
                     // Например, нужная одежда, броня, оружие будут установлены извне
                     if (!element.IsStatic) {
@@ -95,10 +96,12 @@ namespace AppearanceCustomization3D {
         /// Возвращает элементы внешнего вида, которые препятствовали бы активации новых элементов
         /// с заданными id
         /// </summary>
-        public List<AppearanceElement> GetOccupied(IEnumerable<uint> appearanceElementsIds) {
+        public List<AppearanceElement> GetOccupied(
+            IEnumerable<AppearanceElementLocalId> appearanceElementsIds) {
             var res = new List<AppearanceElement>();
-            AppearanceType appearanceType = _appearanceTypesManager.AppearanceTypes[this._appearanceTypeId];
-            foreach (uint appearanceId in appearanceElementsIds) {
+            AppearanceType appearanceType = _appearanceTypesManager
+                .AppearanceTypes[_appearanceData.AppearanceTypeId];
+            foreach (AppearanceElementLocalId appearanceId in appearanceElementsIds) {
                 res.AddRange(_occupancy.GetOccupied(
                     appearanceType.AppearanceElements[appearanceId].OccupancyIds
                 ));
@@ -111,9 +114,9 @@ namespace AppearanceCustomization3D {
         /// скрывает элементы, которые занимали место новых.
         /// Возвращает id элементов, которые были скрыты
         /// </summary>
-        public List<uint> ActivateNonStaticElementsAndDeactivateOccupied(
-            IEnumerable<uint> appearanceElementsIds) {
-            var idsOfHidden = new List<uint>();
+        public List<AppearanceElementLocalId> ActivateNonStaticElementsAndDeactivateOccupied(
+            IEnumerable<AppearanceElementLocalId> appearanceElementsIds) {
+            var idsOfHidden = new List<AppearanceElementLocalId>();
             // Скрываем мешающие элементы внешнего вида
             var occupied = GetOccupied(appearanceElementsIds);
             if (occupied.Count > 0) {
@@ -133,13 +136,15 @@ namespace AppearanceCustomization3D {
         /// (это семантически иной случай, кроме того, его обработка сопровождается удалением
         /// элемента со сцены)
         /// </summary>
-        public void DeactivateNonStaticElements(IEnumerable<uint> appearanceElementsIds) {
+        public void DeactivateNonStaticElements(
+            IEnumerable<AppearanceElementLocalId> appearanceElementsIds) {
             SetNonStaticElementsActive(appearanceElementsIds, false);
         }
 
-        private void SetNonStaticElementsActive(IEnumerable<uint> appearanceElementsIds, bool value) {
-            AppearanceType type = _appearanceTypesManager.AppearanceTypes[_appearanceTypeId];
-            foreach (uint id in appearanceElementsIds) {
+        private void SetNonStaticElementsActive(
+            IEnumerable<AppearanceElementLocalId> appearanceElementsIds, bool value) {
+            AppearanceType type = _appearanceTypesManager.AppearanceTypes[_appearanceData.AppearanceTypeId];
+            foreach (AppearanceElementLocalId id in appearanceElementsIds) {
                 _nonStaticElements[id].SetActive(value);
                 var elem = type.AppearanceElements[id];
                 if (value)

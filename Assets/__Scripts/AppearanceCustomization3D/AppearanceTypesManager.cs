@@ -15,7 +15,7 @@ namespace AppearanceCustomization3D {
         /// <summary>
         /// Id (имена) типов кастомизируемых объектов и объекты этих типов
         /// </summary>
-        public Dictionary<string, AppearanceType> AppearanceTypes { get; private set; }
+        public Dictionary<AppearanceTypeId, AppearanceType> AppearanceTypes { get; private set; }
 
         private void Awake() {
             AssetBundle localAssetBundle = AssetBundle.LoadFromFile(
@@ -28,9 +28,9 @@ namespace AppearanceCustomization3D {
             }
 
             AppearanceType[] assets = localAssetBundle.LoadAllAssets<AppearanceType>();
-            AppearanceTypes = new Dictionary<string, AppearanceType>();
+            AppearanceTypes = new Dictionary<AppearanceTypeId, AppearanceType>();
             foreach (AppearanceType appearance in assets) {
-                AppearanceTypes.Add(appearance.name, appearance);
+                AppearanceTypes.Add(new AppearanceTypeId(appearance.name), appearance);
             }
             Debug.Log("Appearance types dictionary is initialized");
 

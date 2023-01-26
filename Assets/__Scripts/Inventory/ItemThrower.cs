@@ -33,9 +33,9 @@ public class ItemThrower : NetworkBehaviour
         ThrowAwayFromGridSection(first);
     }
 
-    private void ThrowAwayFromWearSection(WearSection wearSection, WearSection.WearSlot slot) {
-        // wearSection.RemoveFromSection(slot);
-        ThrowAway(wearSection.Slots[slot]);
+    private void ThrowAwayFromWearSection(WearSection wearSection, ItemData itemData) {
+        wearSection.RemoveFromSection(itemData);
+        ThrowAway(itemData);
     }
     private void ThrowAwayFromGridSection(GridSectionItem gridItem) {
         // За раз удаляется весь стак

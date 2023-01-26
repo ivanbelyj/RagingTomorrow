@@ -13,46 +13,29 @@ MonoBehaviour:
   m_Name: CharacterAppearanceType
   m_EditorClassIdentifier: 
   _initialApperanceElements:
-  - _localId: 0
-    _prefab: {fileID: -2511240423080479738, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
+  - _prefab: {fileID: 4887554075310606062, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
       type: 3}
     _isStatic: 1
-  - _localId: 1
-    _prefab: {fileID: -3087507936201200301, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
+    _occupancyIds: []
+  - _prefab: {fileID: 214742005582100647, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
       type: 3}
     _isStatic: 1
-  - _localId: 2
-    _prefab: {fileID: 9186995154844227520, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
-      type: 3}
-    _isStatic: 1
-  - _localId: 3
-    _prefab: {fileID: -1626349782603668768, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
-      type: 3}
-    _isStatic: 1
-  - _localId: 4
-    _prefab: {fileID: -1337662063658625187, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
-      type: 3}
-    _isStatic: 1
-  - _localId: 5
-    _prefab: {fileID: 4887554075310606062, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
-      type: 3}
-    _isStatic: 1
-  - _localId: 6
-    _prefab: {fileID: 214742005582100647, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
-      type: 3}
-    _isStatic: 1
-  - _localId: 7
-    _prefab: {fileID: 2309040711690454648, guid: 26c4f7385cbad4e478b5db35e14c42cc,
+    _occupancyIds: []
+  - _prefab: {fileID: 2309040711690454648, guid: 26c4f7385cbad4e478b5db35e14c42cc,
       type: 3}
     _isStatic: 0
-  - _localId: 8
-    _prefab: {fileID: 4536651214871980655, guid: 1d78168c24261af48862d0be1c45d3da,
+    _occupancyIds:
+    - _value: 0
+  - _prefab: {fileID: 4536651214871980655, guid: 1d78168c24261af48862d0be1c45d3da,
       type: 3}
     _isStatic: 0
-  - _localId: 9
-    _prefab: {fileID: 6409439113988574565, guid: fe904e1fa0a505941af5de09c0d637b6,
+    _occupancyIds:
+    - _value: 1
+  - _prefab: {fileID: 6409439113988574565, guid: fe904e1fa0a505941af5de09c0d637b6,
       type: 3}
     _isStatic: 0
+    _occupancyIds:
+    - _value: 2
   _hasRig: 1
   _bonesAndArmatureHolder: {fileID: 4152245839792682039, guid: b02a7a3b3351f3847a9ce22a1fd88916,
     type: 3}

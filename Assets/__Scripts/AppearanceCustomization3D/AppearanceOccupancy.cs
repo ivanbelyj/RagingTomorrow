@@ -13,10 +13,10 @@ namespace AppearanceCustomization3D {
         /// <summary>
         /// Для каждой части с заданным id занятости известен элемент кастомизации, который занимает его 
         /// </summary>
-        private Dictionary<uint, AppearanceElement> Occupancy { get; set; }
+        private Dictionary<OccupancyId, AppearanceElement> Occupancy { get; set; }
         
         public void Initialize() {
-            Occupancy = new Dictionary<uint, AppearanceElement>();
+            Occupancy = new Dictionary<OccupancyId, AppearanceElement>();
         }
 
         /// <summary>
@@ -29,9 +29,9 @@ namespace AppearanceCustomization3D {
         /// <summary>
         /// Получает элементы, которые занимают части с заданными id занятости
         /// </summary>
-        public List<AppearanceElement> GetOccupied(uint[] occupancyIds) {
+        public List<AppearanceElement> GetOccupied(OccupancyId[] occupancyIds) {
             var res = new List<AppearanceElement>();
-            foreach (uint id in occupancyIds) {
+            foreach (OccupancyId id in occupancyIds) {
                 AppearanceElement elemById;
                 if (Occupancy.TryGetValue(id, out elemById)) {
                     res.Add(elemById);
@@ -41,13 +41,13 @@ namespace AppearanceCustomization3D {
         }
 
         public void Occupy(AppearanceElement elem) {
-            foreach (uint occupancyId in elem.OccupancyIds) {
+            foreach (OccupancyId occupancyId in elem.OccupancyIds) {
                 Occupancy[occupancyId] = elem;
             }
         }
 
         public void Dispossess(AppearanceElement elem) {
-            foreach (uint occupancyId in elem.OccupancyIds) {
+            foreach (OccupancyId occupancyId in elem.OccupancyIds) {
                 Occupancy.Remove(occupancyId);
             }
         }

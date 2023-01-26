@@ -46,7 +46,7 @@ public class InteractableInventory : MonoBehaviour, IInventoryInfoProvider, IGri
     }
 
 #pragma warning disable CS0067
-    public event IInventoryInfoProvider.InfoChangedEventHandler InventoryInfoChanged;
+    public event IInventoryInfoProvider.InventoryInfoChangedEventHandler InventoryInfoChanged;
 
 #pragma warning restore CS0067
 }
