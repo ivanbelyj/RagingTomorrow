@@ -6,7 +6,7 @@ using UnityEngine;
 using AppearanceCustomization3D;
 
 [RequireComponent(typeof(Entity))]
-public class PlayerCamera : NetworkBehaviour, ISetCameraOffset
+public class PlayerOverview : NetworkBehaviour, ISetCameraOffset
 {
     [SerializeField]
     private Overview _overview;

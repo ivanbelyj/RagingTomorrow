@@ -11,7 +11,7 @@ using AppearanceCustomization3D;
 [RequireComponent(typeof(CharacterDataProvider))]
 [RequireComponent(typeof(Interactor))]
 [RequireComponent(typeof(ItemInteractorStrategy))]
-[RequireComponent(typeof(PlayerCamera))]
+[RequireComponent(typeof(PlayerOverview))]
 public class Player : NetworkBehaviour
 {
     // Todo: Только для теста! Удалить после
@@ -33,14 +33,14 @@ public class Player : NetworkBehaviour
     private CharacterDataProvider _characterDataProvider;
     [SerializeField]
     private CustomizableAppearance _customizableAppearance;
-    private PlayerCamera _playerCamera;
+    private PlayerOverview _playerCamera;
 
     private void Awake() {
         _entity = GetComponent<Entity>();
         _inventory = GetComponent<CharactersInventory>();
         _itemThrower = GetComponent<ItemThrower>();
         _characterDataProvider = GetComponent<CharacterDataProvider>();
-        _playerCamera = GetComponent<PlayerCamera>();
+        _playerCamera = GetComponent<PlayerOverview>();
 
         _interactor = GetComponent<Interactor>();
 
@@ -89,7 +89,7 @@ public class Player : NetworkBehaviour
         }
 
         _itemsUIController = FindObjectOfType<ItemsUIController>();
-        _itemsUIController.SetPlayer(this, _playerCamera);
+        _itemsUIController.SetPlayer(this.gameObject, this, _playerCamera);
 
         _itemsUIController.CloseUI();
 

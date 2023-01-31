@@ -28,6 +28,9 @@ public class ItemsUIController : MonoBehaviour
     private InventoryUI _otherInventoryUI;
 
     [SerializeField]
+    private GameObjectView _characterView;
+
+    [SerializeField]
     private GameObject _parentUI;
     public RectTransform ParentUI { get => (RectTransform)(_parentUI.transform); }
 
@@ -38,7 +41,7 @@ public class ItemsUIController : MonoBehaviour
     private TakeAllButton _takeAllButton;
 
     private Player _player;
-    private PlayerCamera _playerCamera;
+    private PlayerOverview _playerCamera;
 
     private bool _isUIOpened;
     public bool IsUIOpened => _isUIOpened;
@@ -48,9 +51,10 @@ public class ItemsUIController : MonoBehaviour
     /// <summary>
     /// Устанавливает игрока, информация которого будет отображаться
     /// </summary>
-    public void SetPlayer(Player player, PlayerCamera playerCamera) {
+    public void SetPlayer(GameObject playerGO, Player player, PlayerOverview playerOverview) {
+        _characterView.SetGameObject(playerGO);
         _player = player;
-        _playerCamera = playerCamera;
+        _playerCamera = playerOverview;
         // _playersInventoryUI = GameObject.FindGameObjectWithTag("PlayersInventory")
         //     .GetComponent<InventoryUI>();
         
