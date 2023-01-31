@@ -4,7 +4,6 @@ using UnityEngine;
 using Mirror;
 using System.Linq;
 
-[RequireComponent(typeof(Collider))]
 public class ItemThrower : NetworkBehaviour
 {
     public float throwAwayForce = 0.2f;
@@ -18,11 +17,11 @@ public class ItemThrower : NetworkBehaviour
     /// Бросок происходит с отступом от бросающего, Collider требуется для определения
     /// границ бросающего
     /// </summary>
-    private Collider _collider;
+    // [SerializeField]
+    // private Collider _collider;
     private ItemStaticDataManager _itemStaticDataManager;
 
     private void Awake() {
-        _collider = GetComponent<Collider>();
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
     }
 
@@ -72,7 +71,7 @@ public class ItemThrower : NetworkBehaviour
         // Debug.Log("ThrowAway: itemData - " + itemStaticData.name +
         //     $". {itemStaticData.ItemName}, {itemStaticData.Description}, Item: {itemStaticData.ItemPrefab}");
         
-        Vector3 spawnOffset = transform.forward * (_collider.bounds.size.z / 2);
+        Vector3 spawnOffset = Vector3.zero; // transform.forward * (_collider.bounds.size.z / 2);
         GameObject itemGO = Instantiate(itemStaticData.ItemPrefab,
             transform.position + spawnOffset, Quaternion.identity);
         

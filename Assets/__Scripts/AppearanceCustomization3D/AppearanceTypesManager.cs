@@ -33,6 +33,9 @@ namespace AppearanceCustomization3D {
                 AppearanceTypes.Add(new AppearanceTypeId(appearance.name), appearance);
             }
             Debug.Log("Appearance types dictionary is initialized");
+            foreach (var pair in AppearanceTypes) {
+                Debug.Log("\t" + pair.Key + ": " + pair.Value.name);
+            }
 
             localAssetBundle.Unload(false);
         }

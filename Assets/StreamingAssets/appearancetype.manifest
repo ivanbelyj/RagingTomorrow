@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 141453041
+CRC: 698843932
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8ad807ab3b59139bb5575bf5a153528e
+    Hash: e730107f45ff078b07a2a3abfdda810c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 10d3c0e6c0f8224174673fcc33e73914
+    Hash: 18b7b0d14f04605b90c8596121f07cdc
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -14,6 +14,8 @@ ClassTypes:
 - Class: 4
   Script: {instanceID: 0}
 - Class: 21
+  Script: {instanceID: 0}
+- Class: 28
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
@@ -31,5 +33,6 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: AppearanceCustomization3D.OccupancyId
 Assets:
-- Assets/BundledAssets/appearancetype/CharacterAppearanceType.asset
+- Assets/BundledAssets/appearancetype/OldCharacterAppearanceType.asset
+- Assets/BundledAssets/appearancetype/TestCharacterAppearanceType.asset
 Dependencies: []

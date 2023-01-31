@@ -16,6 +16,11 @@ namespace AppearanceCustomization3D {
         // [SerializeField]
         // private AppearanceData _initialAppearanceData;
 
+        [Tooltip("Если кастомизируемый объект будет анимирован, требуется повторная привязка "
+            + "свойств для Animator")]
+        [SerializeField]
+        private Animator _animator;
+
         private AppearanceTypesManager _appearanceTypesManager;
         private AppearanceOccupancy _occupancy;
 
@@ -81,6 +86,10 @@ namespace AppearanceCustomization3D {
                         elemGO.SetActive(false);
                     }
                 }
+            }
+
+            if (_animator != null) {
+                _animator.Rebind();
             }
         }
 

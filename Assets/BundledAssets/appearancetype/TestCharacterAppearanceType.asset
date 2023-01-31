@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7ab7bc066d5fb44876c6f393874cf8, type: 3}
+  m_Name: TestCharacterAppearanceType
+  m_EditorClassIdentifier: 
+  _initialApperanceElements:
+  - _prefab: {fileID: 4077835334269467097, guid: a5d01fd52460ca44ebbfff01ecc9378f,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  _hasRig: 1
+  _bonesAndArmatureHolder: {fileID: 7033567633734053235, guid: 8afbcd917dfadad4b9c5f044c28b70aa,
+    type: 3}

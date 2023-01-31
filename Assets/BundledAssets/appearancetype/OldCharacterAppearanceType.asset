@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7ab7bc066d5fb44876c6f393874cf8, type: 3}
+  m_Name: OldCharacterAppearanceType
+  m_EditorClassIdentifier: 
+  _initialApperanceElements:
+  - _prefab: {fileID: 4887554075310606062, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _prefab: {fileID: 214742005582100647, guid: 42e83a9c7526c8a4a80089e1e5a2a89c,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _prefab: {fileID: 2309040711690454648, guid: 26c4f7385cbad4e478b5db35e14c42cc,
+      type: 3}
+    _isStatic: 0
+    _occupancyIds:
+    - _value: 0
+  - _prefab: {fileID: 4536651214871980655, guid: 1d78168c24261af48862d0be1c45d3da,
+      type: 3}
+    _isStatic: 0
+    _occupancyIds:
+    - _value: 1
+  - _prefab: {fileID: 6409439113988574565, guid: fe904e1fa0a505941af5de09c0d637b6,
+      type: 3}
+    _isStatic: 0
+    _occupancyIds:
+    - _value: 2
+  _hasRig: 1
+  _bonesAndArmatureHolder: {fileID: 4152245839792682039, guid: b02a7a3b3351f3847a9ce22a1fd88916,
+    type: 3}
