@@ -35,6 +35,22 @@ namespace AppearanceCustomization3D {
         /// </summary>
         public GameObject BonesAndArmatureHolder => _bonesAndArmatureHolder;
 
+        [SerializeField]
+        private bool _setCameraOffsetOnInstantiate;
+        /// <summary>
+        /// Устанавливать ли смещение камеры при инстанцировании кастомизируемого объекта?
+        /// Это актуально, например, для кастомизируемых объектов игрока
+        /// </summary>
+        public bool SetCameraOffsetOnInstantiate => _setCameraOffsetOnInstantiate;
+
+        [SerializeField]
+        private Vector3 _cameraOffset;
+        /// <summary>
+        /// Смещение камеры, чтобы обеспечить вид от лица кастомизируемого объекта. Актуально не для всех
+        /// видов кастомизируемых объектов
+        /// </summary>
+        public Vector3 CameraOffset => _cameraOffset;
+
         /// <summary>
         /// Локальные id и соответствующие части кастомизации, которые можно применять к кастомизируемому
         /// объекту данного типа.

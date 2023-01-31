@@ -9,11 +9,11 @@ using UnityEngine;
 public class CharacterFloatingInfo : NetworkBehaviour
 {
     [SerializeField]
-    private GameObject floatingInfo;
+    private GameObject _floatingInfo;
     [SerializeField]
-    public TextMeshPro characterNameText;
+    public TextMeshPro _characterNameText;
     [SerializeField]
-    public TextMeshPro characterHealthText;
+    public TextMeshPro _characterHealthText;
 
     private CharacterDataProvider _characterDataProvider;
     private Entity _entity;
@@ -22,15 +22,26 @@ public class CharacterFloatingInfo : NetworkBehaviour
         _characterDataProvider = GetComponent<CharacterDataProvider>();
         _entity = GetComponent<Entity>();
         _characterDataProvider.CharacterDataChanged += (CharacterData newData) => {
-            // Debug.Log("Character info is changed");
-            characterNameText.text = newData.Name;
+            _characterNameText.text = newData.Name;
         };
     }
 
     public override void OnStartClient()
     {
         base.OnStartClient();
-        BindFloatingInfo();
+
+        // Локальному персонажу не нужна информация о себе.
+        // netId униикален для сетевых gameObject
+        if (isLocalPlayer && netId == NetworkClient.localPlayer.netId) {
+            Disable();
+        } else {
+            BindFloatingInfo();
+        }
+    }
+
+    private void Disable() {
+        this.enabled = false;
+        _floatingInfo.SetActive(false);
     }
 
     private void BindFloatingInfo() {
@@ -39,12 +50,12 @@ public class CharacterFloatingInfo : NetworkBehaviour
             SetHealthText(newVal);
         };
         void SetHealthText(float val) {
-            characterHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
+            _characterHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
         }
     }
 
     private void Update() {
         if (!isLocalPlayer)
-            floatingInfo.transform.LookAt(Camera.main.transform);
+            _floatingInfo.transform.LookAt(Camera.main.transform);
     }
 }

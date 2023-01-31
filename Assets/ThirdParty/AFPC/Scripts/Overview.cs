@@ -161,7 +161,7 @@ namespace AFPC {
 	    }
 
         /// <summary>
-        /// Control the camera lens shift values.
+        /// Control the camera lens shift values. Required "physical camera" mode on
         /// </summary>
 	    public virtual void Shaking () {
 		    if (!isShakingAvaiable) return;

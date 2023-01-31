@@ -188,6 +188,7 @@ GameObject:
   - component: {fileID: 5238431715026806161}
   - component: {fileID: 707345098067341134}
   - component: {fileID: 879729973011753151}
+  - component: {fileID: 4907695936791074190}
   - component: {fileID: 2168946248158206767}
   - component: {fileID: 4901890020522425594}
   - component: {fileID: 2088041632563891022}
@@ -233,10 +234,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2.2
+  m_Radius: 0.4
+  m_Height: 1.6
   m_Direction: 1
-  m_Center: {x: 0, y: 1.1, z: 0}
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!54 &507993662015929206
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -418,6 +419,40 @@ MonoBehaviour:
         _value: TestCharacterAppearanceType
       _appearanceElementIds:
       - _value: 0
+--- !u!114 &4907695936791074190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507993662015929204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 779a42961bbb83f48962f25361e3c63a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _overview:
+    isDebugLog: 0
+    lookingInputValues: {x: 0, y: 0}
+    aimingInputValue: 0
+    isFollowingInstant: 1
+    damping: 100
+    cameraOffset: {x: 0, y: 0.8, z: 0}
+    isHorizontalInverted: 0
+    isVerticalInverted: 1
+    sensitivity: 400
+    horizontalRange: 0
+    verticalRange: 90
+    searchMask:
+      serializedVersion: 2
+      m_Bits: 0
+    "sear\u0441hDistance": 1
+    defaultFOV: 80
+    aimingFOV: 40
+    referenceShakingAmount: 0
+    camera: {fileID: 0}
 --- !u!114 &2168946248158206767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,26 +467,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  overview:
-    isDebugLog: 0
-    lookingInputValues: {x: 0, y: 0}
-    aimingInputValue: 0
-    isFollowingInstant: 1
-    damping: 10
-    cameraOffset: {x: 0, y: 0.8, z: 0}
-    isHorizontalInverted: 0
-    isVerticalInverted: 1
-    sensitivity: 300
-    horizontalRange: 0
-    verticalRange: 90
-    searchMask:
-      serializedVersion: 2
-      m_Bits: 0
-    "sear\u0441hDistance": 1
-    defaultFOV: 80
-    aimingFOV: 40
-    referenceShakingAmount: 0.5
-    camera: {fileID: 0}
   _customizableAppearance: {fileID: 7047973739683847187}
 --- !u!114 &4901890020522425594
 MonoBehaviour:
@@ -572,9 +587,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  floatingInfo: {fileID: 1709699199297977212}
-  characterNameText: {fileID: 5942551270749010761}
-  characterHealthText: {fileID: 6370469275099971039}
+  _floatingInfo: {fileID: 1709699199297977212}
+  _characterNameText: {fileID: 5942551270749010761}
+  _characterHealthText: {fileID: 6370469275099971039}
 --- !u!114 &7047973739683847187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,7 +616,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 396e2bd2f9b376141b9921e8d8530126, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

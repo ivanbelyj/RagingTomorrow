@@ -38,6 +38,7 @@ public class ItemsUIController : MonoBehaviour
     private TakeAllButton _takeAllButton;
 
     private Player _player;
+    private PlayerCamera _playerCamera;
 
     private bool _isUIOpened;
     public bool IsUIOpened => _isUIOpened;
@@ -47,8 +48,9 @@ public class ItemsUIController : MonoBehaviour
     /// <summary>
     /// Устанавливает игрока, информация которого будет отображаться
     /// </summary>
-    public void SetPlayer(Player player) {
+    public void SetPlayer(Player player, PlayerCamera playerCamera) {
         _player = player;
+        _playerCamera = playerCamera;
         // _playersInventoryUI = GameObject.FindGameObjectWithTag("PlayersInventory")
         //     .GetComponent<InventoryUI>();
         
@@ -73,8 +75,8 @@ public class ItemsUIController : MonoBehaviour
         // _playersInventoryUI.gameObject.SetActive(true);
         _parentUI.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
-        _player.overview.BanLooking();
-        _player.overview.BanAiming();
+        _playerCamera.Overview.BanLooking();
+        _playerCamera.Overview.BanAiming();
         _isUIOpened = true;
     }
 
@@ -82,8 +84,8 @@ public class ItemsUIController : MonoBehaviour
         // _playersInventoryUI.gameObject.SetActive(false);
         _parentUI.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
-        _player.overview.AllowLooking();
-        _player.overview.AllowAiming();
+        _playerCamera.Overview.AllowLooking();
+        _playerCamera.Overview.AllowAiming();
         _isUIOpened = false;
     }
 

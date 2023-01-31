@@ -88,6 +88,16 @@ namespace AppearanceCustomization3D {
                 }
             }
 
+            if (appearanceType.SetCameraOffsetOnInstantiate) {
+                ISetCameraOffset setCamOffset = GetComponent<ISetCameraOffset>();
+                if (setCamOffset == null) {
+                    Debug.LogError("Тип кастомизируемого объекта предусматривает установку смещения камеры, "
+                        + "однако компонент, осуществляющий установку смещения, не прикреплен к game object");
+                } else {
+                    setCamOffset.SetCameraOffset(appearanceType.CameraOffset);
+                }
+            }
+
             if (_animator != null) {
                 _animator.Rebind();
             }
