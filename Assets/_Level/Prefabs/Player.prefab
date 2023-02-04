@@ -186,6 +186,7 @@ GameObject:
   - component: {fileID: 507993662015929206}
   - component: {fileID: 2161631463249222270}
   - component: {fileID: 5238431715026806161}
+  - component: {fileID: 5298394038633702759}
   - component: {fileID: 707345098067341134}
   - component: {fileID: 879729973011753151}
   - component: {fileID: 4907695936791074190}
@@ -308,7 +309,7 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
---- !u!114 &707345098067341134
+--- !u!114 &5298394038633702759
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -317,68 +318,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 507993662015929204}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df6da2b8df99c64fbe6151838427dd6, type: 3}
+  m_Script: {fileID: 11500000, guid: 9aea7e1e6eead854c9be08deb0058483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  health:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 20
-    _value: 20
-  endurance:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 20
-    _value: 20
-  satiety:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 0
-    _value: 20
-  bleedingParameter:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 0
-    _value: 0
-  radiation:
-    minValue: 0
-    maxValue: 20
-    _initialValue: 0
-    _value: 0
-  regeneration:
-    isInfinite: 1
-    recoverToInitial: 1
-    speed: 0.1
-    duration: 0
-    targetParameter: 0
-    startTime: 0
-    effectId: 0
-  enduranceRecovery:
-    isInfinite: 1
-    recoverToInitial: 1
-    speed: 0.3
-    duration: 0
-    targetParameter: 1
-    startTime: 0
-    effectId: 0
-  hunger:
-    isInfinite: 1
-    recoverToInitial: 1
-    speed: -0.1
-    duration: 0
-    targetParameter: 2
-    startTime: 0
-    effectId: 0
-  enduranceDecrease:
-    isInfinite: 1
-    recoverToInitial: 0
-    speed: -0.9
-    duration: 0
-    targetParameter: 1
-    startTime: 0
-    effectId: 0
   movement:
     isDebugLog: 0
     movementInputValues: {x: 0, y: 0, z: 0}
@@ -397,6 +339,80 @@ MonoBehaviour:
       m_Bits: 1
     rb: {fileID: 507993662015929206}
     cc: {fileID: 815267859275951134}
+--- !u!114 &707345098067341134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507993662015929204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df6da2b8df99c64fbe6151838427dd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  health:
+    minValue: 0
+    maxValue: 1
+    recoveredValue: 1
+    value: 1
+  endurance:
+    minValue: 0
+    maxValue: 1
+    recoveredValue: 1
+    value: 1
+  satiety:
+    minValue: 0
+    maxValue: 1
+    recoveredValue: 1
+    value: 1
+  bleed:
+    minValue: 0
+    maxValue: 1
+    recoveredValue: 1
+    value: 1
+  radiation:
+    minValue: 0
+    maxValue: 1
+    recoveredValue: 1
+    value: 1
+  regeneration:
+    isInfinite: 1
+    speed: 0.01
+    duration: 0
+    targetParameter: 0
+  enduranceRecovery:
+    isInfinite: 1
+    speed: 0.05
+    duration: 0
+    targetParameter: 1
+  hunger:
+    isInfinite: 1
+    speed: -0.001
+    duration: 0
+    targetParameter: 2
+  radiationExcretion:
+    isInfinite: 1
+    speed: -0.001
+    duration: 0
+    targetParameter: 4
+  runEnduranceDecrease:
+    isInfinite: 1
+    speed: -0.15
+    duration: 0
+    targetParameter: 1
+  bleedEffect:
+    isInfinite: 0
+    speed: 0
+    duration: 0
+    targetParameter: 0
+  radiationPoisoning:
+    isInfinite: 0
+    speed: 0
+    duration: 0
+    targetParameter: 0
 --- !u!114 &879729973011753151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,18 +449,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _overview:
+  overview:
     isDebugLog: 0
     lookingInputValues: {x: 0, y: 0}
     aimingInputValue: 0
     isFollowingInstant: 1
-    damping: 100
-    cameraOffset: {x: 0, y: 0.8, z: 0}
+    damping: 10
+    cameraOffset: {x: 0, y: 0, z: 0}
     isHorizontalInverted: 0
     isVerticalInverted: 1
     sensitivity: 400
     horizontalRange: 0
-    verticalRange: 90
+    verticalRange: 70
     searchMask:
       serializedVersion: 2
       m_Bits: 0
@@ -453,6 +469,12 @@ MonoBehaviour:
     aimingFOV: 40
     referenceShakingAmount: 0
     camera: {fileID: 0}
+  characterLook:
+    _animator: {fileID: 6222619205890100977}
+    _target: {x: 0, y: 0, z: 0}
+    _bonesToRotate: 36000000
+    _transformsToRotate: []
+  rigidbodyToRotate: {fileID: 507993662015929206}
 --- !u!114 &2168946248158206767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,7 +489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _customizableAppearance: {fileID: 7047973739683847187}
+  customizableAppearance: {fileID: 7047973739683847187}
 --- !u!114 &4901890020522425594
 MonoBehaviour:
   m_ObjectHideFlags: 0

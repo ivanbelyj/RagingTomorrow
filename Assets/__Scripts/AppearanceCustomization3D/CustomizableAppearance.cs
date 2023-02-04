@@ -88,13 +88,20 @@ namespace AppearanceCustomization3D {
                 }
             }
 
-            if (appearanceType.SetCameraOffsetOnInstantiate) {
-                ISetCameraOffset setCamOffset = GetComponent<ISetCameraOffset>();
+            if (appearanceType.HasCamera) {
+                ISetCameraToAppearance setCamOffset = GetComponent<ISetCameraToAppearance>();
                 if (setCamOffset == null) {
                     Debug.LogError("Тип кастомизируемого объекта предусматривает установку смещения камеры, "
                         + "однако компонент, осуществляющий установку смещения, не прикреплен к game object");
                 } else {
-                    setCamOffset.SetCameraOffset(appearanceType.CameraOffset);
+                    Transform boneTransform = armature.transform.Find(appearanceType.CameraBoneName);
+                    if (boneTransform == null) {
+                        Debug.LogError("Кость, которая должна была быть установлена в качестве опорной"
+                            + " для камеры, не найдена по указанному в AppearanceType имени. "
+                            + "Проверьте корректность имени в соответствии с описанными правилами "
+                            + "именования");
+                    }
+                    setCamOffset.SetCamera(boneTransform, appearanceType.CameraOffset);
                 }
             }
 

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterDataProvider))]
-[RequireComponent(typeof(Entity))]
+[RequireComponent(typeof(EntityLifecycle))]
 public class CharacterFloatingInfo : NetworkBehaviour
 {
     [SerializeField]
@@ -16,11 +16,11 @@ public class CharacterFloatingInfo : NetworkBehaviour
     public TextMeshPro _characterHealthText;
 
     private CharacterDataProvider _characterDataProvider;
-    private Entity _entity;
+    private EntityLifecycle _entity;
 
     private void Awake() {
         _characterDataProvider = GetComponent<CharacterDataProvider>();
-        _entity = GetComponent<Entity>();
+        _entity = GetComponent<EntityLifecycle>();
         _characterDataProvider.CharacterDataChanged += (CharacterData newData) => {
             _characterNameText.text = newData.Name;
         };
@@ -45,10 +45,11 @@ public class CharacterFloatingInfo : NetworkBehaviour
     }
 
     private void BindFloatingInfo() {
-        SetHealthText(_entity.health.Value);
-        _entity.health.OnValueChanged += (old, newVal) => {
-            SetHealthText(newVal);
-        };
+        SetHealthText(_entity.Parameters[LifecycleParameterEnum.Health].Value);
+        _entity.Parameters[LifecycleParameterEnum.Health].OnValueChanged +=
+            (old, newVal) => {
+                SetHealthText(newVal);
+            };
         void SetHealthText(float val) {
             _characterHealthText.text = string.Format("{0:F2}", System.Math.Round(val, 2));
         }

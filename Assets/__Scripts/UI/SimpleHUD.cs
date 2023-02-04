@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // [RequireComponent(typeof(Entity))]
 public class SimpleHUD : MonoBehaviour
 {
-    private Entity targetEntity;
+    private EntityLifecycle targetEntity;
 
     [SerializeField]
     private Slider healthSlider;
@@ -20,18 +20,18 @@ public class SimpleHUD : MonoBehaviour
     // radiation, bleeding
 
     public void SetEntity(GameObject entity) {
-        targetEntity = entity.GetComponent<Entity>();
-        InitializeSlider(healthSlider, targetEntity.health);
-        InitializeSlider(enduranceSlider, targetEntity.endurance);
-        InitializeSlider(satietySlider, targetEntity.satiety);
+        targetEntity = entity.GetComponent<EntityLifecycle>();
+        InitializeSlider(healthSlider, targetEntity.Parameters[LifecycleParameterEnum.Health]);
+        InitializeSlider(enduranceSlider, targetEntity.Parameters[LifecycleParameterEnum.Endurance]);
+        InitializeSlider(satietySlider, targetEntity.Parameters[LifecycleParameterEnum.Satiety]);
         
-        targetEntity.health.OnValueChanged += (oldValue, newValue) => {
+        targetEntity.Parameters[LifecycleParameterEnum.Health].OnValueChanged += (oldValue, newValue) => {
             UpdateSlider(healthSlider, newValue);
         };
-        targetEntity.endurance.OnValueChanged += (oldValue, newValue) => {
+        targetEntity.Parameters[LifecycleParameterEnum.Endurance].OnValueChanged += (oldValue, newValue) => {
             UpdateSlider(enduranceSlider, newValue);
         };
-        targetEntity.satiety.OnValueChanged += (oldValue, newValue) => {
+        targetEntity.Parameters[LifecycleParameterEnum.Satiety].OnValueChanged += (oldValue, newValue) => {
             UpdateSlider(satietySlider, newValue);
         };
     }
@@ -40,8 +40,8 @@ public class SimpleHUD : MonoBehaviour
         slider.value = newValue;
     }
     private void InitializeSlider(Slider slider, LifecycleParameter parameter) {
-        slider.minValue = parameter.minValue;
-        slider.maxValue = parameter.maxValue;
+        slider.minValue = parameter.MinValue;
+        slider.maxValue = parameter.MaxValue;
         slider.value = parameter.Value;
         // Debug.Log($"Slider is initialized. [{slider.minValue},{slider.maxValue}]."
         //     + $"Current: {slider.value}");

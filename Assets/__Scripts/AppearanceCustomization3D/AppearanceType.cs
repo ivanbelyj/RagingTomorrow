@@ -18,8 +18,7 @@ namespace AppearanceCustomization3D {
         [SerializeField]
         private List<AppearanceElement> _initialApperanceElements;
 
-        private Dictionary<AppearanceElementLocalId, AppearanceElement> _appearanceElements;
-
+        [Header("Скелет")]
         [SerializeField]
         private bool _hasRig;
         public bool HasRig => _hasRig;
@@ -35,21 +34,35 @@ namespace AppearanceCustomization3D {
         /// </summary>
         public GameObject BonesAndArmatureHolder => _bonesAndArmatureHolder;
 
+        [Header("Камера")]
         [SerializeField]
-        private bool _setCameraOffsetOnInstantiate;
+        private bool _hasCamera;
         /// <summary>
-        /// Устанавливать ли смещение камеры при инстанцировании кастомизируемого объекта?
+        /// Устанавливать ли камеру при инстанцировании кастомизируемого объекта в соответствии
+        /// с параметрами, указанными в объекте типа?
         /// Это актуально, например, для кастомизируемых объектов игрока
         /// </summary>
-        public bool SetCameraOffsetOnInstantiate => _setCameraOffsetOnInstantiate;
+        public bool HasCamera => _hasCamera;
+
+        [SerializeField]
+        private string _cameraBoneName = "mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:Neck/mixamorig:Head";
+        /// <summary>
+        /// Кость, относительно которой будет определяться позиция камеры.
+        /// Актуально, если тип кастомизируемого объекта предполагает скелет, а в приложении
+        /// требуется смотреть от определенной кости данного объекта.
+        /// Имя кости включает ее положение в иерархии скелета. Например:
+        /// mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:Neck/mixamorig:Head  
+        /// </summary>
+        public string CameraBoneName => _cameraBoneName;
 
         [SerializeField]
         private Vector3 _cameraOffset;
         /// <summary>
-        /// Смещение камеры, чтобы обеспечить вид от лица кастомизируемого объекта. Актуально не для всех
-        /// видов кастомизируемых объектов
+        /// Смещение камеры относительно выбранной опорной кости
         /// </summary>
         public Vector3 CameraOffset => _cameraOffset;
+
+        private Dictionary<AppearanceElementLocalId, AppearanceElement> _appearanceElements;
 
         /// <summary>
         /// Локальные id и соответствующие части кастомизации, которые можно применять к кастомизируемому
