@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4079357804
+CRC: 2527648446
 Hashes:
   AssetFileHash:
     serializedVersion: 2
     Hash: 2349f12187b3eb091cc2693ac740f33c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 81b137bb4fc4e67e653b446dd3779dea
+    Hash: d842329eac3bdfb51fa5b9bd39301c30
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -30,6 +30,8 @@ ClassTypes:
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: AppearanceCustomization3D.AppearanceElement
+- AssemblyName: Assembly-CSharp
+  ClassName: AppearanceCustomization3D.AppearanceElementLocalId
 - AssemblyName: Assembly-CSharp
   ClassName: AppearanceCustomization3D.OccupancyId
 Assets:

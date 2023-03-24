@@ -11,9 +11,9 @@ namespace AppearanceCustomization3D {
     public class AppearanceElement
     {
         /// <summary>
-        /// Локальный для типа кастомизируемого объекта id элемента. Устанавливается динамически
+        /// Локальный для типа кастомизируемого объекта id элемента
         /// </summary>
-        // [SerializeField]
+        [SerializeField]
         private AppearanceElementLocalId _localId;
         public AppearanceElementLocalId LocalId { get => _localId; set => _localId = value; }
         

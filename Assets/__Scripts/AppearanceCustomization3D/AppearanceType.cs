@@ -76,9 +76,9 @@ namespace AppearanceCustomization3D {
 
         public void Awake() {
             _appearanceElements = new Dictionary<AppearanceElementLocalId, AppearanceElement>();
-            uint newId = 0;
+            // uint newId = 0;
             foreach (AppearanceElement item in _initialApperanceElements) {
-                item.LocalId = new AppearanceElementLocalId(newId++);
+                // item.LocalId = new AppearanceElementLocalId(newId++);
                 _appearanceElements.Add(item.LocalId, item);
             }
         }
