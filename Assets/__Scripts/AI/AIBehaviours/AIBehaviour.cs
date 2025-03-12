@@ -10,7 +10,7 @@ public class AIBehaviour : MonoBehaviour
 {
     [SerializeField]
     private GameObject target;
-    public virtual GameObject Target { get => target; set => target = value; }
+    public GameObject Target { get => target; set => target = value; }
     protected AIAgent agent;
 
     public virtual void Awake() {

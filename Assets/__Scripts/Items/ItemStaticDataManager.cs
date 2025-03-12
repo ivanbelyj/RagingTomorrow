@@ -17,7 +17,7 @@ public class ItemStaticDataManager : MonoBehaviour
 
     private void Start() {
         AssetBundle localAssetBundle = AssetBundle.LoadFromFile(
-            Path.Combine(Application.streamingAssetsPath, bundleName)
+            System.IO.Path.Combine(Application.streamingAssetsPath, bundleName)
         );
 
         if (localAssetBundle is null) {

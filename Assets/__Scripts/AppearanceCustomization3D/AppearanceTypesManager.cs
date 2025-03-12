@@ -19,7 +19,7 @@ namespace AppearanceCustomization3D {
 
         private void Awake() {
             AssetBundle localAssetBundle = AssetBundle.LoadFromFile(
-                Path.Combine(Application.streamingAssetsPath, _bundleName)
+                System.IO.Path.Combine(Application.streamingAssetsPath, _bundleName)
             );
 
             if (localAssetBundle is null) {
