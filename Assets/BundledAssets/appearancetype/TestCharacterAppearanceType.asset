@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: TestCharacterAppearanceType
   m_EditorClassIdentifier: 
   _initialApperanceElements:
-  - _prefab: {fileID: 4077835334269467097, guid: a5d01fd52460ca44ebbfff01ecc9378f,
+  - _localId:
+      _value: 0
+    _prefab: {fileID: 4077835334269467097, guid: a5d01fd52460ca44ebbfff01ecc9378f,
       type: 3}
     _isStatic: 1
     _occupancyIds: []

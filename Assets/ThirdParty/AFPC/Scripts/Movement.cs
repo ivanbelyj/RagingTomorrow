@@ -66,16 +66,16 @@ namespace AFPC {
         public virtual void Initialize () {
             rb.freezeRotation = true;
             rb.mass = mass;
-            rb.drag = drag;
+            rb.linearDamping = drag;
             cc.height = height;
             if (isGeneratePhysicMaterial) {
-                PhysicMaterial physicMaterial = new PhysicMaterial {
+                PhysicsMaterial physicMaterial = new PhysicsMaterial {
                     name = "Generated Material",
                     bounciness = 0.01f,
                     dynamicFriction = 0.0f,
                     staticFriction = 0.0f,
-                    frictionCombine = PhysicMaterialCombine.Minimum,
-                    bounceCombine = PhysicMaterialCombine.Minimum
+                    frictionCombine = PhysicsMaterialCombine.Minimum,
+                    bounceCombine = PhysicsMaterialCombine.Minimum
                 };
                 cc.material = physicMaterial;
             }
@@ -98,7 +98,7 @@ namespace AFPC {
             isMovementAvailable = true;
             if (isDebugLog) Debug.Log (rb.gameObject.name + ": Ban Movement");
             if (isStopImmediately) {
-                rb.velocity = Vector3.zero;
+                rb.linearVelocity = Vector3.zero;
                 if (isDebugLog) Debug.Log (rb.gameObject.name + ": Stop Movement");
             }
         }
@@ -191,7 +191,7 @@ namespace AFPC {
             if (!isAirControl) {
                 if (!isGrounded) return;
             }
-            if (rb.velocity.magnitude > 1.0f) {
+            if (rb.linearVelocity.magnitude > 1.0f) {
                 rb.interpolation = RigidbodyInterpolation.Extrapolate;
             }
             else {
@@ -200,8 +200,8 @@ namespace AFPC {
             delta = new Vector3 (movementInputValues.x, 0, movementInputValues.y);
             delta = Vector3.ClampMagnitude (delta, 1);
             delta = rb.transform.TransformDirection (delta) * currentAcceleration;
-            vector3_Target = new Vector3 (delta.x, rb.velocity.y, delta.z);
-            rb.velocity = Vector3.SmoothDamp (rb.velocity, vector3_Target, ref vector3_Reference, Time.smoothDeltaTime * movementSmoothing);
+            vector3_Target = new Vector3 (delta.x, rb.linearVelocity.y, delta.z);
+            rb.linearVelocity = Vector3.SmoothDamp (rb.linearVelocity, vector3_Target, ref vector3_Reference, Time.smoothDeltaTime * movementSmoothing);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace AFPC {
 		    if (!isJumpingAvailable) return;
 		    if (isGrounded) {
 			    if (jumpingInputValue) {
-                    rb.velocity = new Vector3 (rb.velocity.x, jumpForce, rb.velocity.z);
+                    rb.linearVelocity = new Vector3 (rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
                 }
 		    }
 	    }
@@ -243,12 +243,12 @@ namespace AFPC {
                     isLandingActionPerformed = true;
                     landingAction?.Invoke ();
                 }
-                rb.drag = drag;
+                rb.linearDamping = drag;
             }
             else {
                 isGrounded = false;
                 isLandingActionPerformed = false;
-                rb.drag = 0.5f;
+                rb.linearDamping = 0.5f;
             }
         }
 
