@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7ab7bc066d5fb44876c6f393874cf8, type: 3}
+  m_Name: TestCharacter1AppearanceType
+  m_EditorClassIdentifier: 
+  _initialApperanceElements:
+  - _localId:
+      _value: 0
+    _prefab: {fileID: 5994120691741900599, guid: a4d5b4d74f8be99418c94993988b53ce,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 1
+    _prefab: {fileID: 1851996669589552624, guid: b4c67fcf53993d44fabd38f0d5dfd081,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 2
+    _prefab: {fileID: 6504429946939234707, guid: 308baad5a7259d84c8fafac11ef46cd8,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 3
+    _prefab: {fileID: 70962306734936886, guid: d55faa8629d009f4c99cae1d4a9bac56, type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 4
+    _prefab: {fileID: 1846527932455442405, guid: 6ea92de8a65f0ad4eb764e01bc99fcd5,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 5
+    _prefab: {fileID: 4251731014938956314, guid: 5f428875a0721b44d9bd193e0c621496,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 6
+    _prefab: {fileID: 4251731014938956314, guid: 5f428875a0721b44d9bd193e0c621496,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 7
+    _prefab: {fileID: 3878950167072666862, guid: 2f7d12746a6c62245bba504e827d17b5,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 8
+    _prefab: {fileID: 6728480813240121805, guid: c2a8881bded505c429698749a958f0e3,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  - _localId:
+      _value: 9
+    _prefab: {fileID: 6504429946939234707, guid: 308baad5a7259d84c8fafac11ef46cd8,
+      type: 3}
+    _isStatic: 1
+    _occupancyIds: []
+  _hasRig: 1
+  _bonesAndArmatureHolder: {fileID: 4349962159533625189, guid: 59b7ea65514c5694f8c3000aef1cf580,
+    type: 3}
+  _hasCamera: 1
+  _cameraBoneName: root/pelvis/spine_01/spine_02/spine_03/neck_01/head
+  _cameraOffset: {x: 0, y: 0.1, z: 0.15}

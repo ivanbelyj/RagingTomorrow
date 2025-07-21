@@ -1,0 +1,3 @@
+[submodule "Packages/ivanbelyj.worldcore"]
+	path = Packages/ivanbelyj.worldcore
+	url = https://github.com/ivanbelyj/WorldCore
