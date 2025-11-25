@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8107752681379450880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90698019c98cc8741ab286056b639ebe, type: 3}
+  m_Name: RootNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 148, y: 0}
+  nodeDescription: 
+  child: {fileID: -4635021732526429640}
+--- !u!114 &-4635021732526429640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ecbd642284b504ca1789fb521bbe87, type: 3}
+  m_Name: SequencerNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 148, y: 190}
+  nodeDescription: 
+  children:
+  - {fileID: 1379789049862060569}
+  - {fileID: 9068508264603916991}
+  - {fileID: 134910285958252030}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce6e2bb9fed1c8a4eb0cf8dcf95da5f6, type: 3}
+  m_Name: Patrol
+  m_EditorClassIdentifier: 
+  callType: 3
+  name: Patrol
+  singleCall: 0
+  description: 
+  rootNode: {fileID: -8107752681379450880}
+  variables:
+    keys:
+    - transform
+    values:
+    - id: 0
+  nodes:
+  - {fileID: -8107752681379450880}
+  - {fileID: -4635021732526429640}
+  - {fileID: 1379789049862060569}
+  - {fileID: 9068508264603916991}
+  - {fileID: 134910285958252030}
+  groups: []
+  references:
+    version: 1
+    00000000:
+      type: {class: TransformVariable, ns: AuroraFPSRuntime.AIModules.BehaviourTree.Variables,
+        asm: Assembly-CSharp}
+      data:
+        value: {fileID: 0}
+--- !u!114 &134910285958252030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85263108a8bd9e0469feac3580755ae9, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 368, y: 380}
+  nodeDescription: 
+  singleCall: 0
+  durationVariable: 
+  duration: 1
+  durationToggle: 0
+--- !u!114 &1379789049862060569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8e7b1b857886d54a9a8a9ddf02d5ab9, type: 3}
+  m_Name: RandomIndexNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: -72, y: 380}
+  nodeDescription: 
+  singleCall: 0
+  listVariable: Global/patrolPoints
+  elementVariable: Local/transform
+--- !u!114 &9068508264603916991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f161257e95eaffd4eb4a33108ed121b7, type: 3}
+  m_Name: AgentSetDestinationNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 148, y: 380}
+  nodeDescription: 
+  singleCall: 0
+  speedVariable: 
+  speed: 5
+  stoppingDistanceVariable: 
+  stoppingDistance: 0.1
+  updateRotationVariable: 
+  updateRotation: 1
+  accelerationVariable: 
+  acceleration: 40
+  toleranceVariable: 
+  tolerance: 1
+  targetType: 0
+  transformVariable: Local/transform
+  positionVariable: 
+  position: {x: 0, y: 0, z: 0}
+  speedToggle: 0
+  stoppingDistanceToggle: 0
+  updateRotationToggle: 0
+  accelerationToggle: 0
+  toleranceToggle: 0
+  positionToggle: 0

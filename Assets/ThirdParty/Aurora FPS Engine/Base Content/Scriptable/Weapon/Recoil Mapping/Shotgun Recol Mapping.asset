@@ -1,0 +1,223 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 290b3df1f75ea20449a4cb1356001f7c, type: 3}
+  m_Name: Shotgun Recol Mapping
+  m_EditorClassIdentifier: 
+  mapping:
+    keys: 0100000001010000410100004100000002010000
+    values:
+    - recoilIteration: 0
+      recoilDuration: 0.1
+      recoil:
+      - {x: 0, y: 5}
+      spreadIteration: 0
+      spread:
+      - xAxis: {x: 0, y: 0}
+        yAxis: {x: 0, y: 0}
+      - xAxis: {x: -0.1, y: 0.1}
+        yAxis: {x: -0.1, y: 0.1}
+      - xAxis: {x: -0.2, y: 0.2}
+        yAxis: {x: -0.2, y: 0.2}
+      - xAxis: {x: -0.5, y: 0.5}
+        yAxis: {x: -0.5, y: 0.5}
+      - xAxis: {x: -0.75, y: 0.75}
+        yAxis: {x: -0.75, y: 0.75}
+      shakeSettings:
+        positionStrength: 0
+        rotationStrength: 2.5
+        axesMultiplier:
+          position: {x: 0, y: 0, z: 0}
+          eulerAngles: {x: 2, y: 2, z: 0.5}
+        frequency: 20
+        numBounces: 5
+        randomness: 0.5
+        attenuation:
+          clippingDistance: 10
+          falloffScale: 50
+          falloffDegree: 1
+          axesMultiplier: {x: 1, y: 1, z: 1}
+    - recoilIteration: 1
+      recoilDuration: 0.15
+      recoil:
+      - {x: 1, y: 1}
+      - {x: 0.7, y: 1}
+      - {x: 0.5, y: 1}
+      - {x: 0.2, y: 1}
+      - {x: 0.1, y: 1}
+      - {x: -0.2, y: 1}
+      - {x: -0.5, y: 1}
+      - {x: -0.7, y: 1}
+      - {x: -1, y: 1}
+      - {x: -0.7, y: 1}
+      - {x: -0.5, y: 1}
+      - {x: -0.2, y: 1}
+      - {x: -0.1, y: 1}
+      - {x: 0.2, y: 1}
+      - {x: 0.5, y: 1}
+      spreadIteration: 0
+      spread:
+      - xAxis: {x: 0, y: 0}
+        yAxis: {x: 0, y: 0}
+      - xAxis: {x: -0.1, y: 0.1}
+        yAxis: {x: -0.1, y: 0.1}
+      - xAxis: {x: -0.2, y: 0.2}
+        yAxis: {x: -0.2, y: 0.2}
+      - xAxis: {x: -0.5, y: 0.5}
+        yAxis: {x: -0.5, y: 0.5}
+      - xAxis: {x: -0.75, y: 0.75}
+        yAxis: {x: -0.75, y: 0.75}
+      shakeSettings:
+        positionStrength: 0
+        rotationStrength: 0.5
+        axesMultiplier:
+          position: {x: 0, y: 0, z: 0}
+          eulerAngles: {x: 1, y: 1, z: 0.7}
+        frequency: 75
+        numBounces: 5
+        randomness: 0.5
+        attenuation:
+          clippingDistance: 10
+          falloffScale: 50
+          falloffDegree: 2
+          axesMultiplier: {x: 1, y: 1, z: 1}
+    - recoilIteration: 1
+      recoilDuration: 0.15
+      recoil:
+      - {x: 1, y: 1}
+      - {x: 0.7, y: 1}
+      - {x: 0.5, y: 1}
+      - {x: 0.2, y: 1}
+      - {x: 0.1, y: 1}
+      - {x: -0.2, y: 1}
+      - {x: -0.5, y: 1}
+      - {x: -0.7, y: 1}
+      - {x: -1, y: 1}
+      - {x: -0.7, y: 1}
+      - {x: -0.5, y: 1}
+      - {x: -0.2, y: 1}
+      - {x: -0.1, y: 1}
+      - {x: 0.2, y: 1}
+      - {x: 0.5, y: 1}
+      spreadIteration: 0
+      spread:
+      - xAxis: {x: 0, y: 0}
+        yAxis: {x: 0, y: 0}
+      - xAxis: {x: -0.1, y: 0.1}
+        yAxis: {x: -0.1, y: 0.1}
+      - xAxis: {x: -0.2, y: 0.2}
+        yAxis: {x: -0.2, y: 0.2}
+      - xAxis: {x: -0.5, y: 0.5}
+        yAxis: {x: -0.5, y: 0.5}
+      - xAxis: {x: -0.75, y: 0.75}
+        yAxis: {x: -0.75, y: 0.75}
+      shakeSettings:
+        positionStrength: 0
+        rotationStrength: 0.5
+        axesMultiplier:
+          position: {x: 0, y: 0, z: 0}
+          eulerAngles: {x: 1, y: 1, z: 0.55}
+        frequency: 75
+        numBounces: 5
+        randomness: 0.5
+        attenuation:
+          clippingDistance: 0
+          falloffScale: 0
+          falloffDegree: 0
+          axesMultiplier: {x: 0, y: 0, z: 0}
+    - recoilIteration: 1
+      recoilDuration: 0.15
+      recoil:
+      - {x: 1, y: 1}
+      - {x: 0.7, y: 1}
+      - {x: 0.5, y: 1}
+      - {x: 0.2, y: 1}
+      - {x: 0.1, y: 1}
+      - {x: -0.2, y: 1}
+      - {x: -0.5, y: 1}
+      - {x: -0.7, y: 1}
+      - {x: -1, y: 1}
+      - {x: -0.7, y: 1}
+      - {x: -0.5, y: 1}
+      - {x: -0.2, y: 1}
+      - {x: -0.1, y: 1}
+      - {x: 0.2, y: 1}
+      - {x: 0.5, y: 1}
+      spreadIteration: 0
+      spread:
+      - xAxis: {x: 0, y: 0}
+        yAxis: {x: 0, y: 0}
+      - xAxis: {x: -0.1, y: 0.1}
+        yAxis: {x: -0.1, y: 0.1}
+      - xAxis: {x: -0.2, y: 0.2}
+        yAxis: {x: -0.2, y: 0.2}
+      - xAxis: {x: -0.5, y: 0.5}
+        yAxis: {x: -0.5, y: 0.5}
+      - xAxis: {x: -0.75, y: 0.75}
+        yAxis: {x: -0.75, y: 0.75}
+      shakeSettings:
+        positionStrength: 0
+        rotationStrength: 0.5
+        axesMultiplier:
+          position: {x: 0, y: 0, z: 0}
+          eulerAngles: {x: 1, y: 1, z: 0.55}
+        frequency: 75
+        numBounces: 5
+        randomness: 0.5
+        attenuation:
+          clippingDistance: 0
+          falloffScale: 0
+          falloffDegree: 0
+          axesMultiplier: {x: 0, y: 0, z: 0}
+    - recoilIteration: 1
+      recoilDuration: 0.15
+      recoil:
+      - {x: 1, y: 1}
+      - {x: 0.7, y: 1}
+      - {x: 0.5, y: 1}
+      - {x: 0.2, y: 1}
+      - {x: 0.1, y: 1}
+      - {x: -0.2, y: 1}
+      - {x: -0.5, y: 1}
+      - {x: -0.7, y: 1}
+      - {x: -1, y: 1}
+      - {x: -0.7, y: 1}
+      - {x: -0.5, y: 1}
+      - {x: -0.2, y: 1}
+      - {x: -0.1, y: 1}
+      - {x: 0.2, y: 1}
+      - {x: 0.5, y: 1}
+      spreadIteration: 0
+      spread:
+      - xAxis: {x: 0, y: 0}
+        yAxis: {x: 0, y: 0}
+      - xAxis: {x: -0.1, y: 0.1}
+        yAxis: {x: -0.1, y: 0.1}
+      - xAxis: {x: -0.2, y: 0.2}
+        yAxis: {x: -0.2, y: 0.2}
+      - xAxis: {x: -0.5, y: 0.5}
+        yAxis: {x: -0.5, y: 0.5}
+      - xAxis: {x: -0.75, y: 0.75}
+        yAxis: {x: -0.75, y: 0.75}
+      shakeSettings:
+        positionStrength: 0
+        rotationStrength: 0.5
+        axesMultiplier:
+          position: {x: 0, y: 0, z: 0}
+          eulerAngles: {x: 1, y: 1, z: 0.55}
+        frequency: 75
+        numBounces: 5
+        randomness: 0.5
+        attenuation:
+          clippingDistance: 0
+          falloffScale: 0
+          falloffDegree: 0
+          axesMultiplier: {x: 0, y: 0, z: 0}

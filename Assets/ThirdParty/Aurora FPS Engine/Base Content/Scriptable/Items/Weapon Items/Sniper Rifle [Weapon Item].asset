@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1dffcd7853d364190e420a831751e2, type: 3}
+  m_Name: Sniper Rifle [Weapon Item]
+  m_EditorClassIdentifier: 
+  itemName: Sniper Rifle
+  itemType: Rifle
+  dropObject: {fileID: 1861121417620755764, guid: b30ddc867be691d439534893fa40ee30,
+    type: 3}
+  dropRotation: {x: 0, y: 0, z: 0}
+  dropScale: {x: 0.25, y: 0.25, z: 0.25}
+  dropForwardMultiplier: 1
+  dropForce: 2
+  dropTorque: 2.5
+  reusable: 1
+  itemImage: {fileID: 21300036, guid: 6674e8c43c63e4f4184cbd009379498d, type: 3}
+  customDatas:
+    keys: []
+    values: []
+  functions: []
+  firstPersonObject: {fileID: 4632691142559492989, guid: d94bc3fc192e9784aa2b2660434b4adb,
+    type: 3}
+  firstPersonPosition: {x: 0, y: -0.025, z: -0.2}
+  firstPersonRotation: {x: 0, y: 180, z: 0}
+  firstPersonScale: {x: 0.25, y: 0.25, z: 0.25}
+  selectTime: 0.3
+  hideTime: 0.3

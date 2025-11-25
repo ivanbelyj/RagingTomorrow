@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1dffcd7853d364190e420a831751e2, type: 3}
+  m_Name: M91 [Weapon Item]
+  m_EditorClassIdentifier: 
+  itemName: M91
+  itemType: Rifle
+  dropObject: {fileID: -3695083680523516526, guid: 14e34e73d4ffe404c8c2efe71c61236b,
+    type: 3}
+  dropRotation: {x: 0, y: 0, z: 0}
+  dropScale: {x: 0.25, y: 0.25, z: 0.25}
+  dropForwardMultiplier: 1
+  dropForce: 2
+  dropTorque: 2.5
+  reusable: 1
+  itemImage: {fileID: 21300002, guid: 6674e8c43c63e4f4184cbd009379498d, type: 3}
+  customDatas:
+    keys: []
+    values: []
+  functions: []
+  firstPersonObject: {fileID: 4865659683346901413, guid: ec69894634bcde945a5166cbf8baf640,
+    type: 3}
+  firstPersonPosition: {x: 0, y: -0.07, z: -0.25}
+  firstPersonRotation: {x: 0, y: 180, z: 0}
+  firstPersonScale: {x: 0.25, y: 0.25, z: 0.25}
+  selectTime: 0.3
+  hideTime: 0.3

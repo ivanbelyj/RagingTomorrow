@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1dffcd7853d364190e420a831751e2, type: 3}
+  m_Name: Knife [Weapon Item]
+  m_EditorClassIdentifier: 
+  itemName: Knife
+  itemType: Melee
+  dropObject: {fileID: 0}
+  dropRotation: {x: 0, y: 0, z: 0}
+  dropScale: {x: 0.25, y: 0.25, z: 0.25}
+  dropForwardMultiplier: 1
+  dropForce: 2
+  dropTorque: 2.5
+  reusable: 1
+  itemImage: {fileID: 0}
+  customDatas:
+    keys: []
+    values: []
+  functions: []
+  firstPersonObject: {fileID: 4695287484123011328, guid: 90c66d0df6e07ac4db4abc2149263df8,
+    type: 3}
+  firstPersonPosition: {x: 0, y: 0, z: -0.25}
+  firstPersonRotation: {x: 0, y: 180, z: 0}
+  firstPersonScale: {x: 0.25, y: 0.25, z: 0.25}
+  selectTime: 0
+  hideTime: 0

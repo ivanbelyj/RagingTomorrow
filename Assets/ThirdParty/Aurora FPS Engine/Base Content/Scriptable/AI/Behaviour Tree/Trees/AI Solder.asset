@@ -1,0 +1,896 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9179360615212228425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ecbd642284b504ca1789fb521bbe87, type: 3}
+  m_Name: SequencerNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 3118, y: 950}
+  nodeDescription: 
+  children:
+  - {fileID: -1242651690989455713}
+  - {fileID: 4981071318431357623}
+--- !u!114 &-8890390365506097934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d9066c4c6cabe4d81e98e4337771a3, type: 3}
+  m_Name: CrouchNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2568, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  procedural: 1
+  heightOffsetVariable: 
+  heightOffset: 1.635
+  radiusVariable: 
+  radius: 1
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 2049
+  crouchVariable: 
+  crouch: 0
+  proceduralToggle: 0
+  heightOffsetToggle: 0
+  radiusToggle: 0
+  crouchToggle: 0
+--- !u!114 &-8236546516433867655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a424b4e9cc997c045834c8fe5c2597c2, type: 3}
+  m_Name: RepeatUntilFailureNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 148, y: 760}
+  nodeDescription: 
+  child: {fileID: 8079288749808001575}
+--- !u!114 &-8188811340467600016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b748c5a86a9e2e84f933e55436671a59, type: 3}
+  m_Name: LookIKNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 1468, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  lookHingeName: Look Hinge
+  targetVariable: 
+  target: {fileID: 0}
+  targetToggle: 0
+--- !u!114 &-7086971707783951166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90698019c98cc8741ab286056b639ebe, type: 3}
+  m_Name: RootNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2018, y: 0}
+  nodeDescription: 
+  child: {fileID: -579034601476848370}
+--- !u!114 &-7016314054655226247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d3af75571e6a241ad38c1e55248de6, type: 3}
+  m_Name: RotateTowardsNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2348, y: 1330}
+  nodeDescription: 
+  singleCall: 0
+  rotationSpeedVariable: 
+  rotationSpeed: 5
+  targetType: 0
+  transformVariable: Local/transform
+  pointVariable: 
+  point: {x: 0, y: 0, z: 0}
+  rotationSpeedToggle: 0
+  pointToggle: 0
+--- !u!114 &-6948607934519396881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f161257e95eaffd4eb4a33108ed121b7, type: 3}
+  m_Name: AgentSetDestinationNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 3668, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  speedVariable: 
+  speed: 5
+  stoppingDistanceVariable: 
+  stoppingDistance: 0.1
+  updateRotationVariable: 
+  updateRotation: 1
+  accelerationVariable: 
+  acceleration: 40
+  toleranceVariable: 
+  tolerance: 1
+  targetType: 1
+  transformVariable: 
+  positionVariable: Local/player last position
+  position: {x: 0, y: 0, z: 0}
+  speedToggle: 0
+  stoppingDistanceToggle: 0
+  updateRotationToggle: 0
+  accelerationToggle: 0
+  toleranceToggle: 0
+  positionToggle: 1
+--- !u!114 &-6771609153770943246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1770628119ce54980deb844516c178, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2898, y: 760}
+  nodeDescription: 
+  children:
+  - {fileID: 9133144115343806217}
+  - {fileID: -9179360615212228425}
+  - {fileID: 1956885593209991038}
+  - {fileID: -4107973568013096322}
+--- !u!114 &-4107973568013096322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1a75faf84fc137479c46fcb339e3299, type: 3}
+  m_Name: BehaviourNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 4108, y: 950}
+  nodeDescription: 
+  singleCall: 0
+  behaviourTree: {fileID: 11400000, guid: f56deea7d9018644c9d57a146b4f873d, type: 2}
+--- !u!114 &-3509479436837209097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97eb788b41d48343b8d55b23b7a89fe, type: 3}
+  m_Name: ParallelCompleteNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2567, y: 570}
+  nodeDescription: 
+  children:
+  - {fileID: 5970087640633650534}
+  - {fileID: -6771609153770943246}
+--- !u!114 &-2604067184349743263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 634eceba54330874e950fed31a34db7f, type: 3}
+  m_Name: ParallelNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2238, y: 1140}
+  nodeDescription: 
+  children:
+  - {fileID: 756131809002574559}
+  - {fileID: -7016314054655226247}
+--- !u!114 &-2466647024385069712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271f9c8906efdd549a857dfc6faa9b39, type: 3}
+  m_Name: OnTakeDamageNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 1248, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  storedVariable: Local/taken damage
+  senterVariable: Local/transform
+  damagePointVariable: Local/player last position
+  healthVariable: Local/health
+--- !u!114 &-2222628112432877690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc754003628a1d247a2d36ea6f202821, type: 3}
+  m_Name: RepeatNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 368, y: 760}
+  nodeDescription: 
+  child: {fileID: 7141395525119994669}
+  fixedCount: 0
+  count: 0
+--- !u!114 &-1242651690989455713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30495fde4c786f845a022cb0e439567e, type: 3}
+  m_Name: ConditionNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 3008, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  booleanVariable: Local/taken damage
+  boolean: 0
+  resetOnSuccess: 1
+  booleanToggle: 1
+--- !u!114 &-579034601476848370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ecbd642284b504ca1789fb521bbe87, type: 3}
+  m_Name: SequencerNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2018, y: 190}
+  nodeDescription: 
+  children:
+  - {fileID: -94730978579477845}
+  - {fileID: 5805674397132226143}
+--- !u!114 &-94730978579477845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d9066c4c6cabe4d81e98e4337771a3, type: 3}
+  m_Name: CrouchNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: -72, y: 380}
+  nodeDescription: 
+  singleCall: 0
+  procedural: 0
+  heightOffsetVariable: 
+  heightOffset: 1.635
+  radiusVariable: 
+  radius: 1
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  crouchVariable: 
+  crouch: 0
+  proceduralToggle: 0
+  heightOffsetToggle: 0
+  radiusToggle: 0
+  crouchToggle: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce6e2bb9fed1c8a4eb0cf8dcf95da5f6, type: 3}
+  m_Name: AI Solder
+  m_EditorClassIdentifier: 
+  callType: 3
+  name: AI Solder
+  singleCall: 0
+  description: 
+  rootNode: {fileID: -7086971707783951166}
+  variables:
+    keys:
+    - transform
+    - taken damage
+    - point
+    - saw player
+    - player last position
+    - health
+    values:
+    - rid: 0
+    - rid: 1
+    - rid: 2
+    - rid: 3
+    - rid: 4
+    - rid: 5
+  nodes:
+  - {fileID: -7086971707783951166}
+  - {fileID: 7688031774209509075}
+  - {fileID: 6681228231475254824}
+  - {fileID: -8188811340467600016}
+  - {fileID: -579034601476848370}
+  - {fileID: -94730978579477845}
+  - {fileID: 5805674397132226143}
+  - {fileID: 8598345993876817997}
+  - {fileID: -8236546516433867655}
+  - {fileID: 8079288749808001575}
+  - {fileID: -2222628112432877690}
+  - {fileID: 7141395525119994669}
+  - {fileID: 3097003562619155891}
+  - {fileID: -3509479436837209097}
+  - {fileID: 5970087640633650534}
+  - {fileID: 5614449664228744447}
+  - {fileID: 6824425025386035341}
+  - {fileID: -2466647024385069712}
+  - {fileID: -6771609153770943246}
+  - {fileID: 9133144115343806217}
+  - {fileID: -9179360615212228425}
+  - {fileID: 1956885593209991038}
+  - {fileID: 1764982974549263481}
+  - {fileID: 8991632479754978159}
+  - {fileID: -2604067184349743263}
+  - {fileID: 756131809002574559}
+  - {fileID: -7016314054655226247}
+  - {fileID: -8890390365506097934}
+  - {fileID: 3811375910819632969}
+  - {fileID: 4983127411315692187}
+  - {fileID: -1242651690989455713}
+  - {fileID: 4981071318431357623}
+  - {fileID: 4130396237510624809}
+  - {fileID: -6948607934519396881}
+  - {fileID: 6153785884855009257}
+  - {fileID: -4107973568013096322}
+  groups: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 0
+      type: {class: TransformVariable, ns: AuroraFPSRuntime.AIModules.BehaviourTree.Variables,
+        asm: Assembly-CSharp}
+      data:
+        value: {fileID: 0}
+    - rid: 1
+      type: {class: BoolVariable, ns: AuroraFPSRuntime.AIModules.BehaviourTree.Variables,
+        asm: Assembly-CSharp}
+      data:
+        value: 0
+    - rid: 2
+      type: {class: Vector3Variable, ns: AuroraFPSRuntime.AIModules.BehaviourTree.Variables,
+        asm: Assembly-CSharp}
+      data:
+        value: {x: 0, y: 0, z: 0}
+    - rid: 3
+      type: {class: BoolVariable, ns: AuroraFPSRuntime.AIModules.BehaviourTree.Variables,
+        asm: Assembly-CSharp}
+      data:
+        value: 0
+    - rid: 4
+      type: {class: Vector3Variable, ns: AuroraFPSRuntime.AIModules.BehaviourTree.Variables,
+        asm: Assembly-CSharp}
+      data:
+        value: {x: 0, y: 0, z: 0}
+    - rid: 5
+      type: {class: FloatVariable, ns: AuroraFPSRuntime.AIModules.BehaviourTree.Variables,
+        asm: Assembly-CSharp}
+      data:
+        value: 0
+--- !u!114 &756131809002574559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f161257e95eaffd4eb4a33108ed121b7, type: 3}
+  m_Name: AgentSetDestinationNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2128, y: 1330}
+  nodeDescription: 
+  singleCall: 0
+  speedVariable: 
+  speed: 5
+  stoppingDistanceVariable: 
+  stoppingDistance: 0.1
+  updateRotationVariable: 
+  updateRotation: 0
+  accelerationVariable: 
+  acceleration: 40
+  toleranceVariable: 
+  tolerance: 1
+  targetType: 1
+  transformVariable: 
+  positionVariable: Local/point
+  position: {x: 0, y: 0, z: 0}
+  speedToggle: 0
+  stoppingDistanceToggle: 0
+  updateRotationToggle: 0
+  accelerationToggle: 0
+  toleranceToggle: 0
+  positionToggle: 1
+--- !u!114 &1764982974549263481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c60a9b97471284fa182a44e864cb88, type: 3}
+  m_Name: CompareNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 1688, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  value1Variable: Local/health
+  comparisonOperator: 3
+  value2: 30
+--- !u!114 &1956885593209991038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ecbd642284b504ca1789fb521bbe87, type: 3}
+  m_Name: SequencerNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 3668, y: 950}
+  nodeDescription: 
+  children:
+  - {fileID: 4130396237510624809}
+  - {fileID: -6948607934519396881}
+  - {fileID: 6153785884855009257}
+--- !u!114 &3097003562619155891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20377f17938920d47bd28a36c0e7c968, type: 3}
+  m_Name: RaycastShootNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 808, y: 760}
+  nodeDescription: 
+  singleCall: 0
+  firePointName: FIRE POINT
+  damage: 20
+  attackState:
+    name: Fire
+    layer: 1
+    fixedTime: 0.1
+    nameHash: -118708495
+  rpm: 600
+  clipCapacity: 30
+  reloadState:
+    name: Reload
+    layer: 1
+    fixedTime: 0.1
+    nameHash: -1525363869
+  reloadTime: 3
+  fireSound: {fileID: 8300000, guid: 80fcb1a77cae6c0498a4ab521473acb6, type: 3}
+  reloadSound: {fileID: 8300000, guid: c12234d355e694fbaaa592fd90d7afc5, type: 3}
+  fireEffectName: Muzzle Flash 3D
+  targetVariable: Local/transform
+  deviation: 0.3
+--- !u!114 &3811375910819632969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85263108a8bd9e0469feac3580755ae9, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2788, y: 1330}
+  nodeDescription: 
+  singleCall: 0
+  durationVariable: 
+  duration: 1
+  durationToggle: 0
+--- !u!114 &4130396237510624809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30495fde4c786f845a022cb0e439567e, type: 3}
+  m_Name: ConditionNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 3448, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  booleanVariable: Local/saw player
+  boolean: 0
+  resetOnSuccess: 1
+  booleanToggle: 1
+--- !u!114 &4981071318431357623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d3af75571e6a241ad38c1e55248de6, type: 3}
+  m_Name: RotateTowardsNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 3228, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  rotationSpeedVariable: 
+  rotationSpeed: 5
+  targetType: 1
+  transformVariable: 
+  pointVariable: Local/player last position
+  point: {x: 0, y: 0, z: 0}
+  rotationSpeedToggle: 0
+  pointToggle: 1
+--- !u!114 &4983127411315692187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc754003628a1d247a2d36ea6f202821, type: 3}
+  m_Name: RepeatNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2788, y: 1140}
+  nodeDescription: 
+  child: {fileID: 3811375910819632969}
+  fixedCount: 0
+  count: 0
+--- !u!114 &5614449664228744447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1770628119ce54980deb844516c178, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 1248, y: 950}
+  nodeDescription: 
+  children:
+  - {fileID: 6824425025386035341}
+  - {fileID: -2466647024385069712}
+  - {fileID: -8188811340467600016}
+--- !u!114 &5805674397132226143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1770628119ce54980deb844516c178, type: 3}
+  m_Name: SelectorNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2128, y: 380}
+  nodeDescription: 
+  children:
+  - {fileID: 8598345993876817997}
+  - {fileID: -3509479436837209097}
+--- !u!114 &5970087640633650534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 786afb1f139f4f740a49b05bbdd5f38b, type: 3}
+  m_Name: RepeatUntilSuccessNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 1248, y: 760}
+  nodeDescription: 
+  child: {fileID: 5614449664228744447}
+--- !u!114 &6153785884855009257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85263108a8bd9e0469feac3580755ae9, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 3888, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  durationVariable: 
+  duration: 2
+  durationToggle: 0
+--- !u!114 &6681228231475254824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b748c5a86a9e2e84f933e55436671a59, type: 3}
+  m_Name: LookIKNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 588, y: 950}
+  nodeDescription: 
+  singleCall: 0
+  lookHingeName: Look Hinge
+  targetVariable: Local/transform
+  target: {fileID: 0}
+  targetToggle: 1
+--- !u!114 &6824425025386035341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baafb277e7e6f0d419b920929e5bee47, type: 3}
+  m_Name: SeeObjectNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 1028, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  objectTag: Player
+  fovVariable: 
+  fov: 90
+  heightOffsetVariable: 
+  heightOffset: 1.635
+  maxDistanceVariable: 
+  maxDistance: 10
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 2049
+  targetVariable: 
+  lastPositionVariable: 
+  fovToggle: 0
+  heightOffsetToggle: 0
+  maxDistanceToggle: 0
+--- !u!114 &7141395525119994669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c55acdc9e3310904f88145dd4881167d, type: 3}
+  m_Name: SetBoolNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 368, y: 950}
+  nodeDescription: 
+  singleCall: 0
+  boolVariable: Local/saw player
+  value: 1
+--- !u!114 &7688031774209509075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc754003628a1d247a2d36ea6f202821, type: 3}
+  m_Name: RepeatNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 588, y: 760}
+  nodeDescription: 
+  child: {fileID: 6681228231475254824}
+  fixedCount: 0
+  count: 0
+--- !u!114 &8079288749808001575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baafb277e7e6f0d419b920929e5bee47, type: 3}
+  m_Name: SeeObjectNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 148, y: 950}
+  nodeDescription: 
+  singleCall: 0
+  objectTag: Player
+  fovVariable: 
+  fov: 90
+  heightOffsetVariable: 
+  heightOffset: 1.635
+  maxDistanceVariable: 
+  maxDistance: 10
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 2049
+  targetVariable: Local/transform
+  lastPositionVariable: Local/player last position
+  fovToggle: 0
+  heightOffsetToggle: 0
+  maxDistanceToggle: 0
+--- !u!114 &8598345993876817997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97eb788b41d48343b8d55b23b7a89fe, type: 3}
+  m_Name: ParallelCompleteNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 477, y: 570}
+  nodeDescription: 
+  children:
+  - {fileID: -8236546516433867655}
+  - {fileID: -2222628112432877690}
+  - {fileID: 7688031774209509075}
+  - {fileID: 3097003562619155891}
+--- !u!114 &8991632479754978159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5eb56f5edaae0c41ad5d94591c32451, type: 3}
+  m_Name: CoverPositionNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 1908, y: 1140}
+  nodeDescription: 
+  singleCall: 0
+  hideFromVariable: Local/transform
+  pointDensityVariable: 
+  pointDensity: 4
+  minMaxDistanceVariable: 
+  minMaxDistance: {x: 5, y: 10}
+  shelterOffsetVariable: 
+  shelterOffset: 0.5
+  coverSurfaceLayer:
+    serializedVersion: 2
+    m_Bits: 2049
+  storageVariable: Local/point
+  pointDensityToggle: 0
+  minMaxDistanceToggle: 0
+  shelterOffsetToggle: 0
+--- !u!114 &9133144115343806217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ecbd642284b504ca1789fb521bbe87, type: 3}
+  m_Name: SequencerNode
+  m_EditorClassIdentifier: 
+  mute: 0
+  nodePosition: {x: 2238, y: 950}
+  nodeDescription: 
+  children:
+  - {fileID: 1764982974549263481}
+  - {fileID: 8991632479754978159}
+  - {fileID: -2604067184349743263}
+  - {fileID: -8890390365506097934}
+  - {fileID: 4983127411315692187}

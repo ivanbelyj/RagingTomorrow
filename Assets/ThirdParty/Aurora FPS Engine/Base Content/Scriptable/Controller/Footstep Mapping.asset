@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c76b5ba2832a34aa7b8f51f4325f6d1f, type: 3}
+  m_Name: Footstep Mapping
+  m_EditorClassIdentifier: 
+  mapping:
+    keys:
+    - {fileID: 13400000, guid: 7509f6c6d640a774f9dfaa8af8658a80, type: 2}
+    values:
+    - stepClips:
+      - {fileID: 8300000, guid: 2ca41b11ded2b6140bb05f5dac5dd4e1, type: 3}
+      - {fileID: 8300000, guid: ed4ea481742520b46ab738f34f319c6d, type: 3}
+      - {fileID: 8300000, guid: 0e8fd0760019cf941ad3da82eaac295e, type: 3}
+      - {fileID: 8300000, guid: ccdc0868487d1b94bb1f612e9b0e367e, type: 3}
+      - {fileID: 8300000, guid: 439db0aaedd4046489b25965f531b320, type: 3}
+      - {fileID: 8300000, guid: 764f89047ff28e74795ebd0e7679cccc, type: 3}
+      - {fileID: 8300000, guid: 1c440f2034bd1c146912aa6e645ca72c, type: 3}
+      - {fileID: 8300000, guid: 2f08dca4a29c5e74b88b139f4522ada8, type: 3}
+      - {fileID: 8300000, guid: 40a713dcc8fae214c8025ceb6305c1fb, type: 3}
+      - {fileID: 8300000, guid: 6293cdcc9be433a43842c40cbb5d4c93, type: 3}
+      jumpClips:
+      - {fileID: 8300000, guid: 23d66605cc181ec49849504d4e531ed3, type: 3}
+      landClips:
+      - {fileID: 8300000, guid: 2155a85b2cdb6dd41adf9d0e4dfc54bc, type: 3}

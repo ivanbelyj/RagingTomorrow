@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c4df73fd1e8c49f0b5e054fbaedd793, type: 3}
+  m_Name: Decal Mapping
+  m_EditorClassIdentifier: 
+  mapping:
+    keys:
+    - {fileID: 13400000, guid: 7509f6c6d640a774f9dfaa8af8658a80, type: 2}
+    - {fileID: 13400000, guid: 77b2008fc6197f44a82570617d274355, type: 2}
+    - {fileID: 13400000, guid: 0151b31279cbbe64db23577e9163731a, type: 2}
+    - {fileID: 13400000, guid: 5a5030e45671867428ad1a23a9d95b9d, type: 2}
+    values:
+    - storageData:
+      - {fileID: 6066829104983375477, guid: 4edabb1c0dde62743b137378c7d22980, type: 3}
+    - storageData:
+      - {fileID: 8389655997605411378, guid: 02a509a7fa70ed740ba4197e20c5d32d, type: 3}
+    - storageData:
+      - {fileID: 5376604736086405340, guid: beb3acff7ab73944fb8f470f24d74ed3, type: 3}
+    - storageData:
+      - {fileID: 6066829104983375477, guid: 4edabb1c0dde62743b137378c7d22980, type: 3}
