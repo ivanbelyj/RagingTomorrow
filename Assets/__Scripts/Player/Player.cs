@@ -15,9 +15,6 @@ using AppearanceCustomization3D;
 [RequireComponent(typeof(PlayerOverview))]
 public class Player : NetworkBehaviour
 {
-    // Todo: Только для теста! Удалить после
-    public static bool dontEndDrag;
-
     private PickableItemIcon pickableItemUI;
     private SimpleHUD hud;
 
@@ -88,19 +85,19 @@ public class Player : NetworkBehaviour
 
     private void BindUI()
     {
-        hud = FindObjectOfType<SimpleHUD>();
+        hud = FindAnyObjectByType<SimpleHUD>(FindObjectsInactive.Include);
         if (hud is not null)
         {
             hud.SetEntity(gameObject);
             // Debug.Log("HUD is set");
         }
 
-        itemsUIController = FindObjectOfType<ItemsUIController>();
+        itemsUIController = FindAnyObjectByType<ItemsUIController>(FindObjectsInactive.Include);
         itemsUIController.SetPlayer(this.gameObject, this, playerCamera);
 
         itemsUIController.CloseUI();
 
-        pickableItemUI = FindObjectOfType<PickableItemIcon>();
+        pickableItemUI = FindAnyObjectByType<PickableItemIcon>(FindObjectsInactive.Include);
         pickableItemUI.HideIcon();
     }
 
@@ -139,7 +136,8 @@ public class Player : NetworkBehaviour
             BindUI();
             _uiIsBinded = true;
         }
-        if (!isLocalPlayer || !hasAuthority || !lifecycle.IsAlive)
+
+        if (!isLocalPlayer || !isOwned || !lifecycle.IsAlive)
         {
             return;
         }
@@ -236,15 +234,6 @@ public class Player : NetworkBehaviour
             };
             characterDataProvider.SetData(charData);
             Debug.Log("Новые данные игрока " + charData.ToString());
-        }
-
-        // Todo: только для теста! убрать после
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            Player.dontEndDrag = !Player.dontEndDrag;
-            var str = Player.dontEndDrag ? "не " : "";
-            Debug.Log($"Drag End drop {str}будет заканчиваться!");
-
         }
 
         if (Input.GetKeyDown(KeyCode.X))

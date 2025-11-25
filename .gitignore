@@ -73,6 +73,8 @@ crashlytics-build.properties
 
 /[Aa]ssets/[Ss]treamingAssets/
 
+/Assets/PrivateAssets/
+
 # Exceptions
 !*.dll
 !*.obj

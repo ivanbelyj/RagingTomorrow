@@ -6,7 +6,7 @@ using UnityEngine;
 /// Сущность, которая может получать урон.
 /// Например, тело персонажа, бочка топлива или механизм
 /// </summary>
-public interface IDamageable
-{
-    public void Damage(DamageData damage);
-}
+// public interface IDamageable
+// {
+//     public void Damage(DamageData damage);
+// }

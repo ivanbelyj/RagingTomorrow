@@ -1,0 +1,69 @@
+﻿:root {
+	--color-border: rgb(25, 25, 25);
+}
+
+/* Tab */
+#tab-container {
+	width: 100%;
+	height: 30px;
+
+	flex-direction: row;
+}
+
+.tab-button {
+	flex-grow: 1;
+
+	margin: -1px;
+	padding: 0;
+
+	border-radius: 0;
+	border-width: 1px;
+	border-color: var(--color-border);
+
+	font-size: 14px;
+
+	background-color: rgb(56, 56, 56);
+}
+
+.tab-button.active {
+	background-color: rgb(93, 93, 93);
+}
+
+/* Content */
+#content-container {
+	flex-grow: 1;
+}
+
+.content-page {
+	flex-grow: 1;
+	display: none;
+}
+
+.content-page.active {
+	display: flex;
+}
+
+.content-page > IMGUIContainer {
+	margin: 5px;
+}
+
+/* Aurora Custom Styles */
+.acs-description-line{
+	height: 20px;
+
+	padding-left: 6px;
+
+	border-top-width: 1px;
+	border-color: var(--color-border);
+
+	-unity-text-align: middle-left;
+
+	background-color: rgb(75, 75, 75);
+}
+
+.acs-horizontal-line {
+	width: 100%;
+	height: 1px;
+
+	background-color: var(--color-border);
+}

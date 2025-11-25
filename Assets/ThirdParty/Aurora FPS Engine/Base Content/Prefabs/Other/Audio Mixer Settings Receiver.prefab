@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4381328235327229841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1262816448859120600}
+  - component: {fileID: 5336687784394087060}
+  - component: {fileID: 8303438048182278965}
+  - component: {fileID: 8911627901856526023}
+  - component: {fileID: 5362672569073219458}
+  m_Layer: 0
+  m_Name: Audio Mixer Settings Receiver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1262816448859120600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381328235327229841}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.5437617, y: -22.128368, z: 0}
+  m_LocalScale: {x: 0.6705566, y: 0.6705566, z: 0.6705566}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5336687784394087060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381328235327229841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ed3bed42c950f488288092eb36c07c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  section: Audio
+  guid: Master Volume
+  autoRemove: 1
+  mixer: {fileID: 24100000, guid: 313a130b3854edc4bb53c92a1bb5dc5f, type: 2}
+  parameter: Master Volume
+  defaultVolume: 1
+--- !u!114 &8303438048182278965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381328235327229841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ed3bed42c950f488288092eb36c07c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  section: Audio
+  guid: SFX Volume
+  autoRemove: 1
+  mixer: {fileID: 24100000, guid: 313a130b3854edc4bb53c92a1bb5dc5f, type: 2}
+  parameter: SFX Volume
+  defaultVolume: 1
+--- !u!114 &8911627901856526023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381328235327229841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ed3bed42c950f488288092eb36c07c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  section: Audio
+  guid: Music Volume
+  autoRemove: 1
+  mixer: {fileID: 24100000, guid: 313a130b3854edc4bb53c92a1bb5dc5f, type: 2}
+  parameter: Music Volume
+  defaultVolume: 1
+--- !u!114 &5362672569073219458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4381328235327229841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ed3bed42c950f488288092eb36c07c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  section: Audio
+  guid: UI Volume
+  autoRemove: 1
+  mixer: {fileID: 24100000, guid: 313a130b3854edc4bb53c92a1bb5dc5f, type: 2}
+  parameter: UI Volume
+  defaultVolume: 1

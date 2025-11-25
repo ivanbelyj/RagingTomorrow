@@ -63,8 +63,9 @@ public class EntityLifecycle : NetworkBehaviour
     public bool IsAlive { get; private set; }
     public event UnityAction OnDeath;
 
-    private void Awake() {
-        syncEffects.Callback += SyncEffects;
+    private void Awake()
+    {
+        syncEffects.OnChange += SyncEffects;
 
         Parameters = new Dictionary<LifecycleParameterEnum, LifecycleParameter>() {
             { LifecycleParameterEnum.Bleeding, bleed },
@@ -72,23 +73,28 @@ public class EntityLifecycle : NetworkBehaviour
             { LifecycleParameterEnum.Health, health },
             { LifecycleParameterEnum.Radiation, radiation },
             { LifecycleParameterEnum.Satiety, satiety },
-            
+
         };
 
         health.OnMin += Die;
 
-        if (health.Value > health.MinValue) {
+        if (health.Value > health.MinValue)
+        {
             IsAlive = true;
-        } else {
+        }
+        else
+        {
             Die();
         }
 
         effects = new HashSet<LifecycleEffect>();
     }
 
-    public override void OnStartClient() {
+    public override void OnStartClient()
+    {
         // При подключении игрока на сервере уже могли быть эффекты 
-        foreach (var effect in syncEffects) {
+        foreach (var effect in syncEffects)
+        {
             effects.Add(effect);
         }
     }
@@ -100,27 +106,31 @@ public class EntityLifecycle : NetworkBehaviour
         // Установка и синхронизация начальных эффектов, установленных в инспекторе
         var permanentEffects = new LifecycleEffect[] { regeneration, enduranceRecovery, hunger,
             radiationExcretion };
-        for (int i = 0; i < permanentEffects.Length; i++) {
+        for (int i = 0; i < permanentEffects.Length; i++)
+        {
             AddEffect(permanentEffects[i]);
         }
     }
 
-    private void SyncEffects(SyncHashSet<LifecycleEffect>.Operation op,  LifecycleEffect item) {
-        switch (op) {
+    private void SyncEffects(SyncHashSet<LifecycleEffect>.Operation op, LifecycleEffect item)
+    {
+        switch (op)
+        {
             case SyncHashSet<LifecycleEffect>.Operation.OP_ADD:
-            {
-                effects.Add(item);
-                break;
-            }
+                {
+                    effects.Add(item);
+                    break;
+                }
             case SyncHashSet<LifecycleEffect>.Operation.OP_REMOVE:
-            {
-                effects.Remove(item);
-                break;
-            }
+                {
+                    effects.Remove(item);
+                    break;
+                }
         }
     }
 
-    private void Die() {
+    private void Die()
+    {
         IsAlive = false;
         Debug.Log("Entity is dead");
         OnDeath?.Invoke();
@@ -129,29 +139,37 @@ public class EntityLifecycle : NetworkBehaviour
     #region Add And Remove Effects
 
     [Server]
-    private void AddLifecycleEffect(LifecycleEffect effect) {
+    private void AddLifecycleEffect(LifecycleEffect effect)
+    {
         syncEffects.Add(effect);
     }
 
     [Command]
-    private void CmdAddLifecycleEffect(LifecycleEffect effect) {
+    private void CmdAddLifecycleEffect(LifecycleEffect effect)
+    {
         AddLifecycleEffect(effect);
     }
 
     [Server]
-    private void RemoveLifecycleEffect(LifecycleEffect effect) {
+    private void RemoveLifecycleEffect(LifecycleEffect effect)
+    {
         syncEffects.Remove(effect);
     }
 
     [Command]
-    private void CmdRemoveLifecycleEffect(LifecycleEffect effect) {
+    private void CmdRemoveLifecycleEffect(LifecycleEffect effect)
+    {
         RemoveLifecycleEffect(effect);
     }
 
-    public void RemoveEffect(LifecycleEffect effect) {
-        if (isServer) {
+    public void RemoveEffect(LifecycleEffect effect)
+    {
+        if (isServer)
+        {
             RemoveLifecycleEffect(effect);
-        } else {
+        }
+        else
+        {
             CmdRemoveLifecycleEffect(effect);
         }
     }
@@ -160,35 +178,46 @@ public class EntityLifecycle : NetworkBehaviour
     /// Добавляет эффект и возвращает такой же эффект, но с установленным временем начала
     /// (который и был добавлен)
     /// </summary>
-    public LifecycleEffect AddEffect(LifecycleEffect effect) {
+    public LifecycleEffect AddEffect(LifecycleEffect effect)
+    {
         effect.StartTime = NetworkTime.time;
-        if (isServer) {
+        if (isServer)
+        {
             AddLifecycleEffect(effect);
-        } else {
+        }
+        else
+        {
             CmdAddLifecycleEffect(effect);
         }
         return effect;
     }
     #endregion
 
-    private void Update() {
+    private void Update()
+    {
         UpdateEffects();
     }
 
-    private void UpdateEffects() {
+    private void UpdateEffects()
+    {
         List<LifecycleEffect> effectsToRemove = new List<LifecycleEffect>();
         // Todo: применять только то, что не закончилось. Удалять только на сервере
-        foreach (var effect in effects) {
-            if (!effect.isInfinite && IsPassed(effect)) {
+        foreach (var effect in effects)
+        {
+            if (!effect.isInfinite && IsPassed(effect))
+            {
                 // Прошедшие временные эффекты откладываются для удаления
                 // (нельзя изменять словарь, пока проходим по нему)
                 if (isServer)
                     effectsToRemove.Add(effect);
-            } else {
+            }
+            else
+            {
                 ApplyEffect(effect);
             }
         }
-        if (isServer) {
+        if (isServer)
+        {
             foreach (var effectId in effectsToRemove)
                 RemoveLifecycleEffect(effectId);
         }
@@ -196,9 +225,11 @@ public class EntityLifecycle : NetworkBehaviour
 
     bool IsPassed(LifecycleEffect effect) => effect.StartTime + effect.duration <= NetworkTime.time;
 
-    public void ApplyEffect(LifecycleEffect effect) {
+    public void ApplyEffect(LifecycleEffect effect)
+    {
         // Если эффект бесконечен или не закончился
-        if ((effect.isInfinite || !IsPassed(effect))) {
+        if ((effect.isInfinite || !IsPassed(effect)))
+        {
             LifecycleParameter target = Parameters[effect.targetParameter];
             // Если параметр восстанавливающийся и сейчас нужно восстанавливать
             // if (effect.recover) {
@@ -215,11 +246,13 @@ public class EntityLifecycle : NetworkBehaviour
     private LifecycleEffect runEffect;
 
     #region Movement
-    public void Run() {
+    public void Run()
+    {
         runEffect = AddEffect(runEnduranceDecrease);
         Debug.Log("added: " + runEffect);
     }
-    public void StopRun() {
+    public void StopRun()
+    {
         RemoveEffect(runEffect);
         Debug.Log("Stop run: " + runEffect);
     }

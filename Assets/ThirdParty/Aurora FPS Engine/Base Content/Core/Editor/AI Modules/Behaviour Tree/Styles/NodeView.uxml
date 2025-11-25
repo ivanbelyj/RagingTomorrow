@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="node-state" />
+        <ui:VisualElement name="node-border">
+            <Style src="BehaviourTreeStyle.uss" />
+            <ui:VisualElement name="contents">
+                <ui:VisualElement name="top">
+                    <ui:VisualElement name="input" />
+                    <ui:VisualElement name="divider" class="horizontal" />
+                    <ui:VisualElement name="title">
+                        <ui:Label name="title-label" text="Node Title" class="unity-text-element unity-label" />
+                        <ui:VisualElement name="title-button-container">
+                            <ui:VisualElement name="collapse-button">
+                                <ui:VisualElement name="icon" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Label name="description" text="Node Description" display-tooltip-when-elided="true" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="divider" class="horizontal" />
+                    <ui:VisualElement name="output" />
+                </ui:VisualElement>
+                <ui:VisualElement name="mute-block">
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    <ui:VisualElement name="selection-border" picking-mode="Ignore" />
+</ui:UXML>

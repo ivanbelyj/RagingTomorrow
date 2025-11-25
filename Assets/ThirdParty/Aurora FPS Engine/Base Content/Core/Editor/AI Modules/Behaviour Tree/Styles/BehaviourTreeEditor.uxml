@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="container-main">
+        <ui:VisualElement name="container-left">
+            <uie:Toolbar class="toolbar">
+                <uie:ToolbarMenu class="toolbar-element" name="toolbar-asset-menu" display-tooltip-when-elided="true" text="Assets " />
+                <uie:ToolbarMenu class="toolbar-element" name="toolbar-edit-menu" display-tooltip-when-elided="true" text="Edit " />
+            </uie:Toolbar>
+            <ui:VisualElement name="container-tree">
+                <AuroraFPSEditor.AIModules.BehaviourTree.TreeView focusable="true" style="flex-grow: 1;" />
+                <ui:Label name="tree-name" text="Select tree..."/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="container-right">
+            <uie:Toolbar class="toolbar">
+                <uie:ToolbarButton class="toolbar-element" name="viewbar-behaviour-menu" display-tooltip-when-elided="true" text="Behaviour" />
+                <uie:ToolbarButton class="toolbar-element" name="viewbar-nodes-menu" display-tooltip-when-elided="true" text="Nodes" />
+                <uie:ToolbarButton class="toolbar-element" name="viewbar-variables-menu" display-tooltip-when-elided="true" text="Variables" />
+                <uie:ToolbarButton class="toolbar-element" name="viewbar-inspector-menu" display-tooltip-when-elided="true" text="Inspector" />
+            </uie:Toolbar>
+            <ui:Label name="tool-name" class="lable-title" text="Behaviour" display-tooltip-when-elided="true" />
+            <ui:VisualElement name="container-tools">
+                <AuroraFPSEditor.AIModules.BehaviourTree.BehaviourView class="container-tools-tool active-tool" focusable="true" />
+                <AuroraFPSEditor.AIModules.BehaviourTree.NodesView class="container-tools-tool" focusable="true" />
+                <AuroraFPSEditor.AIModules.BehaviourTree.VariablesView class="container-tools-tool" focusable="true" />
+                <AuroraFPSEditor.AIModules.BehaviourTree.InspectorView class="container-tools-tool" focusable="true" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

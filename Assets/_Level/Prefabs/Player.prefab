@@ -206,8 +206,7 @@ GameObject:
   - component: {fileID: 7047973739683847187}
   - component: {fileID: 6222619205890100977}
   - component: {fileID: 2064756742173130691}
-  - component: {fileID: 7497578950269338793}
-  m_Layer: 1
+  m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +589,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _characterInventory: {fileID: 4901890020522425594}
 --- !u!114 &4178382809326399703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,7 +616,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   throwAwayForce: 0.2
-  _wearSectionToPick: {fileID: 8271884393692352404}
   _sectionToPick: {fileID: 2088041632563891022}
 --- !u!114 &1986895825739135081
 MonoBehaviour:
@@ -688,19 +685,6 @@ MonoBehaviour:
   syncInterval: 0.1
   clientAuthority: 1
   animator: {fileID: 6222619205890100977}
---- !u!114 &7497578950269338793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507993662015929204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5770622f76c5e1f419f1889bd0ccce63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chunkWorld: {fileID: 0}
 --- !u!1 &1709699199297977212
 GameObject:
   m_ObjectHideFlags: 0

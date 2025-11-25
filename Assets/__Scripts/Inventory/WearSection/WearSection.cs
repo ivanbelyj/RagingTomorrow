@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,14 @@ public class WearSection : NetworkBehaviour
     private readonly SyncList<ItemData> _syncItems = new SyncList<ItemData>();
     protected ItemStaticDataManager _itemStaticDataManager;
 
-    public event SyncList<ItemData>.SyncListChanged InventoryChanged {
-        add {
+    public event Action<SyncList<ItemData>.Operation, int, ItemData, ItemData> InventoryChanged
+    {
+        add
+        {
             _syncItems.Callback += value;
         }
-        remove {
+        remove
+        {
             _syncItems.Callback -= value;
         }
     }
@@ -40,7 +44,8 @@ public class WearSection : NetworkBehaviour
         }
     }
 
-    private void Awake() {
+    private void Awake()
+    {
         _itemStaticDataManager = FindObjectOfType<ItemStaticDataManager>();
     }
 
@@ -54,44 +59,50 @@ public class WearSection : NetworkBehaviour
 
     #region Sync
     [Server]
-    private void AddItem(ItemData itemData) {
+    private void AddItem(ItemData itemData)
+    {
         _syncItems.Add(itemData);
     }
 
     [Server]
-    private void RemoveItem(ItemData itemData) {
+    private void RemoveItem(ItemData itemData)
+    {
         _syncItems.Remove(itemData);
     }
 
     [Command]
-    private void CmdAddItem(ItemData itemData) {
+    private void CmdAddItem(ItemData itemData)
+    {
         AddItem(itemData);
     }
 
     [Command]
-    private void CmdRemoveItem(ItemData itemData) {
+    private void CmdRemoveItem(ItemData itemData)
+    {
         RemoveItem(itemData);
     }
 
     private void SyncItems(SyncList<ItemData>.Operation op, int index,
-        ItemData oldItem, ItemData newItem) {
-        switch (op) {
+        ItemData oldItem, ItemData newItem)
+    {
+        switch (op)
+        {
             case SyncList<ItemData>.Operation.OP_ADD:
-            {
-                _appearance.ActivateNonStaticElementsAndDeactivateOccupied(
-                    GetAppearanceItemStaticData(newItem).CharacterAppearanceElementsLocalIds
-                );
-                _items.Add(newItem);
-                break;
-            }
+                {
+                    _appearance.ActivateNonStaticElementsAndDeactivateOccupied(
+                        GetAppearanceItemStaticData(newItem).CharacterAppearanceElementsLocalIds
+                    );
+                    _items.Add(newItem);
+                    break;
+                }
             case SyncList<ItemData>.Operation.OP_REMOVEAT:
-            {
-                _appearance.DeactivateNonStaticElements(
-                    GetAppearanceItemStaticData(oldItem).CharacterAppearanceElementsLocalIds
-                );
-                _items.Remove(oldItem);
-                break;
-            }
+                {
+                    _appearance.DeactivateNonStaticElements(
+                        GetAppearanceItemStaticData(oldItem).CharacterAppearanceElementsLocalIds
+                    );
+                    _items.Remove(oldItem);
+                    break;
+                }
         }
     }
     #endregion
@@ -104,16 +115,19 @@ public class WearSection : NetworkBehaviour
     /// <summary>
     /// true, если возможно надеть предмет, не снимая предыдущие, занимающие те же части тела
     /// <summary>
-    public bool CanAdd(ItemData itemData) {
+    public bool CanAdd(ItemData itemData)
+    {
         return CanAdd(itemData, out _);
     }
 
     private List<AppearanceElement> GetOccupied(AppearanceItemStaticData appearanceItemStaticData)
         => _appearance.GetOccupied(appearanceItemStaticData.CharacterAppearanceElementsLocalIds);
 
-    private bool CanAdd(ItemData itemData, out List<AppearanceElement> occupied) {
+    private bool CanAdd(ItemData itemData, out List<AppearanceElement> occupied)
+    {
         if (_itemStaticDataManager.GetStaticDataByName(itemData.ItemStaticDataName)
-            is AppearanceItemStaticData appearanceItemStaticData) {
+            is AppearanceItemStaticData appearanceItemStaticData)
+        {
             occupied = GetOccupied(appearanceItemStaticData);
             return occupied.Count == 0;
         }
@@ -121,25 +135,34 @@ public class WearSection : NetworkBehaviour
         return false;
     }
 
-    private bool TryToAddToSection(ItemData itemData) {
+    private bool TryToAddToSection(ItemData itemData)
+    {
         bool canAdd = CanAdd(itemData);
-        if (!canAdd) {
+        if (!canAdd)
+        {
             return false;
         }
 
-        if (isServer) {
+        if (isServer)
+        {
             AddItem(itemData);
-        } else {
+        }
+        else
+        {
             CmdAddItem(itemData);
         }
 
         return true;
     }
 
-    public void RemoveFromSection(ItemData itemData) {
-        if (isServer) {
+    public void RemoveFromSection(ItemData itemData)
+    {
+        if (isServer)
+        {
             RemoveItem(itemData);
-        } else {
+        }
+        else
+        {
             CmdRemoveItem(itemData);
         }
     }
@@ -147,11 +170,13 @@ public class WearSection : NetworkBehaviour
     // Для теста
     public bool AddTestItems()
     {
-        var newItem = new ItemData() {
+        var newItem = new ItemData()
+        {
             ItemStaticDataName = "TestArmor",
         };
         bool isAdded = TryToAddToSection(newItem);
-        if (!isAdded) {
+        if (!isAdded)
+        {
             Debug.Log("Не удалось надеть предмет " + newItem);
             return false;
         }

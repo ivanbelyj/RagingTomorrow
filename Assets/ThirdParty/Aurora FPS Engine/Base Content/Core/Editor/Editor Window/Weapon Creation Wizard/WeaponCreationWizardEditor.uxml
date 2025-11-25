@@ -1,0 +1,50 @@
+﻿<UXML xmlns:ui="UnityEngine.UIElements">
+	<ui:VisualElement name="tab-container">
+		<ui:Button class="tab-button" text="First Person Weapon" />
+		<ui:Button class="tab-button" text="Loot Weapon" />
+		<ui:Button class="tab-button" text="Loot Ammo" />
+	</ui:VisualElement>
+
+	<ui:VisualElement name="content-container">
+		<ui:ScrollView>	
+			<ui:VisualElement class="content-page">
+				<ui:IMGUIContainer name="weapon-templates-gui" />
+
+				<ui:Label text="Information" class="acs-description-line" />
+				<ui:IMGUIContainer name="weapon-information-gui" />
+
+				<ui:Label text="Shooting System" class="acs-description-line" />
+				<ui:IMGUIContainer name="shooting-system-gui" />
+
+				<ui:Label text="Reload System" class="acs-description-line" />
+				<ui:IMGUIContainer name="reload-system-gui" />
+
+				<ui:Label text="Model" class="acs-description-line" />
+				<ui:IMGUIContainer name="model-gui" />
+
+				<ui:Label text="Location" class="acs-description-line" />
+				<ui:IMGUIContainer name="weapon-location-gui" />
+			</ui:VisualElement>
+
+			<ui:VisualElement class="content-page">
+				<ui:IMGUIContainer name="loot-weapon-templates-gui" />
+
+				<ui:Label text="Information" class="acs-description-line" />
+				<ui:IMGUIContainer name="loot-weapon-information-gui" />
+
+				<ui:Label text="Location" class="acs-description-line" />
+				<ui:IMGUIContainer name="loot-weapon-location-gui" />
+			</ui:VisualElement>
+
+			<ui:VisualElement class="content-page">
+				<ui:IMGUIContainer name="loot-ammo-templates-gui" />
+
+				<ui:Label text="Information" class="acs-description-line" />
+				<ui:IMGUIContainer name="loot-ammo-information-gui" />
+
+				<ui:Label text="Location" class="acs-description-line" />
+				<ui:IMGUIContainer name="loot-ammo-location-gui" />
+			</ui:VisualElement>
+		</ui:ScrollView>	
+	</ui:VisualElement>
+</UXML>

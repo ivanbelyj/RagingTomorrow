@@ -91,6 +91,13 @@
         "com.unity.modules.uielements": "1.0.0"
       }
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.performance.profile-analyzer": {
       "version": "1.2.3",
       "depth": 1,
@@ -165,6 +172,57 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.zor.simple-blackboard": {
+      "version": "file:com.zor.simple-blackboard",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.zor.utility-ai": {
+      "version": "file:com.zor.utility-ai",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.zor.simple-blackboard": "https://github.com/ZorPastaman/Simple-Blackboard.git"
+      }
+    },
+    "ivanbelyj.afterglow": {
+      "version": "file:ivanbelyj.afterglow",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "ivanbelyj.common-utilities": "git@github.com:ivanbelyj/CommonUtilitiesUnity.git",
+        "com.zor.utility-ai": "https://github.com/ZorPastaman/UtilityAI.git"
+      }
+    },
+    "ivanbelyj.afterglow.extras": {
+      "version": "file:ivanbelyj.afterglow.extras",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "ivanbelyj.common-utilities": "git@github.com:ivanbelyj/CommonUtilitiesUnity.git",
+        "com.zor.utility-ai": "https://github.com/ZorPastaman/UtilityAI.git",
+        "ivanbelyj.afterglow": "https://gitverse.ru/evai/Afterglow.git"
+      }
+    },
+    "ivanbelyj.common-ui": {
+      "version": "file:ivanbelyj.common-ui",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "ivanbelyj.common-utilities": {
+      "version": "file:ivanbelyj.common-utilities",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "ivanbelyj.inventory": {
+      "version": "file:ivanbelyj.inventory",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "ivanbelyj.worldcore": {
       "version": "file:ivanbelyj.worldcore",

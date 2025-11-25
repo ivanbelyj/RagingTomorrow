@@ -1,3 +1,24 @@
 [submodule "Packages/ivanbelyj.worldcore"]
 	path = Packages/ivanbelyj.worldcore
-	url = https://github.com/ivanbelyj/WorldCore
+	url = ssh://git@gitverse.ru:2222/evai/WorldCore.git
+[submodule "Packages/ivanbelyj.common-ui"]
+	path = Packages/ivanbelyj.common-ui
+	url = https://github.com/ivanbelyj/CommonUI
+[submodule "Packages/ivanbelyj.inventory"]
+	path = Packages/ivanbelyj.inventory
+	url = ssh://git@gitverse.ru:2222/evai/Inventory.git
+[submodule "Packages/ivanbelyj.common-utilities"]
+	path = Packages/ivanbelyj.common-utilities
+	url = https://github.com/ivanbelyj/CommonUtilitiesUnity.git
+[submodule "Packages/com.zor.simple-blackboard"]
+	path = Packages/com.zor.simple-blackboard
+	url = https://github.com/ivanbelyj/SimpleBlackboard.git
+[submodule "Packages/com.zor.utility-ai"]
+	path = Packages/com.zor.utility-ai
+	url = https://github.com/ivanbelyj/UtilityAI.git
+[submodule "Packages/ivanbelyj.afterglow"]
+	path = Packages/ivanbelyj.afterglow
+	url = ssh://git@gitverse.ru:2222/evai/Afterglow.git
+[submodule "Packages/ivanbelyj.afterglow.extras"]
+	path = Packages/ivanbelyj.afterglow.extras
+	url = ssh://git@gitverse.ru:2222/evai/Afterglow.Extras.git
