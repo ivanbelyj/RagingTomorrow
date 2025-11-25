@@ -6,19 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/PrivateAssets/Aurora FPS Engine/Base Content/Scenes/Menu Demo/Menu
+    path: Assets/ThirdParty/Aurora FPS Engine/Base Content/Scenes/Menu Demo/Menu
       Sample.unity
     guid: 6ea28c212bb15b14eb5cc8c23072eb7d
   - enabled: 1
-    path: Assets/PrivateAssets/Aurora FPS Engine/Base Content/Scenes/Loading Demo/Loading
+    path: Assets/ThirdParty/Aurora FPS Engine/Base Content/Scenes/Loading Demo/Loading
       Scene.unity
     guid: 54613bea35c9ed344ae2e879a6fe2e17
   - enabled: 1
-    path: Assets/PrivateAssets/Aurora FPS Engine/Base Content/Scenes/Player Demo/Player
+    path: Assets/ThirdParty/Aurora FPS Engine/Base Content/Scenes/Player Demo/Player
       Showcase.unity
     guid: 041c9849c1427104ab78c9b4bb17050b
   - enabled: 1
-    path: Assets/PrivateAssets/Aurora FPS Engine/Base Content/Scenes/AI Demo/AI Showcase.unity
+    path: Assets/ThirdParty/Aurora FPS Engine/Base Content/Scenes/AI Demo/AI Showcase.unity
     guid: 2b4ac471f25cea643bcd0df91188d6ca
   m_configObjects:
     Apex Settings Config Asset Key: {fileID: 11400000, guid: 8f5f4a1bfc4557347a4db3d7da68c066,
